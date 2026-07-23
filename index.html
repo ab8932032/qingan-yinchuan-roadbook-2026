@@ -69,6 +69,7 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
+      transform-origin: center center;
     }
     .hero::after {
       content: "";
@@ -550,7 +551,7 @@
       backdrop-filter: blur(12px);
       border-top: 1px solid rgba(196,165,116,0.35);
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(7, 1fr);
       z-index: 50;
     }
     .bottom-nav a {
@@ -558,11 +559,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 10px;
+      font-size: 9px;
       color: var(--ink-soft);
       gap: 2px;
+      min-width: 0;
+      padding: 0 2px;
     }
-    .bottom-nav a span { font-size: 16px; line-height: 1; }
+    .bottom-nav a span { font-size: 15px; line-height: 1; }
     .bottom-nav a.active { color: var(--dusk); font-weight: 600; }
 
     .map-panel {
@@ -585,6 +588,7 @@
       padding: 10px;
       background: #fff;
     }
+    .map-actions.collapsed .btn:nth-child(n+5) { display: none; }
 
     .sunset-grid {
       display: grid;
@@ -619,10 +623,85 @@
       pointer-events: none;
     }
     @keyframes heroIn {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(14px); }
       to { opacity: 1; transform: none; }
     }
-    .hero { animation: heroIn 0.85s ease both; }
+    @keyframes heroKenBurns {
+      from { transform: scale(1.06) translate3d(0, 1.5%, 0); }
+      to { transform: scale(1) translate3d(0, 0, 0); }
+    }
+    .hero-bg {
+      animation: heroKenBurns 14s ease-out both;
+      will-change: transform;
+      transform-origin: center center;
+    }
+    .hero > *:not(.hero-bg) {
+      animation: heroIn 0.85s ease both;
+    }
+    .hero-kicker { animation-delay: 0.08s; }
+    .hero h1 { animation-delay: 0.16s; }
+    .hero-verse { animation-delay: 0.26s; }
+    .hero-lead { animation-delay: 0.34s; }
+    .hero-meta { animation-delay: 0.42s; }
+    .hero .btn-row { animation-delay: 0.5s; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.is-in {
+      opacity: 1;
+      transform: none;
+    }
+    .reveal-stagger > .reveal:nth-child(1) { transition-delay: 0.02s; }
+    .reveal-stagger > .reveal:nth-child(2) { transition-delay: 0.08s; }
+    .reveal-stagger > .reveal:nth-child(3) { transition-delay: 0.14s; }
+    .reveal-stagger > .reveal:nth-child(4) { transition-delay: 0.2s; }
+    .reveal-stagger > .reveal:nth-child(5) { transition-delay: 0.26s; }
+    .reveal-stagger > .reveal:nth-child(6) { transition-delay: 0.32s; }
+
+    .btn, .toc a, .filter-btn, .map-toggle, .checklist label {
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .btn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(26,20,16,0.12); }
+      .btn-map:hover { box-shadow: 0 6px 18px rgba(42,111,127,0.28); }
+      .toc a:hover { border-color: var(--sand); color: var(--ink); }
+      .checklist label:hover { background: rgba(196,165,116,0.08); border-radius: 8px; }
+      .bottom-nav a:hover { color: var(--dusk); }
+    }
+    details.day {
+      transition: box-shadow 0.25s ease;
+    }
+    details.day > summary .chev {
+      transition: transform 0.28s ease;
+    }
+    details.day[open] > .day-body {
+      animation: dayBodyIn 0.32s ease both;
+    }
+    @keyframes dayBodyIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .hero, .hero-bg, .hero > *:not(.hero-bg),
+      details.day[open] > .day-body {
+        animation: none !important;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .btn, .toc a, .filter-btn, .map-toggle, .checklist label,
+      details.day, details.day > summary .chev {
+        transition: none !important;
+      }
+      .btn:hover { transform: none; box-shadow: none; }
+    }
     .toc {
       display: flex;
       flex-wrap: wrap;
@@ -755,26 +834,16 @@
     }
     .day-kind.drive { background: rgba(42,111,127,0.12); color: var(--lake); }
     .day-kind.play { background: rgba(196,92,38,0.12); color: var(--dusk); }
-    .map-actions { max-height: none; }
-    .map-actions.collapsed { max-height: 88px; overflow: hidden; position: relative; }
-    .map-actions.collapsed::after {
-      content: "";
-      position: absolute;
-      left: 0; right: 0; bottom: 0; height: 36px;
-      background: linear-gradient(transparent, #fff);
-      pointer-events: none;
-    }
     .map-toggle {
       width: 100%;
-      margin-top: 4px;
       border: none;
+      border-top: 1px solid rgba(196,165,116,0.25);
       background: var(--paper-2);
       color: var(--ink-soft);
       padding: 10px;
       font-size: 13px;
       font-family: inherit;
       cursor: pointer;
-      border-radius: 0 0 12px 12px;
     }
     .extras-tabs {
       display: flex;
@@ -857,12 +926,12 @@
         </div>
 
         <nav class="toc no-print" aria-label="目录">
-          <a href="#days">每日行程</a>
-          <a href="#route">导航</a>
-          <a href="#budget">预算</a>
-          <a href="#todo">出发前</a>
-          <a href="#spots">地方</a>
-          <a href="#extras">路上备忘</a>
+          <a href="#days">每天的安排</a>
+          <a href="#route">沿着这条线往西</a>
+          <a href="#budget">这一路的预算</a>
+          <a href="#todo">出发前慢慢办</a>
+          <a href="#spots">沿途停靠</a>
+          <a href="#extras">一些小事</a>
         </nav>
 
         <div class="layer">
@@ -1878,10 +1947,12 @@
 
   <nav class="bottom-nav no-print" aria-label="底部导航">
     <a href="#top"><span>⌂</span>开头</a>
-    <a href="#days"><span>日</span>按天</a>
-    <a href="#route"><span>⌖</span>导航</a>
-    <a href="#todo"><span>✓</span>待办</a>
-    <a href="#budget"><span>¥</span>花钱</a>
+    <a href="#days"><span>日</span>安排</a>
+    <a href="#route"><span>⌖</span>路线</a>
+    <a href="#budget"><span>¥</span>预算</a>
+    <a href="#todo"><span>✓</span>出发前</a>
+    <a href="#spots"><span>◇</span>停靠</a>
+    <a href="#extras"><span>…</span>小事</a>
   </nav>
 
   <script>
@@ -2097,13 +2168,45 @@
         entries.forEach((e) => {
           if (!e.isIntersecting) return;
           const id = e.target.id;
-          links.forEach((l) => l.classList.toggle("active", l.getAttribute("href") === "#" + id));
+          const activeHref = id === "overview" ? "#top" : ("#" + id);
+          links.forEach((l) => l.classList.toggle("active", l.getAttribute("href") === activeHref));
         });
       }, { rootMargin: "-40% 0px -50% 0px", threshold: 0 });
       ["top", "overview", "days", "route", "budget", "todo", "spots", "extras"].forEach((id) => {
         const el = document.getElementById(id);
         if (el) io.observe(el);
       });
+
+      // 滚动进入视口：章节/卡片轻 fade-up（仅加一次 class）
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduceMotion && "IntersectionObserver" in window) {
+        const revealSel = [
+          "section .section-label",
+          "section h2",
+          "section .section-verse",
+          "section .section-desc",
+          ".phase-row .phase",
+          ".layer",
+          "details.day",
+          ".route-strip .route-node",
+          ".map-panel",
+          ".callout",
+          ".spot",
+          ".checklist",
+          ".total-box",
+          ".sunset-grid > div"
+        ].join(",");
+        const revealEls = [...document.querySelectorAll(revealSel)];
+        revealEls.forEach((el) => el.classList.add("reveal"));
+        const rio = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("is-in");
+            rio.unobserve(entry.target);
+          });
+        }, { rootMargin: "0px 0px -6% 0px", threshold: 0.08 });
+        revealEls.forEach((el) => rio.observe(el));
+      }
 
       // 深链打开对应天
       const openHashDay = () => {
