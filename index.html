@@ -160,6 +160,12 @@
       font-size: 13px;
       line-height: 1.5;
     }
+    /* 停靠卡：多行导航按钮加高行距，不影响全页其它小按钮 */
+    #spots .btn-map.btn-sm {
+      padding: 12px 14px;
+      line-height: 1.7;
+      align-items: flex-start;
+    }
 
     .wrap { width: min(720px, 100%); margin: 0 auto; padding: 0 16px; }
 
@@ -581,14 +587,33 @@
       border: 0;
       display: block;
     }
-    .map-actions {
-      display: flex;
-      flex-wrap: wrap;
+    /* 路线区 / 行程内：导航按钮网格，宽屏约 3 列，窄屏 2/1 列 */
+    .nav-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
+    }
+    .nav-grid > .btn {
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    @media (max-width: 560px) {
+      .nav-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 380px) {
+      .nav-grid { grid-template-columns: 1fr; }
+    }
+    .day-body > .nav-grid { margin-top: 4px; }
+    .map-leg-nav {
       padding: 10px;
       background: #fff;
+      border-top: 1px solid rgba(196,165,116,0.22);
     }
-    .map-actions.collapsed .btn:nth-child(n+5) { display: none; }
+    .map-leg-nav .btn-map.btn-sm {
+      padding: 11px 10px;
+      line-height: 1.55;
+    }
 
     .sunset-grid {
       display: grid;
@@ -661,7 +686,7 @@
     .reveal-stagger > .reveal:nth-child(5) { transition-delay: 0.26s; }
     .reveal-stagger > .reveal:nth-child(6) { transition-delay: 0.32s; }
 
-    .btn, .toc a, .filter-btn, .map-toggle, .checklist label {
+    .btn, .toc a, .filter-btn, .checklist label {
       transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
     @media (hover: hover) and (pointer: fine) {
@@ -696,7 +721,7 @@
         transform: none;
         transition: none;
       }
-      .btn, .toc a, .filter-btn, .map-toggle, .checklist label,
+      .btn, .toc a, .filter-btn, .checklist label,
       details.day, details.day > summary .chev {
         transition: none !important;
       }
@@ -834,17 +859,6 @@
     }
     .day-kind.drive { background: rgba(42,111,127,0.12); color: var(--lake); }
     .day-kind.play { background: rgba(196,92,38,0.12); color: var(--dusk); }
-    .map-toggle {
-      width: 100%;
-      border: none;
-      border-top: 1px solid rgba(196,165,116,0.25);
-      background: var(--paper-2);
-      color: var(--ink-soft);
-      padding: 10px;
-      font-size: 13px;
-      font-family: inherit;
-      cursor: pointer;
-    }
     .extras-tabs {
       display: flex;
       gap: 6px;
@@ -882,7 +896,7 @@
     details.day summary::-webkit-details-marker { display: none; }
 
     @media print {
-      .bottom-nav, .btn-row, .no-print, .progress-bar, .fab-top, .toc, .filter-row, .map-toggle, .lightbox { display: none !important; }
+      .bottom-nav, .btn-row, .no-print, .progress-bar, .fab-top, .toc, .filter-row, .lightbox { display: none !important; }
       body { padding: 0; background: #fff; }
       details.day { break-inside: avoid; }
       details.day[open] { box-shadow: none; }
@@ -1008,8 +1022,10 @@
               <li>下午去镇北堡西部影城或贺兰山岩画，选一处就好——岩画是远古敲凿的图像，影城是电影里的边塞。</li>
               <li>傍晚回漫葡，跟着节目单逛「看见贺兰」：街区、灯火、几场想看的演艺，不必全看完。</li>
             </ul>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.52&name=漫葡小镇&src=qinggan-roadbook&coordinate=gaode&callnative=1">高德搜：漫葡小镇</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.50&name=镇北堡西部影城&src=qinggan-roadbook&coordinate=gaode&callnative=1">高德搜：镇北堡影城</a>
+            <div class="nav-grid">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.52&name=漫葡小镇&src=qinggan-roadbook&coordinate=gaode&callnative=1">高德搜：漫葡小镇</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.50&name=镇北堡西部影城&src=qinggan-roadbook&coordinate=gaode&callnative=1">高德搜：镇北堡影城</a>
+            </div>
           </div>
         </details>
 
@@ -1029,10 +1045,12 @@
               <li>下午前往张掖临泽，住丹霞明珠，把日落留给第二天。</li>
               <li><strong>可选：</strong>西夏后顺路在中卫沙坡头看一眼黄河贴着沙漠走的那一角，停一两小时再继续；只看景即可。会更晚到店——星空仍留给青海湖。</li>
             </ul>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.98,38.43&name=西夏陵&src=qinggan-roadbook&coordinate=gaode&callnative=1">高德搜：西夏陵</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=105.98,38.43,西夏陵&to=100.45,38.93,张掖七彩丹霞&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">西夏 → 丹霞一带</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=105.98,38.43,西夏陵&to=105.005,37.463,沙坡头景区&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：西夏 → 沙坡头</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=105.005,37.463,沙坡头景区&to=100.45,38.93,张掖七彩丹霞&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：沙坡头 → 丹霞</a>
+            <div class="nav-grid">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.98,38.43&name=西夏陵&src=qinggan-roadbook&coordinate=gaode&callnative=1">高德搜：西夏陵</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=105.98,38.43,西夏陵&to=100.45,38.93,张掖七彩丹霞&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">西夏 → 丹霞一带</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=105.98,38.43,西夏陵&to=105.005,37.463,沙坡头景区&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：西夏 → 沙坡头</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=105.005,37.463,沙坡头景区&to=100.45,38.93,张掖七彩丹霞&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：沙坡头 → 丹霞</a>
+            </div>
           </div>
         </details>
 
@@ -1050,8 +1068,10 @@
               <li>下午进入七彩丹霞，跟着园内观光车转几个观景台，日落前留在台上。</li>
               <li>天黑后开往嘉峪关——长城西端关城所在；南湖停车场车宿一晚，为明天进敦煌留体力。</li>
             </ul>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.45,38.93&name=张掖七彩丹霞&src=qinggan-roadbook&coordinate=gaode&callnative=1">高德搜：七彩丹霞</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=100.45,38.93,七彩丹霞&to=98.29,39.77,嘉峪关&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">丹霞 → 嘉峪关</a>
+            <div class="nav-grid">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.45,38.93&name=张掖七彩丹霞&src=qinggan-roadbook&coordinate=gaode&callnative=1">高德搜：七彩丹霞</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=100.45,38.93,七彩丹霞&to=98.29,39.77,嘉峪关&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">丹霞 → 嘉峪关</a>
+            </div>
           </div>
         </details>
 
@@ -1070,8 +1090,10 @@
               <li>下午从数字展示中心进入莫高窟——先电影再进窟，出来后抓紧去鸣沙山赶日落。</li>
               <li>回梵尘稍作休息，再去沙州夜市吃饭；夜里回到沙边，灯火远一点就好。</li>
             </ul>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.81,40.04&name=莫高窟数字展示中心&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航数字中心</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.68,40.09&name=鸣沙山月牙泉&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航鸣沙山</a>
+            <div class="nav-grid">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.81,40.04&name=莫高窟数字展示中心&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航数字中心</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.68,40.09&name=鸣沙山月牙泉&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航鸣沙山</a>
+            </div>
           </div>
         </details>
 
@@ -1108,13 +1130,15 @@
               <li>出水上雅丹后沿 G315 东行：<strong>东台吉乃尔</strong>路边停一下拍盐湖（约 15–40 分钟）；接着<strong>U315 / U 型公路</strong>当顺路风景开过，安全处可再停几分钟，傍晚到大柴旦入住。</li>
               <li><strong>可选顺路：</strong>出敦煌往阿克塞时，可拐<strong>多坝沟胡杨峡</strong>——走廊西侧支线，短停约 1–2 小时，看峡谷里那层水墨戈壁与雅丹山体，再接水上雅丹。</li>
             </ul>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.35,37.72,乌素特水上雅丹&to=93.90,37.50,东台吉乃尔湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 东台</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.90,37.50,东台吉乃尔湖&to=94.10,37.55,U型公路&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">东台 → U315</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.10,37.55,U型公路&to=95.37,37.85,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">U315 → 大柴旦</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=95.37,37.85,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">直达：敦煌 → 大柴旦</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.82,39.98,多坝沟胡杨峡&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：敦煌 → 胡杨峡</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.82,39.98,多坝沟胡杨峡&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：胡杨峡 → 水上雅丹</a>
+            <div class="nav-grid">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.35,37.72,乌素特水上雅丹&to=93.90,37.50,东台吉乃尔湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 东台</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.90,37.50,东台吉乃尔湖&to=94.10,37.55,U型公路&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">东台 → U315</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.10,37.55,U型公路&to=95.37,37.85,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">U315 → 大柴旦</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=95.37,37.85,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">直达：敦煌 → 大柴旦</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.82,39.98,多坝沟胡杨峡&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：敦煌 → 胡杨峡</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.82,39.98,多坝沟胡杨峡&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：胡杨峡 → 水上雅丹</a>
+            </div>
           </div>
         </details>
 
@@ -1134,13 +1158,15 @@
               <li>途经<strong>德令哈</strong>：加油、吃饭、超市补给，约 15–40 分钟量级就够（海西州府，比盐湖沿线好找），补完继续开。</li>
               <li>时间宽裕可短停茶卡盐湖（天空之镜）；傍晚到东岸看湖，夜里看星，住木慧楠。风大、夜里冷，外套要有。</li>
             </ul>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.37,37.85&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.37,37.85,大柴旦翡翠湖&to=97.37,37.37,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=99.08,36.70,茶卡盐湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：德令哈 → 茶卡</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=99.08,36.70,茶卡盐湖&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：茶卡 → 青海湖东岸</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖东岸</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=99.08,36.70&name=茶卡盐湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航茶卡</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.74,36.72&name=青海湖东岸&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航青海湖东岸</a>
+            <div class="nav-grid">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.37,37.85&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.37,37.85,大柴旦翡翠湖&to=97.37,37.37,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=99.08,36.70,茶卡盐湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：德令哈 → 茶卡</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=99.08,36.70,茶卡盐湖&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：茶卡 → 青海湖东岸</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖东岸</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=99.08,36.70&name=茶卡盐湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航茶卡</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.74,36.72&name=青海湖东岸&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航青海湖东岸</a>
+            </div>
           </div>
         </details>
 
@@ -1199,49 +1225,37 @@
         </div>
 
         <div class="map-panel">
-
-<!-- OSM 概览：成都→兰州走廊视觉参考；精确导航用下方高德 -->
+<!-- OSM 概览：成都→兰州走廊视觉参考；精确导航用下方高德主段 -->
           <iframe
             title="路线概览地图"
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
             src="https://www.openstreetmap.org/export/embed.html?bbox=92.5%2C29.5%2C107.5%2C41.5&amp;layer=mapnik&amp;marker=36.06%2C103.83">
           </iframe>
-          <div class="map-actions collapsed" id="mapActions">
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=104.066301,30.572961,成都&to=106.278179,38.466370,银川&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">成都 → 银川</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=106.278179,38.466370,银川&to=100.449818,38.925823,张掖七彩丹霞&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">银川 → 丹霞</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=100.449818,38.925823,七彩丹霞&to=98.289152,39.773250,嘉峪关&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">丹霞 → 嘉峪关</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=98.289152,39.773250,嘉峪关&to=94.661881,40.142128,敦煌&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">嘉峪关 → 敦煌</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=93.350000,37.720000,乌素特水上雅丹&to=93.900000,37.500000,东台吉乃尔湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 东台</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=93.900000,37.500000,东台吉乃尔湖&to=94.100000,37.550000,U型公路&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">东台 → U315</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=94.100000,37.550000,U型公路&to=95.367500,37.852800,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">U315 → 大柴旦</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=95.367500,37.852800,大柴旦翡翠湖&to=97.370000,37.370000,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=97.370000,37.370000,德令哈&to=99.080000,36.700000,茶卡盐湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：德令哈 → 茶卡</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=99.080000,36.700000,茶卡盐湖&to=100.735000,36.720000,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：茶卡 → 青海湖</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=97.370000,37.370000,德令哈&to=100.735000,36.720000,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=100.735000,36.720000,青海湖东岸&to=103.834170,36.061380,兰州&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">青海湖 → 兰州</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=103.834170,36.061380,兰州&to=104.066301,30.572961,成都&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">兰州 → 成都</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.820000,39.980000,多坝沟胡杨峡&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：敦煌 → 胡杨峡</a>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=93.820000,39.980000,多坝沟胡杨峡&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：胡杨峡 → 水上雅丹</a>
+          <div class="map-leg-nav" aria-label="主路段导航">
+            <div class="nav-grid">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=104.066301,30.572961,成都&to=106.278179,38.466370,银川&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">成都 → 银川</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=106.278179,38.466370,银川&to=100.449818,38.925823,张掖七彩丹霞&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">银川 → 丹霞</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=100.449818,38.925823,七彩丹霞&to=98.289152,39.773250,嘉峪关&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">丹霞 → 嘉峪关</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=98.289152,39.773250,嘉峪关&to=94.661881,40.142128,敦煌&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">嘉峪关 → 敦煌</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=93.350000,37.720000,乌素特水上雅丹&to=95.367500,37.852800,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 大柴旦</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=95.367500,37.852800,大柴旦翡翠湖&to=97.370000,37.370000,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=97.370000,37.370000,德令哈&to=100.735000,36.720000,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=100.735000,36.720000,青海湖东岸&to=103.834170,36.061380,兰州&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">青海湖 → 兰州</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+                href="https://uri.amap.com/navigation?from=103.834170,36.061380,兰州&to=104.066301,30.572961,成都&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">兰州 → 成都</a>
+            </div>
           </div>
-          <button type="button" class="map-toggle no-print" id="mapToggle">展开全部导航段</button>
         </div>
 
         <div class="callout lake">
@@ -1388,23 +1402,12 @@
               <div class="spot-meta">望山 · 银川西麓 · 9.25</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.997,38.727&name=贺兰山岩画&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航贺兰山岩画</a>
               <details class="spot-more">
-                <summary>看看游览安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
-                  <h4>这是什么</h4>
                   <ul>
-                    <li><strong>贺兰山</strong>：宁夏与内蒙古交界的山脉，银川西侧那一道连绵山脊。</li>
-                    <li>山名近「骏马」：史籍里的边塞坐标；岩画、西夏遗迹、葡萄园都围着山脚铺开。</li>
-                    <li>这一站不赶场——抵达后先望山，把长途的疲倦卸掉，再决定近看岩画。</li>
-                  </ul>
-                  <h4>9.25 怎么排</h4>
-                  <ul>
-                    <li>下午抵达银川西麓一带，先找一处能看见山脊的开阔处停一停。</li>
-                    <li>天气好就对着西边拍几张；若还有余力，可顺路去<strong>贺兰山岩画</strong>（也可留到第二天与影城任选其一）。</li>
-                  </ul>
-                  <h4>注意</h4>
-                  <ul>
-                    <li>山前昼夜温差大，薄外套备一件。</li>
-                    <li>进保护区或景区按现场开放与票务走开放区域。</li>
+                    <li>9.25 下午到银川西麓后，先找一处能看见山脊的开阔处停稳——车门一开，先把视线交给西边，别急着赶下一站。</li>
+                    <li>天气好就对着山影拍几张；还有余力再近看<strong>贺兰山岩画</strong>。也可留到 9.26 下午，与镇北堡影城二选一。</li>
+                    <li>山前昼夜温差大，薄外套备一件；进保护区或景区按现场开放与票务走开放区域。</li>
                   </ul>
                 </div>
               </details>
@@ -1420,13 +1423,12 @@
               <div class="spot-meta">9.26 下午可选 · 银川</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.50&name=镇北堡西部影城&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航影城</a>
               <details class="spot-more">
-                <summary>看看游览安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
-                  <h4>怎么放进路书</h4>
                   <ul>
-                    <li>9.26 下午可来影城，或去<strong>贺兰山岩画</strong>。</li>
-                    <li>进园后跟着标志走几个拍摄点即可，不必打卡全集。</li>
-                    <li>傍晚赶回漫葡，把体力留给「看见贺兰」夜场。</li>
+                    <li>排在 9.26 下午：从宿集换到漫葡安顿后，下午可来影城，或去<strong>贺兰山岩画</strong>——两处选一即可，别两头赶。</li>
+                    <li>进园跟着标志走几处拍摄点：夯土墙、残堡、干裂地面，走巷子里感受风沙就够；不必按打卡清单走完。</li>
+                    <li>傍晚赶回漫葡，把体力留给夜场灯火；影城与漫葡、宿集都在银川西麓一带，车程不远，但预留回程时间。</li>
                   </ul>
                 </div>
               </details>
@@ -1441,11 +1443,12 @@
               <div class="spot-meta">9.26 · 住天沐·党项 · 夜场票提前确认</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.52&name=漫葡小镇&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航漫葡</a>
               <details class="spot-more">
-                <summary>看看游览安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>从宿集换到漫葡后，先放行李再出门。</li>
-                    <li>夜游按节目单选几场；温泉与充电桩出发前向酒店确认。</li>
+                    <li>9.26 从宿集换到天沐·党项后，先放行李、确认夜场票与入场方式，再出门。</li>
+                    <li>傍晚跟着节目单选几场逛街区与灯火即可，不必全看完；下午若去了影城或岩画，更要留体力给夜里。</li>
+                    <li>温泉、充电桩出发前向酒店问清楚位置与时段；夜里风凉，外套备一件。</li>
                   </ul>
                 </div>
               </details>
@@ -1460,14 +1463,12 @@
               <div class="spot-meta">票+车约 115/人 · 馆多半免费 · 尽量早入园</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.98,38.45&name=西夏陵&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航西夏陵</a>
               <details class="spot-more">
-                <summary>看看游览安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
-                  <h4>这是什么</h4>
-                  <p>西夏王朝的皇家陵园，土黄色塔状陵台很有辨识度。旁边博物馆把西夏历史、文字、文物讲清楚，先看馆再上陵，不会只剩「看个土堆」。</p>
-                  <h4>怎么玩</h4>
                   <ul>
-                    <li>尽量 <strong>8:30–9:00</strong> 到，留足半天，中午前结束去张掖。</li>
-                    <li>建议顺序：游客中心/售票 → <strong>博物馆</strong> → 坐<strong>观光车</strong>进陵区 → 返回。</li>
+                    <li>尽量 <strong>8:30–9:00</strong> 到，留足半天；中午前结束，下午才赶得上往张掖。</li>
+                    <li>动线：游客中心/售票 → <strong>博物馆</strong>（把背景听清楚）→ 坐<strong>观光车</strong>进陵区看夯土陵台 → 返回。陵区不必硬走。</li>
+                    <li>票+车约 115/人、馆多半免费——以现场为准；看完接西夏 → 丹霞（或可选绕沙坡头）。</li>
                   </ul>
                 </div>
               </details>
@@ -1482,12 +1483,12 @@
               <div class="spot-meta">可选路过 · 停 1–2 小时 · 西夏 → 张掖途中</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.005,37.463&name=沙坡头景区&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航沙坡头</a>
               <details class="spot-more">
-                <summary>看看怎么路过</summary>
+                <summary>看看怎么停</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>只适合夹在<strong>西夏 → 张掖</strong>之间。</li>
-                    <li>只看景即可，滑沙、筏子等项目想玩再买。</li>
-                    <li>星空主场仍是<strong>10.2 青海湖</strong>。</li>
+                    <li>夹在<strong>西夏 → 张掖</strong>途中：西夏看完再决定是否拐；停 1–2 小时，只看黄河贴着沙漠的那一角即可。</li>
+                    <li>滑沙、羊皮筏子等项目想玩再买，不玩也能走；时间紧就直开丹霞明珠。</li>
+                    <li>绕行会更晚到店——夜里别赶星空，星空留给 <strong>10.2 青海湖东岸</strong>。</li>
                   </ul>
                 </div>
               </details>
@@ -1503,11 +1504,12 @@
               <div class="spot-meta">票+车约 75/人 · 9.28 下午 · 日落约 18:30–19:30</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.12,38.97&name=张掖七彩丹霞&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航丹霞</a>
               <details class="spot-more">
-                <summary>看看游览安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>9.28 上午补觉，下午进园卡日落。</li>
-                    <li>必须坐区间环保车；日落后开嘉峪关车宿。</li>
+                    <li>9.28 上午补觉；下午进园，把时间留给日落前后（约 18:30–19:30）——斜阳一到，层理才醒。</li>
+                    <li>园内必须坐区间环保车串观景台；跟着车次走几处高点即可，不必打卡全集。</li>
+                    <li>住北门丹霞明珠，进出省事；日落撤出后开嘉峪关车宿，夜里别拖太晚。</li>
                   </ul>
                 </div>
               </details>
@@ -1523,11 +1525,12 @@
               <div class="spot-meta">约 238/人 · 提前约 30 天抢 · A 类常规票</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.81,40.04&name=莫高窟数字展示中心&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航数字中心</a>
               <details class="spot-more">
-                <summary>看看参观安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>导航去<strong>莫高窟数字展示中心</strong>，先电影再摆渡进窟。</li>
-                    <li>目标日期 <strong>2026-09-29</strong>，优先下午场；只用官方预约。</li>
+                    <li>导航去<strong>莫高窟数字展示中心</strong>：先看影片，再摆渡进窟区——别直接开去崖壁门口。</li>
+                    <li>目标日期 <strong>2026-09-29</strong>，优先下午场；约提前 30 天在官方渠道抢 A 类常规票，别走不明渠道。</li>
+                    <li>洞窟里凉、脚步轻；看完出来再开鸣沙山赶日落，中间留足换场时间。</li>
                   </ul>
                 </div>
               </details>
@@ -1543,11 +1546,12 @@
               <div class="spot-meta">约 110/人 · 票常可 3 日用 · 住梵尘很近</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.68,40.09&name=鸣沙山月牙泉&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航鸣沙山</a>
               <details class="spot-more">
-                <summary>看看游览安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>下午晚一些入园，把光线留给日落前后。</li>
-                    <li>骑骆驼、滑沙另收费；不玩也不亏。</li>
+                    <li>莫高窟出来后，下午晚一些入园，把光线留给日落前后；主看沙色与月牙泉，看完主色就撤。</li>
+                    <li>骑骆驼、滑沙另收费，想玩再买；票常可多日使用，以现场说明为准。</li>
+                    <li>住梵尘很近；日落撤出后进城沙州夜市吃晚饭，再回酒店。</li>
                   </ul>
                 </div>
               </details>
@@ -1562,11 +1566,11 @@
               <div class="spot-meta">9.29 晚饭 · 阳关路一带</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.14&name=沙州夜市&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航沙州夜市</a>
               <details class="spot-more">
-                <summary>看看怎么排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>日落撤出鸣沙山后开车十几分钟到夜市。</li>
-                    <li>以吃饱、尝尝当地味道为主，晚饭后早些回——第二天出城去雅丹。</li>
+                    <li>日落撤出鸣沙山，开车十几分钟到阳关路一带；以吃饱、尝尝当地味道为主，别拖成深夜逛街。</li>
+                    <li>晚饭后早些回梵尘——第二天要出城去雅丹，赶日落班。</li>
                   </ul>
                 </div>
               </details>
@@ -1584,8 +1588,8 @@
                 <summary>看看怎么停</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>当作去雅丹途中的短停，留足时间赶日落班。</li>
-                    <li>风大沙多，帽子口罩有用。</li>
+                    <li>9.30 出城去雅丹途中短停：关城不大，下车拍几张、站一会儿即可，别耗掉赶日落班的余量。</li>
+                    <li>风大沙多，帽子、口罩有用；停稳再下车，注意过路车。</li>
                   </ul>
                 </div>
               </details>
@@ -1601,11 +1605,12 @@
               <div class="spot-meta">票+车约 120/人 · 市区约 2–2.5 小时 · 末班常约 18:30</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=92.85,40.52&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
               <details class="spot-more">
-                <summary>看看游览安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>9.30 建议 13:00–14:00 前出城；赶日落班。</li>
-                    <li>翌日乌素特是「水上雅丹」：土丘泡在浅湖里，景致另一番。</li>
+                    <li>9.30 建议 <strong>13:00–14:00</strong> 前出城（市区约 2–2.5 小时）；途中可短停玉门关，但要留足赶日落班。</li>
+                    <li>进园坐观光车串土丘；末班常约 18:30，以现场为准——日落时阴影拉长最好看，看完当天回敦煌。</li>
+                    <li>票+车约 120/人；第二天主线换到乌素特水上雅丹，别把两天景挤成一天。</li>
                   </ul>
                 </div>
               </details>
@@ -1620,11 +1625,11 @@
               <div class="spot-meta">10.1 上午任选 · 凭证件参观以现场为准</div>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.15&name=敦煌博物馆&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航博物馆</a>
               <details class="spot-more">
-                <summary>看看怎么排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>中午前后上路，下午翻当金山进柴达木。</li>
-                    <li>博物馆或书店任选其一即可。</li>
+                    <li>10.1 上午城里任选：博物馆或书店走一处即可，凭证件参观以现场为准，别排太满。</li>
+                    <li>中午前后上路，下午翻当金山进柴达木——后面还有水上雅丹主停，上午别拖。</li>
                   </ul>
                 </div>
               </details>
@@ -1644,8 +1649,8 @@
                 <summary>看看怎么停</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>出敦煌后、进当金山前可拐；停约 1–2 小时，再接水上雅丹。</li>
-                    <li>主线仍是水上雅丹（主停）→ 东台／U315 短停 → 大柴旦过夜。</li>
+                    <li>出敦煌往阿克塞、进当金山前可拐多坝沟；短停约 1–2 小时，找安全处停稳再看山体与戈壁。</li>
+                    <li>接回主线：水上雅丹（主停）→ 东台／U315 路边短停 → 大柴旦过夜。时间紧就跳过此处直开水上雅丹。</li>
                   </ul>
                 </div>
               </details>
@@ -1662,12 +1667,12 @@
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.35,37.72&name=乌素特水上雅丹&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航水上雅丹</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
               <details class="spot-more">
-                <summary>看看怎么停</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>反向走法：水上雅丹（主停）→ 东台／U315 路边短停 → 大柴旦。</li>
-                    <li>再晚出发就缩短后面短停，优先保到大柴旦住宿。</li>
-                    <li>防晒和水要带够。</li>
+                    <li>今日主停：进园约 1–1.5 小时，跟着游览线看土丘与倒影即可；票+车约 120/人，以现场为准。</li>
+                    <li>出园后沿 G315 东行：东台、U315 作路边短停／车窗风景；再晚出发就缩短后面短停，优先保大柴旦住宿。</li>
+                    <li>日照强、风干，防晒和水要带够。</li>
                   </ul>
                 </div>
               </details>
@@ -1687,9 +1692,9 @@
                 <summary>看看怎么停</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>导航「东台吉乃尔湖」或 G315 观景点；路边停一下即可，注意避让过路车。</li>
-                    <li>水位随季节变化，蓝白浓淡以现场为准——拍完就走。</li>
-                    <li>继续东行上 U315 风景公路段，傍晚进大柴旦。</li>
+                    <li>水上雅丹之后、大柴旦之前：导航「东台吉乃尔湖」或 G315 观景点，路边停 15–40 分钟拍几张。</li>
+                    <li>只在路肩宽、能看清来车处停稳；水位与蓝白浓淡随季节变化，以现场为准——拍完就走。</li>
+                    <li>继续东行上 U315 一段，傍晚进大柴旦过夜；翡翠湖留到次日清晨。</li>
                   </ul>
                 </div>
               </details>
@@ -1710,8 +1715,8 @@
                 <summary>看看怎么开</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>沿着开：只在路肩宽、能看清来车处短停。</li>
-                    <li>风大、紫外线强——车窗风景也够用；傍晚进大柴旦过夜。</li>
+                    <li>接在东台之后：慢开路过；想拍再找路肩宽、能看清来车处停几分钟（约 15–40 分钟，也可不下车）。</li>
+                    <li>风大、紫外线强，车窗风景也够用；傍晚进大柴旦过夜，别在公路上拖到天黑。</li>
                   </ul>
                 </div>
               </details>
@@ -1728,11 +1733,12 @@
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.37,37.85&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.37,37.85,大柴旦翡翠湖&to=97.37,37.37,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
               <details class="spot-more">
-                <summary>看看游览安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>住大柴旦后第二天早上去最省事。</li>
-                    <li>日照强、干燥，防晒和水要带够。</li>
+                    <li>10.2 住大柴旦后早上去最省事；1～3 号湖转一转就够，别恋战——后面还要经德令哈赶到东岸日落。</li>
+                    <li>票+车约 100/人量级，以现场为准；日照强、干燥，防晒和水要带够。</li>
+                    <li>出镇后东行：德令哈补给 →（可选茶卡）→ 青海湖东岸过夜。</li>
                   </ul>
                 </div>
               </details>
@@ -1753,8 +1759,8 @@
                 <summary>看看怎么停</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>优先加油、吃饭、超市补给，补完就走，把余量留给东岸日落。</li>
-                    <li>出城后视时间决定是否短停茶卡，星空主场仍在青海湖东岸。</li>
+                    <li>翡翠湖之后、东岸之前：进城优先加油、吃饭、超市补给，约 15–40 分钟量级，补完就走。</li>
+                    <li>出城后视时间决定是否短停茶卡；把余量留给东岸日落与夜里看星。</li>
                   </ul>
                 </div>
               </details>
@@ -1774,8 +1780,8 @@
                 <summary>看看怎么停</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>只适合时间宽裕时短停；星空主场仍在东岸。</li>
-                    <li>盐壳反光强，墨镜必备。</li>
+                    <li>德令哈补给后、若时间宽裕再短停；看完盐壳反光就继续东岸，别挤掉日落与星空。</li>
+                    <li>盐壳反光强，墨镜必备；停车按景区指示，别在危险路段随意停。</li>
                   </ul>
                 </div>
               </details>
@@ -1792,12 +1798,12 @@
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.74,36.72&name=青海湖东岸&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航东岸</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 东岸</a>
               <details class="spot-more">
-                <summary>看看游览安排</summary>
+                <summary>看看怎么玩</summary>
                 <div class="spot-detail">
                   <ul>
-                    <li>10.2 翡翠湖后经德令哈补给，再经黑马河一带开到东岸。</li>
-                    <li>傍晚看湖、夜里看星——本趟星空重点。</li>
-                    <li>10.3 上午再晃一下，下午经西宁去兰州。</li>
+                    <li>10.2 翡翠湖后经德令哈补给，再经黑马河一带开到东岸；傍晚先把湖面看一眼，天黑以后等星——本趟星空重点在这里。</li>
+                    <li>住木慧楠一带；风大、夜里冷，外套要有。景区票约 100/人量级，以现场为准。</li>
+                    <li>10.3 上午湖边再晃一下即可，下午经西宁去兰州，别排新景点。</li>
                   </ul>
                 </div>
               </details>
@@ -2026,15 +2032,6 @@
         openOnlyDay(first);
         first && first.scrollIntoView({ behavior: "smooth", block: "start" });
       });
-
-      const mapActions = document.getElementById("mapActions");
-      const mapToggle = document.getElementById("mapToggle");
-      if (mapActions && mapToggle) {
-        mapToggle.addEventListener("click", () => {
-          const collapsed = mapActions.classList.toggle("collapsed");
-          mapToggle.textContent = collapsed ? "展开全部导航段" : "收起导航段";
-        });
-      }
 
       // 手机：优先唤起本地高德；桌面仍走 uri.amap.com 网页
       const isMobileAmap = /Android|iPhone|iPad|iPod|Mobile|HarmonyOS|MicroMessenger|Lark|Feishu/i.test(navigator.userAgent);
