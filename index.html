@@ -37,12 +37,67 @@
       margin: 0;
       font-family: "Noto Sans SC", system-ui, sans-serif;
       color: var(--ink);
+      isolation: isolate;
       background-color: var(--paper);
+      /* 纸基：细纤维 + 既有暖沙/湖青氛围，避免塑料平涂 */
       background-image:
+        repeating-linear-gradient(
+          105deg,
+          transparent 0,
+          transparent 11px,
+          rgba(61, 52, 44, 0.012) 11px,
+          rgba(61, 52, 44, 0.012) 12px
+        ),
+        repeating-linear-gradient(
+          -12deg,
+          transparent 0,
+          transparent 17px,
+          rgba(196, 165, 116, 0.018) 17px,
+          rgba(196, 165, 116, 0.018) 18px
+        ),
         radial-gradient(ellipse 120% 80% at 10% -10%, rgba(196,165,116,0.22), transparent 50%),
         radial-gradient(ellipse 80% 50% at 100% 20%, rgba(42,111,127,0.08), transparent 45%);
       line-height: 1.65;
       padding-bottom: calc(var(--nav-h) + var(--safe-b) + 16px);
+    }
+    /* 1) 极淡噪点纸感：固定层、不抢焦点、移动端低开销小瓦片 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 160px 160px;
+    }
+    /* 3) 宽屏侧缘：左暖沙 / 右冷青，中间阅读区保持干净 */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      background:
+        radial-gradient(ellipse 38% 72% at 0% 42%, rgba(196, 165, 116, 0.16), transparent 72%),
+        radial-gradient(ellipse 36% 68% at 100% 58%, rgba(42, 111, 127, 0.11), transparent 72%);
+      transition: opacity 0.25s ease;
+    }
+    @media (min-width: 1100px) {
+      body::after { opacity: 1; }
+    }
+    @media (min-width: 1400px) {
+      body::after {
+        background:
+          radial-gradient(ellipse 34% 70% at 0% 40%, rgba(196, 165, 116, 0.2), transparent 74%),
+          radial-gradient(ellipse 32% 66% at 100% 56%, rgba(42, 111, 127, 0.14), transparent 74%);
+      }
+    }
+    .hero, main, footer {
+      position: relative;
+      z-index: 1;
     }
     img { max-width: 100%; display: block; }
     a { color: var(--lake); text-decoration: none; }
@@ -160,17 +215,40 @@
       font-size: 13px;
       line-height: 1.5;
     }
-    /* 停靠卡：多行导航按钮加高行距，不影响全页其它小按钮 */
-    #spots .btn-map.btn-sm {
-      padding: 12px 14px;
-      line-height: 1.7;
-      align-items: flex-start;
-    }
 
     .wrap { width: min(720px, 100%); margin: 0 auto; padding: 0 16px; }
 
     section {
       padding: 36px 0 8px;
+    }
+    /* 2) 分区气息：大块柔和渐变，非整页色块仪表盘 */
+    #overview {
+      background:
+        linear-gradient(180deg, rgba(247, 240, 230, 0.2) 0%, transparent 55%);
+    }
+    #days {
+      background:
+        radial-gradient(ellipse 95% 70% at 50% -8%, rgba(196, 165, 116, 0.2), transparent 62%),
+        linear-gradient(180deg, rgba(232, 213, 181, 0.28) 0%, rgba(247, 240, 230, 0.12) 42%, transparent 78%);
+    }
+    #route {
+      background:
+        radial-gradient(ellipse 90% 65% at 42% -6%, rgba(42, 111, 127, 0.13), transparent 60%),
+        linear-gradient(180deg, rgba(226, 238, 236, 0.42) 0%, rgba(247, 240, 230, 0.1) 48%, transparent 80%);
+    }
+    #budget {
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(196, 165, 116, 0.06) 45%, transparent 100%);
+    }
+    #todo {
+      background:
+        linear-gradient(180deg, transparent 0%, rgba(239, 228, 212, 0.35) 50%, transparent 100%);
+    }
+    /* #spots stage styles live with .spot-stage */
+    #extras {
+      background:
+        radial-gradient(ellipse 80% 50% at 70% 0%, rgba(42, 111, 127, 0.05), transparent 55%),
+        linear-gradient(180deg, transparent 0%, rgba(239, 228, 212, 0.22) 60%, transparent 100%);
     }
     .section-label {
       font-size: 12px;
@@ -342,7 +420,11 @@
       margin: 14px -14px 12px;
       height: 160px;
       overflow: hidden;
+      /* 加载中默认色块，避免透明空洞 */
       background-color: var(--paper-2);
+      background-image: linear-gradient(160deg, var(--paper-2), var(--sand-light));
+      background-size: cover;
+      background-position: center;
       cursor: zoom-in;
     }
     .day-cover > img {
@@ -350,6 +432,41 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      opacity: 0;
+      transition: opacity 0.22s ease;
+    }
+    .day-cover.is-img-ready > img,
+    .spot-img.is-img-ready > img {
+      opacity: 1;
+    }
+    /* 加载失败：固定色块 + 极短提示 */
+    .day-cover.is-img-failed,
+    .spot-img.is-img-failed {
+      background-image: linear-gradient(160deg, var(--paper-2), var(--sand-light)) !important;
+      background-color: var(--paper-2);
+    }
+    .day-cover.is-img-failed > img,
+    .spot-img.is-img-failed > img {
+      opacity: 0;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .day-cover.is-img-failed::after,
+    .spot-img.is-img-failed::after {
+      content: "图未载入";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink-soft);
+      letter-spacing: 0.12em;
+      pointer-events: none;
     }
     .day-cover:focus-visible,
     .spot-img:focus-visible {
@@ -369,31 +486,426 @@
     .tag.hot { background: rgba(196,92,38,0.12); color: var(--dusk); }
     .tag.ok { background: rgba(61,107,79,0.12); color: var(--ok); }
 
-    .spot-grid {
-      display: grid;
-      gap: 14px;
+
+    /* —— 停靠舞台：横滑 + 全幅换景 —— */
+    .visually-hidden {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
     }
-    .spot {
-      border-radius: var(--radius);
-      overflow: hidden;
-      background: #fff;
-      border: 1px solid rgba(196,165,116,0.35);
-    }
-    .spot-img {
+    #spots.spot-stage {
       position: relative;
-      height: 160px;
+      isolation: isolate;
+      padding: 28px 0 36px;
+      min-height: min(92vh, 820px);
       overflow: hidden;
-      background-color: var(--paper-2);
+      color: #fffaf3;
+      background: #1a1410;
+    }
+    #spots.spot-stage .section-label { color: var(--sand-light); }
+    #spots.spot-stage h2 { color: #fffaf3; }
+    #spots.spot-stage .section-verse,
+    #spots.spot-stage .section-desc {
+      color: rgba(255, 250, 243, 0.78);
+    }
+    .spot-stage-bg {
+      position: absolute;
+      inset: -8%;
+      z-index: 0;
+      pointer-events: none;
+      transform-origin: center center;
+      animation: bgBreathe 20s ease-in-out infinite;
+      will-change: transform;
+    }
+    .spot-stage-bg-layer {
+      position: absolute;
+      inset: 0;
+      background-color: #1a1410;
       background-size: cover;
       background-position: center;
-      cursor: zoom-in;
+      opacity: 0;
+      transition: opacity 0.55s ease;
+      will-change: opacity;
     }
-    .spot-img > img {
+    .spot-stage-bg-layer.is-active {
+      opacity: 1;
+    }
+    .spot-stage-veil {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(26,20,16,0.42) 0%, rgba(26,20,16,0.12) 42%, rgba(26,20,16,0.38) 72%, rgba(26,20,16,0.72) 100%),
+        linear-gradient(90deg, rgba(26,20,16,0.22) 0%, transparent 45%, transparent 55%, rgba(26,20,16,0.22) 100%);
+    }
+    /* 换景时淡白盖住，避免缩放/切图跳变 */
+    .spot-stage-wash {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      background:
+        radial-gradient(ellipse 85% 70% at 50% 42%, rgba(255, 252, 247, 0.92), rgba(255, 252, 247, 0.55) 58%, rgba(255, 252, 247, 0.18) 100%);
+      transition: opacity 0.32s ease;
+    }
+    .spot-stage-wash.is-on {
+      opacity: 1;
+    }
+    .spot-stage-ui {
+      position: relative;
+      z-index: 1;
+    }
+    #spots.spot-stage .filter-row { margin-top: 4px; }
+    #spots.spot-stage .filter-btn {
+      background: rgba(255,252,247,0.12);
+      border-color: rgba(255,252,247,0.28);
+      color: rgba(255,250,243,0.88);
+    }
+    #spots.spot-stage .filter-btn.on {
+      background: #fffaf3;
+      color: var(--ink);
+      border-color: #fffaf3;
+    }
+    .spot-pager {
+      display: grid;
+      grid-template-columns: 40px 1fr 40px;
+      align-items: center;
+      gap: 8px;
+      margin: 6px 0 14px;
+    }
+    .spot-pager-btn {
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255,252,247,0.28);
+      border-radius: 50%;
+      background: rgba(255,252,247,0.12);
+      color: #fffaf3;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+    }
+    .spot-pager-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+    .spot-pager-btn:active:not(:disabled) { background: rgba(255,252,247,0.22); }
+    .spot-dots {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 7px;
+      overflow-x: auto;
+      padding: 8px 4px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+    .spot-dots::-webkit-scrollbar { display: none; }
+    .spot-dots button {
+      flex: 0 0 auto;
+      width: 9px;
+      height: 9px;
+      padding: 0;
+      margin: 6px 3px;
+      border: 0;
+      border-radius: 999px;
+      background: rgba(255,252,247,0.42);
+      cursor: pointer;
+      transition: width 0.2s ease, background-color 0.2s ease;
+    }
+    .spot-dots button.on {
+      width: 24px;
+      background: #fffaf3;
+    }
+    .spot-count {
+      grid-column: 1 / -1;
+      justify-self: center;
+      margin-top: -4px;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      color: rgba(255,250,243,0.7);
+      font-variant-numeric: tabular-nums;
+    }
+    .spot-carousel {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: 0;
+      padding: 2px 0 8px;
+      margin: 0;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      outline: none;
+    }
+    .spot-carousel::-webkit-scrollbar { display: none; }
+    .spot-slide {
+      flex: 0 0 100%;
       width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+      max-width: 100%;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      box-sizing: border-box;
+      padding: 0 2px;
     }
+    .spot-slide[hidden] { display: none !important; }
+    .spot-slide-card {
+      position: relative;
+      background: transparent;
+      color: #fffaf3;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      min-height: min(58vh, 560px);
+      padding: 4px 2px 12px;
+      display: flex;
+      flex-direction: column;
+      cursor: zoom-in;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
+    }
+    .spot-slide.is-current .spot-slide-card { box-shadow: none; }
+    .spot-slide-card a { cursor: pointer; }
+    .spot-slide-card > h3 {
+      margin: 0;
+      max-width: 9em;
+      font-family: "ZCOOL XiaoWei", serif;
+      font-size: clamp(2rem, 9vw, 2.75rem);
+      font-weight: 400;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
+      color: #fffaf3;
+    }
+    .spot-slide-card .spot-meta {
+      position: absolute;
+      top: 6px;
+      right: 0;
+      margin: 0;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      color: rgba(255, 250, 243, 0.78);
+      line-height: 1.4;
+      max-height: 42vh;
+      overflow: hidden;
+    }
+    .spot-slide-card .spot-teaser {
+      margin: 22px 2.5em 0 0;
+      max-width: 22em;
+      font-size: 14px;
+      line-height: 1.75;
+      color: rgba(255, 250, 243, 0.9);
+    }
+    .spot-slide-card > .spot-aside {
+      margin: 12px 2.5em 0 0;
+      max-width: 22em;
+      font-size: 12px;
+      line-height: 1.7;
+      color: rgba(255, 250, 243, 0.72);
+      opacity: 1;
+    }
+    .spot-slide-card .spot-detail {
+      margin: 14px 2.5em 0 0;
+      max-width: 22em;
+      padding: 0;
+      border: 0;
+      font-size: 13px;
+      color: rgba(255, 250, 243, 0.78);
+    }
+    .spot-slide-card .spot-detail ul {
+      margin: 0;
+      padding-left: 1.05em;
+    }
+    .spot-slide-card .spot-detail li { margin: 5px 0; }
+    .spot-slide-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 28px;
+      padding-right: 2px;
+    }
+    #spots.spot-stage .spot-slide-actions .btn-map,
+    #spots.spot-stage .spot-nav-link {
+      width: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent !important;
+      color: #fffaf3 !important;
+      font-family: "ZCOOL XiaoWei", serif;
+      font-size: 16px;
+      font-weight: 400;
+      letter-spacing: 0.42em;
+      line-height: 1.4;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+      box-shadow: none !important;
+      border-bottom: 1px solid rgba(255, 250, 243, 0.7);
+      transform: none !important;
+    }
+    #spots.spot-stage .spot-slide-actions .btn-map:active,
+    #spots.spot-stage .spot-nav-link:active {
+      opacity: 0.75;
+    }
+    #spots.spot-stage .spot-slide-actions a[hidden] { display: none !important; }
+    @media (prefers-reduced-motion: reduce) {
+      .spot-stage-bg,
+      .spot-stage-bg-layer,
+      .spot-stage-bg-layer.is-active,
+      .route-fullmap::before {
+        animation: none !important;
+        transform: none !important;
+      }
+      .spot-stage-wash {
+        transition: none !important;
+      }
+      .spot-stage-bg { inset: 0; }
+    }
+    @media print {
+      #spots.spot-stage {
+        color: var(--ink);
+        background: none;
+        min-height: 0;
+      }
+      .spot-stage-bg { display: none !important; }
+      .spot-carousel {
+        display: block;
+        overflow: visible;
+      }
+      .spot-slide {
+        break-inside: avoid;
+        margin-bottom: 12px;
+      }
+      .spot-slide-card {
+        color: var(--ink);
+        text-shadow: none;
+        min-height: 0;
+      }
+      .spot-slide-card > h3,
+      .spot-slide-card .spot-teaser,
+      .spot-slide-card > .spot-aside,
+      .spot-slide-card .spot-meta,
+      .spot-slide-card .spot-detail {
+        color: var(--ink);
+        writing-mode: horizontal-tb;
+        position: static;
+        max-width: none;
+      }
+      .spot-slide-card > .spot-aside { display: block; }
+      #spots.spot-stage .spot-slide-actions .btn-map,
+      #spots.spot-stage .spot-nav-link {
+        color: var(--lake) !important;
+        border-bottom-color: var(--lake);
+        text-shadow: none;
+      }
+    }
+
+    /* 日程背景：默认折叠，打开再读 */
+    details.day-lore {
+      margin: 0 0 10px;
+      border-radius: 12px;
+      background: rgba(196,165,116,0.08);
+      border: 1px solid rgba(196,165,116,0.28);
+    }
+    details.day-lore > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dusk);
+      user-select: none;
+    }
+    details.day-lore > summary::-webkit-details-marker { display: none; }
+    details.day-lore .day-aside {
+      margin: 0;
+      padding: 0 12px 12px;
+    }
+
+    /* 待办分组可折 */
+    details.check-fold {
+      border-bottom: 1px solid rgba(196,165,116,0.25);
+      margin: 0;
+    }
+    details.check-fold:last-child { border-bottom: none; }
+    details.check-fold > summary.check-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+      padding: 12px 0;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+    }
+    details.check-fold > summary.check-group::-webkit-details-marker { display: none; }
+    details.check-fold > summary.check-group::after {
+      content: "＋";
+      font-weight: 400;
+      color: var(--sand);
+    }
+    details.check-fold[open] > summary.check-group::after { content: "－"; }
+    details.check-fold .check-fold-body { padding-bottom: 6px; }
+
+    .check-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .check-progress-track {
+      flex: 1;
+      min-width: 120px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--paper-2);
+      overflow: hidden;
+    }
+    .check-progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--sand), var(--dusk));
+      border-radius: 999px;
+      transition: width 0.25s ease;
+    }
+
+    /* 更多菜单 */
+    .more-sheet {
+      position: fixed;
+      left: 12px; right: 12px;
+      bottom: calc(var(--nav-h) + var(--safe-b) + 10px);
+      z-index: 70;
+      background: rgba(255,252,247,0.97);
+      border: 1px solid rgba(196,165,116,0.4);
+      border-radius: 16px;
+      padding: 10px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 6px;
+    }
+    .more-sheet[hidden] { display: none !important; }
+    .more-sheet a {
+      display: block;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: var(--ink);
+      font-size: 14px;
+      background: var(--paper);
+    }
+    .more-sheet a:active { background: var(--paper-2); }
+
     .lightbox {
       position: fixed;
       inset: 0;
@@ -408,13 +920,19 @@
     }
     .lightbox[hidden] { display: none !important; }
     .lightbox-figure {
+      position: relative;
       margin: 0;
       max-width: min(960px, 100%);
       max-height: min(92vh, 92dvh);
+      min-width: min(280px, 72vw);
+      min-height: 160px;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 10px;
+      border-radius: 10px;
+      background: linear-gradient(160deg, var(--paper-2), var(--sand-light));
     }
     .lightbox-figure img {
       max-width: 100%;
@@ -424,8 +942,24 @@
       object-fit: contain;
       border-radius: 10px;
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
-      background: #111;
+      background: transparent;
+      opacity: 0;
+      transition: opacity 0.22s ease;
     }
+    .lightbox-figure.is-img-ready img { opacity: 1; }
+    .lightbox-figure.is-img-failed::after {
+      content: "图未载入";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--ink-soft);
+      letter-spacing: 0.12em;
+      pointer-events: none;
+    }
+    .lightbox-figure.is-img-failed img { opacity: 0; }
     .lightbox-caption {
       margin: 0;
       color: rgba(255, 252, 247, 0.88);
@@ -586,7 +1120,7 @@
       backdrop-filter: blur(12px);
       border-top: 1px solid rgba(196,165,116,0.35);
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       z-index: 50;
     }
     .bottom-nav a {
@@ -594,13 +1128,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 9px;
+      font-size: 10px;
       color: var(--ink-soft);
-      gap: 2px;
+      gap: 3px;
       min-width: 0;
       padding: 0 2px;
     }
-    .bottom-nav a span { font-size: 15px; line-height: 1; }
+    .bottom-nav a span { font-size: 16px; line-height: 1; }
     .bottom-nav a.active { color: var(--dusk); font-weight: 600; }
 
     .map-panel {
@@ -613,18 +1147,31 @@
     }
     /* 完整路线：本地 SVG 示意 + 高德多点标注强入口（无 Key、不嵌易空白的 iframe） */
     .route-fullmap {
+      position: relative;
       margin: 0 0 10px;
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid rgba(42,111,127,0.22);
+      background: #efe4d4;
+    }
+    .route-fullmap::before {
+      content: "";
+      position: absolute;
+      inset: -10%;
+      z-index: 0;
+      pointer-events: none;
+      transform-origin: center center;
       background:
         radial-gradient(ellipse 70% 55% at 28% 32%, rgba(42,111,127,0.18), transparent 58%),
         radial-gradient(ellipse 55% 45% at 72% 68%, rgba(196,165,116,0.28), transparent 55%),
         linear-gradient(165deg, #e8f0ef 0%, #efe4d4 48%, #e4d4bc 100%);
+      animation: bgBreathe 22s ease-in-out infinite;
+      will-change: transform;
     }
     .route-fullmap-link {
       display: block;
       position: relative;
+      z-index: 1;
       color: inherit;
       text-decoration: none;
     }
@@ -650,15 +1197,6 @@
       font-weight: 500;
       text-align: center;
       line-height: 1.4;
-    }
-    .route-fullmap-note {
-      margin: 0;
-      padding: 6px 12px 10px;
-      font-size: 11px;
-      color: var(--ink-soft);
-      text-align: center;
-      opacity: 0.78;
-      background: rgba(255,252,247,0.55);
     }
     @media (hover: hover) and (pointer: fine) {
       .route-fullmap-link:hover .route-fullmap-cta {
@@ -692,16 +1230,29 @@
 
     .sunset-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       gap: 8px;
       font-size: 13px;
     }
     .sunset-grid div {
       background: var(--paper-2);
       border-radius: 12px;
-      padding: 10px;
+      padding: 10px 12px;
+      color: var(--ink-soft);
+      line-height: 1.45;
     }
-    .sunset-grid b { display: block; margin-bottom: 2px; }
+    .sunset-grid b {
+      display: inline;
+      margin: 0;
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .sunset-grid .sun-note {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
 
     .food-list { font-size: 13px; color: var(--ink-soft); }
     .food-list li { margin: 4px 0; }
@@ -726,12 +1277,13 @@
       from { opacity: 0; transform: translateY(14px); }
       to { opacity: 1; transform: none; }
     }
-    @keyframes heroKenBurns {
-      from { transform: scale(1.06) translate3d(0, 1.5%, 0); }
-      to { transform: scale(1) translate3d(0, 0, 0); }
+    /* 呼吸：缓慢放大 ↔ 缓慢缩小，循环不停 */
+    @keyframes bgBreathe {
+      0%, 100% { transform: scale(1.08); }
+      50% { transform: scale(1); }
     }
     .hero-bg {
-      animation: heroKenBurns 14s ease-out both;
+      animation: bgBreathe 18s ease-in-out infinite;
       will-change: transform;
       transform-origin: center center;
     }
@@ -753,6 +1305,13 @@
     .reveal.is-in {
       opacity: 1;
       transform: none;
+    }
+    /* 日行程卡片不用 opacity：未进视口时 open 也会整卡透明，封面「有图却看不见」 */
+    details.day.reveal {
+      opacity: 1;
+    }
+    details.day.reveal:not(.is-in) {
+      transform: translateY(14px);
     }
     .reveal-stagger > .reveal:nth-child(1) { transition-delay: 0.02s; }
     .reveal-stagger > .reveal:nth-child(2) { transition-delay: 0.08s; }
@@ -777,20 +1336,25 @@
     details.day > summary .chev {
       transition: transform 0.28s ease;
     }
+    /* 仅位移，不用 opacity + both：部分内置浏览器动画卡住时会整块透明（封面「看不见」但可点开 lightbox） */
     details.day[open] > .day-body {
-      animation: dayBodyIn 0.32s ease both;
+      animation: dayBodyIn 0.32s ease;
     }
     @keyframes dayBodyIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: none; }
+      from { transform: translateY(-6px); }
+      to { transform: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       .hero, .hero-bg, .hero > *:not(.hero-bg),
+      .spot-stage-bg, .spot-stage-bg-layer, .spot-stage-bg-layer.is-active,
+      .route-fullmap::before,
       details.day[open] > .day-body {
         animation: none !important;
+        transform: none !important;
       }
+      .spot-stage-wash { transition: none !important; }
       .reveal {
         opacity: 1;
         transform: none;
@@ -801,6 +1365,8 @@
         transition: none !important;
       }
       .btn:hover { transform: none; box-shadow: none; }
+      /* 纹理与侧晕保持静态，仅关掉侧晕淡入 */
+      body::after { transition: none; }
     }
     .toc {
       display: flex;
@@ -981,7 +1547,9 @@
 
     @media print {
       .bottom-nav, .btn-row, .no-print, .progress-bar, .fab-top, .toc, .filter-row, .lightbox { display: none !important; }
-      body { padding: 0; background: #fff; }
+      body { padding: 0; background: #fff; background-image: none; }
+      body::before, body::after { display: none !important; }
+      #overview, #days, #route, #budget, #todo, #spots, #extras { background: none; }
       details.day { break-inside: avoid; }
       details.day[open] { box-shadow: none; }
     }
@@ -990,20 +1558,14 @@
 <body>
   <div class="progress-bar" id="progress" aria-hidden="true"></div>
   <header class="hero" id="top">
-    <img class="hero-bg" src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1920&q=85" alt="" referrerpolicy="no-referrer" fetchpriority="high" decoding="async" />
-    <div class="hero-kicker">2026 · 两人 · 理想 L7</div>
+    <img class="hero-bg" src="assets/hero-desert.jpg" alt="" fetchpriority="high" decoding="async" />
+    <div class="hero-kicker">2026 · 九月二十四日—十月四日 · 理想 L7</div>
     <h1>青甘银川<br />自驾路书</h1>
     <p class="hero-verse">「无垠的沙漠热烈追求一叶绿草的爱，她摇摇头笑着飞开了。」</p>
     <p class="hero-lead">向西，把生日放进贺兰山的风里；穿过河西与敦煌，在青海湖边等一晚星光，再从兰州回成都。</p>
-    <div class="hero-meta">
-      <span class="chip">九月二十四日至十月四日</span>
-      <span class="chip">两个人，理想 L7</span>
-      <span class="chip">青海湖边看星</span>
-    </div>
     <div class="btn-row no-print">
       <a class="btn btn-primary" href="#days">按天看</a>
-      <a class="btn btn-map" href="#route">路线导航</a>
-      <a class="btn btn-ghost" href="#todo">待办</a>
+      <a class="btn btn-ghost" href="#spots">沿途停靠</a>
     </div>
   </header>
 
@@ -1018,7 +1580,7 @@
         <div class="phase-row" aria-label="行程五段">
           <a class="phase" href="#d925"><b>银川</b>九月二十五日至二十七日<br />生日与西夏</a>
           <a class="phase" href="#d928"><b>河西</b>九月二十七日至二十八日<br />丹霞与车宿</a>
-          <a class="phase" href="#d929"><b>敦煌</b>九月二十九日至十月一日<br />莫高窟与雅丹</a>
+          <a class="phase" href="#d929"><b>敦煌</b>九月二十九日至十月一日<br />莫高、博物馆与雅丹</a>
           <a class="phase" href="#d1002"><b>青海</b>十月一日至三日<br />湖边与星光</a>
           <a class="phase" href="#d1004"><b>回程</b>十月三日至四日<br />兰州回成都</a>
         </div>
@@ -1034,12 +1596,17 @@
 
         <div class="layer">
           <h3>会经过的地方</h3>
-          <p>贺兰山的生日、漫葡的夜、西夏陵、张掖丹霞、敦煌的莫高窟和鸣沙山、雅丹与柴达木（主停水上雅丹，东台与 U315 路边短停）、翡翠湖、德令哈加油吃饭路过、青海湖，再到兰州。</p>
+          <p>银川（生日、漫葡、西夏）→ 张掖丹霞 → 敦煌（莫高、鸣沙、雅丹）→ 冷湖走廊（黑独山／胡杨峡择一、火星公路、水上雅丹）→ 翡翠湖 → 青海湖 → 兰州回成都。</p>
         </div>
-        <div class="layer">
-          <h3>留一点余地</h3>
-          <p>赶路的日子以行车为主。西夏去张掖途中，沙坡头可作可选路过。雅丹看完日落回敦煌，星空留给青海湖。十月四日从兰州早些出发，当天回成都。</p>
-        </div>
+        <details class="layer" open>
+          <summary style="cursor:pointer;font-weight:600;list-style:none;margin:0 0 8px">留一点余地</summary>
+          <ul style="margin:0;padding-left:1.15em;font-size:14px;color:var(--ink-soft)">
+            <li>赶路日以行车为主；沙坡头只作西夏→张掖途中可选。</li>
+            <li>9.30：上午博物馆、中午市区漫步，下午雅丹赶日落再回敦煌。</li>
+            <li>10.1：胡杨峡与黑独山只深停一处；水上雅丹争取日落前。</li>
+            <li>星空主场留给青海湖东岸；10.4 兰州早些出发当天回成都。</li>
+          </ul>
+        </details>
         <p class="verse-aside">（「世界上的一队小小的漂泊者呀，请留下你们的足印在我的文字里。」）</p>
       </div>
     </section>
@@ -1082,7 +1649,7 @@
             <div class="day-cover" role="img" aria-label="贺兰山宿集泳池与贺兰山景" data-caption="贺兰山宿集 · 泳池望山（致夏）" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/suji-helan.jpg"><img src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/suji-helan.jpg" alt="贺兰山宿集泳池与贺兰山景" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <div class="tag-row"><span class="tag hot">生日惊喜</span></div>
             <p class="day-lead">贺兰山在西，黄河在东，银川平原夹在中间。宿集落在镇北堡一带——明清边墙遗址旁，影城与葡萄园都近；车门一开，先是干燥的风，再是西边那道青黑山脊。</p>
-            <p class="day-aside">「贺兰」一名见于史籍，蒙古语意近「骏马」。山形起伏如奔马脊背，古人常以山名边塞。东麓葡萄、岩画、残墙都贴着山脚铺开——到了这里，先把车停稳、人安顿好，把长途的疲倦交给院子和山风。</p>
+            <details class="day-lore"><summary>背景与说法</summary><p class="day-aside">「贺兰」一名见于史籍，蒙古语意近「骏马」。山形起伏如奔马脊背，古人常以山名边塞。东麓葡萄、岩画、残墙都贴着山脚铺开——到了这里，先把车停稳、人安顿好，把长途的疲倦交给院子和山风。</p></details>
             <ul>
               <li>下午入住宿集，放行李，在院子里走走，把长途的疲倦卸一卸。</li>
               <li>晚上有生日惊喜，其余到时候再说。</li>
@@ -1100,7 +1667,7 @@
           <div class="day-body">
             <div class="day-cover" role="img" aria-label="漫葡小镇全景" data-caption="漫葡小镇 · 白天全景" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/manpu-panorama.jpg"><img src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/manpu-panorama.jpg" alt="漫葡小镇全景" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <p class="day-lead">贺兰山东麓种葡萄已久；漫葡就在山前，白天可以去影城或岩画，夜里回到「看见贺兰」的灯火里——街区亮起来时，山影还在远处站着。</p>
-            <p class="day-aside">镇北堡西部影城由明清边墙遗址改建，张贤亮创办；《红高粱》《大话西游》等曾在此取景。黄土墙、残堡、风沙磨过的轮廓，本来就是西北边塞的样子——电影只是把它留在镜头里。</p>
+            <details class="day-lore"><summary>背景与说法</summary><p class="day-aside">镇北堡西部影城由明清边墙遗址改建，张贤亮创办；《红高粱》《大话西游》等曾在此取景。黄土墙、残堡、风沙磨过的轮廓，本来就是西北边塞的样子——电影只是把它留在镜头里。</p></details>
             <ul>
               <li>从宿集换到漫葡天沐·党项，放好行李后慢慢出门。</li>
               <li>下午去镇北堡西部影城或贺兰山岩画，选一处就好——岩画是远古敲凿的图像，影城是电影里的边塞。</li>
@@ -1123,7 +1690,7 @@
             <div class="day-cover" role="img" aria-label="西夏陵" data-caption="西夏陵" data-full="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg" alt="西夏陵" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <div class="tag-row"><span class="tag">可选沙坡头</span></div>
             <p class="day-lead">上午把西夏的黄土陵台看完，下午转入河西走廊——戈壁开阔，远山一层层退去，车窗外渐渐只剩风与距离。</p>
-            <p class="day-aside">西夏是党项人建立的王朝，陵园俗称「东方金字塔」：夯土塔状陵台矗在贺兰山下，风沙削去了华丽，却留下轮廓。先看博物馆，再上陵区——土黄色的丘岗便有了朝代、人名与沉默的年份。</p>
+            <details class="day-lore"><summary>背景与说法</summary><p class="day-aside">西夏是党项人建立的王朝，陵园俗称「东方金字塔」：夯土塔状陵台矗在贺兰山下，风沙削去了华丽，却留下轮廓。先看博物馆，再上陵区——土黄色的丘岗便有了朝代、人名与沉默的年份。</p></details>
             <ul>
               <li>早些起床，上午看西夏陵和博物馆；陵区乘观光车，不必硬走。</li>
               <li>下午前往张掖临泽，住丹霞明珠，把日落留给第二天。</li>
@@ -1147,7 +1714,7 @@
           <div class="day-body">
             <div class="day-cover" role="img" aria-label="张掖七彩丹霞" data-caption="张掖七彩丹霞" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG" alt="张掖七彩丹霞" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <p class="day-lead">上午补觉，下午专留给彩色山丘。斜阳一到，红黄白灰才一层层醒过来；风里带着干燥的甜腥，像颜料刚被晒开。</p>
-            <p class="day-aside">张掖七彩丹霞是彩色丘陵：白垩纪砂砾岩经风化侵蚀，铁、锰等氧化物染出红黄白灰的层理。正午晒得发白，傍晚光斜进来时，整片山丘像一只被慢慢打开的调色盘。</p>
+            <details class="day-lore"><summary>背景与说法</summary><p class="day-aside">张掖七彩丹霞是彩色丘陵：白垩纪砂砾岩经风化侵蚀，铁、锰等氧化物染出红黄白灰的层理。正午晒得发白，傍晚光斜进来时，整片山丘像一只被慢慢打开的调色盘。</p></details>
             <ul>
               <li>下午进入七彩丹霞，跟着园内观光车转几个观景台，日落前留在台上。</li>
               <li>天黑后开往嘉峪关——长城西端关城所在；南湖停车场车宿一晚，为明天进敦煌留体力。</li>
@@ -1169,7 +1736,7 @@
             <div class="day-cover" role="img" aria-label="莫高窟" data-caption="莫高窟" data-full="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920"><img src="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="莫高窟" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <div class="tag-row"><span class="tag hot">莫高预约</span></div>
             <p class="day-lead">一天两头：先走进石窟里的光阴，再去沙山上等日落；夜里回到沙边，城市的热闹留给夜市一顿——洞窟的静、沙山的金、夜市的烟火，叠在同一天里。</p>
-            <p class="day-aside">「莫高」一说为「漠高」——沙漠高处的佛龛。传说前秦时乐僔和尚见金光如千佛，遂开窟；其后千余年，丝路商旅与信仰叠在崖壁上，壁画里的飞天与供养人仍停在灯影未到之处。鸣沙山因风过沙丘作声得名，月牙泉形如新月，嵌在沙海中间——傍晚沙色偏金，泉水却仍旧冷静。</p>
+            <details class="day-lore"><summary>背景与说法</summary><p class="day-aside">「莫高」一说为「漠高」——沙漠高处的佛龛。传说前秦时乐僔和尚见金光如千佛，遂开窟；其后千余年，丝路商旅与信仰叠在崖壁上，壁画里的飞天与供养人仍停在灯影未到之处。鸣沙山因风过沙丘作声得名，月牙泉形如新月，嵌在沙海中间——傍晚沙色偏金，泉水却仍旧冷静。</p></details>
             <ul>
               <li>下午从数字展示中心进入莫高窟——先电影再进窟，出来后抓紧去鸣沙山赶日落。</li>
               <li>回梵尘稍作休息，再去沙州夜市吃饭；夜里回到沙边，灯火远一点就好。</li>
@@ -1184,44 +1751,55 @@
         <details class="day" id="d930" name="roadbook-days">
           <summary>
             <div class="day-date"><b>9.30</b>周三</div>
-            <div><div class="day-title">去雅丹看一场日落 <span class="day-kind play">敦煌</span></div><div class="day-sub">午后出城，傍晚返回</div></div>
+            <div><div class="day-title">博物馆、漫步，再去雅丹看日落 <span class="day-kind play">敦煌</span></div><div class="day-sub">上午馆里，中午城里，下午出城</div></div>
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
             <div class="day-cover" role="img" aria-label="敦煌雅丹" data-caption="敦煌雅丹国家地质公园" data-full="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg" alt="敦煌雅丹" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
-            <p class="day-lead">出城两小时多，戈壁尽头是风削出来的土丘城。专为日落去：光一斜，土丘的阴影就拉长，像一座座空城在暮色里亮起轮廓；看完就回敦煌。</p>
-            <p class="day-aside">「雅丹」借自维吾尔语，指陡壁小丘。风与时间把戈壁削成城堡状，当地又称魔鬼城——风穿梭其间时，会发出低沉的呜咽，像有人在土丘缝里走过。</p>
+            <p class="day-lead">上午进<strong>敦煌博物馆</strong>，把丝路与地方史在展柜里再串一遍；中午<strong>市区漫步</strong>、吃顿午饭。午后出城约两小时，到<strong>雅丹魔鬼城</strong>赶日落——光一斜，土丘阴影拉长，像一座座空城亮起轮廓；看完当天回敦煌。</p>
+            <details class="day-lore"><summary>背景与说法</summary><p class="day-aside">「雅丹」借自维吾尔语，指陡壁小丘。风与时间把戈壁削成城堡状，当地又称魔鬼城——风穿梭其间时，会发出低沉的呜咽，像有人在土丘缝里走过。</p></details>
             <ul>
-              <li>中午前后出发，路上可在玉门关短停；进园后乘观光车，日落前到观景点。</li>
-              <li>末班车时间以当天公告为准，日落后赶回敦煌，不在园里等星。</li>
+              <li><strong>上午：</strong>敦煌博物馆（凭证件以现场为准）；节奏宜轻，别逛到中午拖沓。</li>
+              <li><strong>中午：</strong>市区漫步 + 午饭（阳关路／沙州一带即可），约 <strong>13:00–14:00</strong> 前出城。</li>
+              <li><strong>下午：</strong>去雅丹；途中可短停玉门关。进园乘观光车，日落前到观景点；末班以当天公告为准，日落后赶回，不在园里等星。</li>
             </ul>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=92.85,40.52&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
+            <div class="nav-grid">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.15&name=敦煌博物馆&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航博物馆</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.14&name=沙州夜市&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航市区（阳关路）</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=92.85,40.52&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
+            </div>
           </div>
         </details>
 
         <details class="day" id="d1001" name="roadbook-days">
           <summary>
             <div class="day-date"><b>10.1</b>周四</div>
-            <div><div class="day-title">从敦煌到大柴旦 <span class="day-kind drive">行车日</span></div><div class="day-sub">上午在城里走走，下午上路</div></div>
+            <div><div class="day-title">从敦煌到大柴旦 <span class="day-kind drive">行车日</span></div><div class="day-sub">经冷湖进柴达木，一路换成盐与风</div></div>
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" role="img" aria-label="戈壁沙漠公路（通用）" data-caption="戈壁公路 · 通用图" data-full="https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=1920&q=85"><img src="https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=1920&q=85" alt="戈壁沙漠公路（通用）" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
-            <p class="day-lead">上午把敦煌的城留一点余味，下午翻当金山进柴达木——海拔抬升，绿洲换成盐壳与荒原，空气也更薄、更亮。今日主停<strong>水上雅丹</strong>：雅丹立在浅湖里，倒影干净；出园后沿 G315 东行，<strong>东台</strong>与<strong>U315</strong>作路边短停／车窗风景，夜里仍住大柴旦。</p>
+            <div class="day-cover" role="img" aria-label="火星一号公路一带戈壁公路" data-caption="火星一号公路一带 · 戈壁公路" data-full="assets/mars-highway.jpg"><img src="assets/mars-highway.jpg" alt="火星一号公路一带戈壁公路" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
+            <p class="day-lead">出敦煌，沿 <strong>G215</strong> 南下，翻<strong>当金山</strong>进冷湖——绿洲退后，戈壁先铺开一层灰，再换成柴达木的盐壳与风。白天必走<strong>火星一号公路</strong>与<strong>水上雅丹</strong>；夜里住大柴旦。走廊上的荒凉水墨感——<strong>胡杨峡</strong>、<strong>黑独山</strong>或<strong>冷湖镇边路过</strong>——任选一处即可，不必叠停。</p>
             <ul>
-              <li>上午在敦煌城里走走，博物馆或书店任选；中午前后上路。</li>
-              <li>经当金山进柴达木，先到<strong>乌素特水上雅丹</strong>：停 1–1.5 小时——土丘泡在水里，风一过，倒影也会轻轻碎开。</li>
-              <li>出水上雅丹后沿 G315 东行：<strong>东台吉乃尔</strong>路边停一下拍盐湖（约 15–40 分钟）；接着<strong>U315 / U 型公路</strong>当顺路风景开过，安全处可再停几分钟，傍晚到大柴旦入住。</li>
-              <li><strong>可选顺路：</strong>出敦煌往阿克塞时，可拐<strong>多坝沟胡杨峡</strong>——走廊西侧支线，短停约 1–2 小时，看峡谷里那层水墨戈壁与雅丹山体，再接水上雅丹。</li>
+              <li><strong>今日正线：</strong>敦煌 →（走廊任选一处）→ 火星一号公路 → 水上雅丹 → 大柴旦。东台／U315 有余光再停，否则车窗带过。</li>
+              <li><strong>走廊任选一（同类荒凉感，别叠）：</strong>
+                <ul>
+                  <li><strong>黑独山：</strong>冷湖镇再北约一刻钟；山下 30–60 分钟。墨色丘陵最「像月球」，末段砂石跟辙慢开。</li>
+                  <li><strong>胡杨峡：</strong>出城往阿克塞西拐，约 67 km／纯开约 1h，进沟约 1.5–2.5h。十月初叶子未必满金，峡谷与水墨山体仍值得；宜 7:00–7:30 出城。</li>
+                  <li><strong>冷湖镇边：</strong>敦煌到冷湖约 250 km／3.5–4.5h，本就是这条走廊。镇边戈壁与远处黑山也能看一眼，不下黑独山砂石路也行。</li>
+                </ul>
+              </li>
+              <li><strong>节奏：</strong>选黑独山或冷湖镇边，宜 8:00–8:30 出城；选胡杨峡宜更早。水上雅丹是白天收尾；两处走廊都深停再加东台，整日易到 11–13h、后半段摸黑——别硬凑。</li>
             </ul>
             <div class="nav-grid">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.82,39.98,多坝沟胡杨峡&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 胡杨峡</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.82,39.98,多坝沟胡杨峡&to=93.34,38.75,冷湖镇&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">胡杨峡 → 冷湖</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.34,38.75,冷湖镇&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 冷湖</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.42,38.84&name=黑独山景区&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航黑独山</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.35,37.72,乌素特水上雅丹&to=93.90,37.50,东台吉乃尔湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 东台</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.90,37.50,东台吉乃尔湖&to=94.10,37.55,U型公路&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">东台 → U315</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.10,37.55,U型公路&to=95.37,37.85,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">U315 → 大柴旦</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=95.37,37.85,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">直达：敦煌 → 大柴旦</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.82,39.98,多坝沟胡杨峡&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：敦煌 → 胡杨峡</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.82,39.98,多坝沟胡杨峡&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：胡杨峡 → 水上雅丹</a>
             </div>
           </div>
         </details>
@@ -1236,7 +1814,7 @@
             <div class="day-cover" role="img" aria-label="大柴旦翡翠湖一带" data-caption="大柴旦翡翠湖一带" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg" alt="大柴旦翡翠湖一带" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <div class="tag-row"><span class="tag hot">星空</span></div>
             <p class="day-lead">清晨在盐湖边看一层层蓝绿，白天东行经德令哈补给路过，傍晚落到青海湖东岸——湖面渐暗之后，这一晚的星空才是主场。</p>
-            <p class="day-aside">「翡翠湖」是大柴旦镇旁盐湖群的俗称，因多层蓝绿水色得名；东台是 G315 路边的盐湖短停，已在昨天路过。青海湖古称西海，藏语「措温布」意近「青色的海」——到了东岸，天黑以后湖面先静下来，星星才一颗颗亮起。</p>
+            <details class="day-lore"><summary>背景与说法</summary><p class="day-aside">「翡翠湖」是大柴旦镇旁盐湖群的俗称，因多层蓝绿水色得名；东台是 G315 路边的盐湖短停，已在昨天路过。青海湖古称西海，藏语「措温布」意近「青色的海」——到了东岸，天黑以后湖面先静下来，星星才一颗颗亮起。</p></details>
             <ul>
               <li>上午走进翡翠湖，1～3 号湖转一转就够；出镇后东行。</li>
               <li>途经<strong>德令哈</strong>：加油、吃饭、超市补给，约 15–40 分钟量级就够（海西州府，比盐湖沿线好找），补完继续开。</li>
@@ -1302,7 +1880,7 @@
           <div class="route-node" data-n="3"><strong>张掖</strong><span>丹霞</span></div><div class="arrow">→</div>
           <div class="route-node" data-n="4"><strong>嘉峪关</strong><span>车宿</span></div><div class="arrow">→</div>
           <div class="route-node" data-n="5"><strong>敦煌</strong><span>2 晚梵尘</span></div><div class="arrow">→</div>
-          <div class="route-node" data-n="6"><strong>大柴旦</strong><span>水雅丹·东台短停·U315</span></div><div class="arrow">→</div>
+          <div class="route-node" data-n="6"><strong>大柴旦</strong><span>走廊任选·水雅丹</span></div><div class="arrow">→</div>
           <div class="route-node" data-n="7"><strong>青海湖</strong><span>经德令哈补给</span></div><div class="arrow">→</div>
           <div class="route-node" data-n="8"><strong>兰州</strong><span>1 晚</span></div><div class="arrow">→</div>
           <div class="route-node" data-n="9"><strong>成都</strong><span>10.4 到家</span></div>
@@ -1338,7 +1916,6 @@
               </svg>
               <span class="route-fullmap-cta">在高德查看完整路线</span>
             </a>
-            <p class="route-fullmap-note">页内为示意；点击打开高德标注全程节点</p>
           </div>
           <div class="nav-grid">
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
@@ -1350,7 +1927,9 @@
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
               href="https://uri.amap.com/navigation?from=98.289152,39.773250,嘉峪关&to=94.661881,40.142128,敦煌&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">嘉峪关 → 敦煌</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
+              href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.340000,38.750000,冷湖镇&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 冷湖</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=93.340000,38.750000,冷湖镇&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
               href="https://uri.amap.com/navigation?from=93.350000,37.720000,乌素特水上雅丹&to=95.367500,37.852800,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 大柴旦</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
@@ -1374,8 +1953,13 @@
               <tr><td>西夏 → 沙坡头 → 丹霞（可选）</td><td>比直达多约 1–2h</td></tr>
               <tr><td>丹霞 → 嘉峪关</td><td>2.5–3.5h</td></tr>
               <tr><td>嘉峪关 → 敦煌</td><td>4–5h</td></tr>
-              <tr><td>敦煌 → 水上雅丹 → 东台 → U315 → 大柴旦</td><td>纯开约 6–7h；含水上雅丹约 7–9h（东台／U315 各约 15–40 分钟，可更少）</td></tr>
-              <tr><td>可选：敦煌 ⇄ 阿克塞胡杨峡</td><td>出敦煌往阿克塞／当金山走廊西侧支线，约多 1–2h（含短停）</td></tr>
+              <tr><td>10.1 冷湖正线（走廊任选一＋火星公路＋水上雅丹）</td><td>整日约 8–10h；纯开约 7–8.5h；水上雅丹争取日落前（约 19:34）</td></tr>
+              <tr><td>走廊任选一：黑独山／胡杨峡／冷湖镇边</td><td>黑独山约 +0.5–1h；胡杨峡约 +1.5–3h（宜更早出发）；镇边路过可不计。叠停易到 11–13h、后半段摸黑</td></tr>
+              <tr><td>敦煌 → 冷湖</td><td>约 250km／3.5–4.5h</td></tr>
+              <tr><td>胡杨峡（走廊三选一）</td><td>支线约 +1–1.5h 车程；进沟约 1.5–2.5h</td></tr>
+              <tr><td>黑独山（走廊三选一）</td><td>冷湖再北约一刻钟；山下宜 30–60 分钟</td></tr>
+              <tr><td>冷湖 → 水上雅丹（火星一号公路）</td><td>约 1.5–2h；国道更久</td></tr>
+              <tr><td>水上雅丹 → 大柴旦（东台／U315 可选）</td><td>纯开约 2–2.5h；水上雅丹另约 1–1.5h；没余光就直开进镇</td></tr>
               <tr><td>大柴旦翡翠湖 → 德令哈 → 青海湖东岸（茶卡可选短停）</td><td>纯开约 5–6h；德令哈补给约 15–40 分钟；茶卡另加约 1–2h 量级</td></tr>
               <tr><td>青海湖 → 兰州</td><td>5–7h</td></tr>
               <tr><td>兰州 → 成都</td><td>10–12h</td></tr>
@@ -1394,11 +1978,11 @@
         <p class="section-desc">按两个人估算。房价以已经查到的价格为准，门票和油电留一点浮动。</p>
 
         <div class="budget-bars">
-          <div class="bar"><span>住宿</span><div class="bar-track"><div class="bar-fill" style="width:90%"></div></div><span class="money">6288</span></div>
+          <div class="bar"><span>住宿</span><div class="bar-track"><div class="bar-fill" style="width:97%"></div></div><span class="money">6288</span></div>
           <div class="bar"><span>生日那天</span><div class="bar-track"><div class="bar-fill" style="width:32%"></div></div><span class="money">~2100</span></div>
-          <div class="bar"><span>门票</span><div class="bar-track"><div class="bar-fill" style="width:34%"></div></div><span class="money">~2300</span></div>
-          <div class="bar"><span>油电高速</span><div class="bar-track"><div class="bar-fill" style="width:70%"></div></div><span class="money">~4–6.5k</span></div>
-          <div class="bar"><span>吃喝</span><div class="bar-track"><div class="bar-fill" style="width:42%"></div></div><span class="money">~3000</span></div>
+          <div class="bar"><span>门票</span><div class="bar-track"><div class="bar-fill" style="width:35%"></div></div><span class="money">~2300</span></div>
+          <div class="bar"><span>油电高速</span><div class="bar-track"><div class="bar-fill" style="width:81%"></div></div><span class="money">~4–6.5k</span></div>
+          <div class="bar"><span>吃喝</span><div class="bar-track"><div class="bar-fill" style="width:46%"></div></div><span class="money">~3000</span></div>
         </div>
         <div class="total-box">
           <div style="opacity:.85;font-size:13px;margin-bottom:4px">两人加起来大概</div>
@@ -1432,8 +2016,15 @@
         <p class="section-verse">「那些把灯背在背上的人，把他们的影子投到了自己前面。」</p>
         <p class="section-desc">按行程拆成住宿、门票、出行、用品。勾选状态会保留在这台设备的浏览器里。</p>
         <div class="check-head"><span>进度</span><strong id="checkCount">0/0</strong></div>
+        <div class="check-tools no-print">
+          <div class="check-progress-track" aria-hidden="true"><div class="check-progress-fill" id="checkFill"></div></div>
+          <button type="button" class="filter-btn" id="checkOpenTodo">只看未完成</button>
+          <button type="button" class="filter-btn" id="checkShowAll">全部</button>
+        </div>
         <div class="layer checklist" id="checklist">
-          <div class="check-group">住宿</div>
+          <details class="check-fold" open>
+          <summary class="check-group">住宿</summary>
+          <div class="check-fold-body">
           <label><input type="checkbox" data-k="h_suji" /> 9.25 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%AE%BF%E9%9B%86" target="_blank" rel="noopener">贺兰山宿集（致夏）</a> · 银川</label>
           <label><input type="checkbox" data-k="h_manpu" /> 9.26 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E6%BC%AB%E8%91%A1%E5%A4%A9%E6%B2%90%E5%85%9A%E9%A1%B9" target="_blank" rel="noopener">漫葡天沐·党项</a> · 银川（含夜场相关安排）</label>
           <label><input type="checkbox" data-k="h_danxia" /> 9.27 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E4%B8%B9%E9%9C%9E%E6%98%8E%E7%8F%A0%20%E5%BC%A0%E6%8E%96" target="_blank" rel="noopener">丹霞明珠</a> · 张掖临泽</label>
@@ -1444,7 +2035,10 @@
           <label><input type="checkbox" data-k="h_atour" /> 10.3 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E4%BA%9A%E6%9C%B5%20%E5%85%B0%E5%B7%9E%E5%BC%A0%E6%8E%96%E8%B7%AF" target="_blank" rel="noopener">亚朵</a> · 兰州张掖路一带（确认停车）</label>
           <label><input type="checkbox" data-k="h_charge" /> 订房时确认充电桩：宿集、漫葡、丹霞明珠、梵尘、桔子、木慧楠、亚朵</label>
 
-          <div class="check-group">门票与预约</div>
+          </div></details>
+          <details class="check-fold" open>
+          <summary class="check-group">门票与预约</summary>
+          <div class="check-fold-body">
           <label><input type="checkbox" data-k="t_mogao" /> 莫高窟 9.29 下午场 · 提前约 30 天 <a href="https://www.mgk.org.cn/" target="_blank" rel="noopener">官网预约</a>（两人）</label>
           <span class="check-note">最紧一项；数字中心进窟，只用官方渠道，勿走倒票。</span>
           <label><input type="checkbox" data-k="t_manpu" /> 漫葡「看见贺兰」夜游票 / 温泉 · 向酒店或官方确认两人名额</label>
@@ -1455,10 +2049,15 @@
           <label><input type="checkbox" data-k="t_yardang" /> 敦煌雅丹国家地质公园门票 ×2 · 现场或携程</label>
           <label><input type="checkbox" data-k="t_shui" /> 乌素特水上雅丹门票 ×2 · 现场购票</label>
           <label><input type="checkbox" data-k="t_feicui" /> 大柴旦翡翠湖门票 ×2 · 现场购票</label>
-          <label><input type="checkbox" data-k="t_opt" /> 可选票：沙坡头 / 多坝沟胡杨峡 / 敦煌博物馆 / 玉门关 / 茶卡盐湖（当天要去再买；现场或携程）</label>
+          <label><input type="checkbox" data-k="t_museum" /> 敦煌博物馆（9.30 上午）×2 · 凭证件／现场以公告为准</label>
+          <label><input type="checkbox" data-k="t_opt" /> 可选票：沙坡头 / 多坝沟胡杨峡（10.1）/ 玉门关 / 茶卡盐湖（当天要去再买；现场或携程）</label>
+          <span class="check-note">黑独山在冷湖边上，多为开放荒野／政策以现场为准，通常无大门票。10.1 走廊荒凉感：胡杨峡／黑独山／冷湖镇边任选一即可；水上雅丹争取日落前。</span>
           <span class="check-note">青海湖东岸散步观景一般不强绑门票；以现场与导航目的地为准。</span>
 
-          <div class="check-group">出行与车辆</div>
+          </div></details>
+          <details class="check-fold">
+          <summary class="check-group">出行与车辆</summary>
+          <div class="check-fold-body">
           <label><input type="checkbox" data-k="c_ins" /> 车险三者额度够用；两人各补一份旅行意外险</label>
           <label><input type="checkbox" data-k="c_car" /> 出发前检车：胎压、备胎、雨刮、灯光、刹车、玻璃水</label>
           <label><input type="checkbox" data-k="c_map" /> 高德下载离线地图：宁夏、甘肃、青海、四川</label>
@@ -1467,7 +2066,10 @@
           <label><input type="checkbox" data-k="c_route" /> 用路书里的高德链接预览关键日分段（尤其 10.1 柴达木）</label>
           <label><input type="checkbox" data-k="c_id" /> 身份证随身；驾驶证行驶证；健康码/预约短信截图备份</label>
 
-          <div class="check-group">用品</div>
+          </div></details>
+          <details class="check-fold">
+          <summary class="check-group">用品</summary>
+          <div class="check-fold-body">
           <label><input type="checkbox" data-k="p_sun" /> 防晒：帽子、墨镜、高倍防晒霜、润唇膏（戈壁紫外线强）</label>
           <label><input type="checkbox" data-k="p_warm" /> 防风外套 / 薄羽绒；青海湖与雅丹夜里会冷</label>
           <label><input type="checkbox" data-k="p_shoe" /> 舒服走路鞋 + 一双备用袜；沙地可穿的鞋套或旧鞋</label>
@@ -1477,441 +2079,517 @@
           <label><input type="checkbox" data-k="p_photo" /> 相机或手机；三脚架（青海湖拍星）；洞内不摄影，莫高只拍外面</label>
           <label><input type="checkbox" data-k="p_birth" /> 生日惊喜相关准备（鲜花 / 蛋糕等按自己安排）</label>
           <label><input type="checkbox" data-k="p_misc" /> 湿巾、垃圾袋、纸巾、保温杯；墨镜备用；少量口罩（风沙天）</label>
+          </div></details>
         </div>
       </div>
     </section>
 
-<section id="spots">
-      <div class="wrap">
+<section id="spots" class="spot-stage">
+      <div class="spot-stage-bg" aria-hidden="true">
+        <div class="spot-stage-bg-layer is-active" id="spotBgA"></div>
+        <div class="spot-stage-bg-layer" id="spotBgB"></div>
+      </div>
+      <div class="spot-stage-veil" aria-hidden="true"></div>
+      <div class="spot-stage-wash" id="spotWash" aria-hidden="true"></div>
+      <div class="wrap spot-stage-ui">
         <div class="section-label">会停下来的地方</div>
         <h2>沿途停靠</h2>
         <p class="section-verse">「旅客要在每一个生人门口敲叩，才能敲到自己的家门。」</p>
         <div class="filter-row no-print" id="spotFilter" role="tablist" aria-label="按地区筛">
-          <button type="button" class="filter-btn on" data-f="all">全部</button>
-          <button type="button" class="filter-btn" data-f="yinchuan">银川</button>
-          <button type="button" class="filter-btn" data-f="hexi">河西</button>
-          <button type="button" class="filter-btn" data-f="dunhuang">敦煌</button>
-          <button type="button" class="filter-btn" data-f="qinghai">青海</button>
+          <button type="button" class="filter-btn on" data-f="all" aria-selected="true">全部</button>
+          <button type="button" class="filter-btn" data-f="yinchuan" aria-selected="false">银川</button>
+          <button type="button" class="filter-btn" data-f="hexi" aria-selected="false">河西</button>
+          <button type="button" class="filter-btn" data-f="dunhuang" aria-selected="false">敦煌</button>
+          <button type="button" class="filter-btn" data-f="qinghai" aria-selected="false">青海</button>
         </div>
-        <div class="spot-grid" id="spotGrid">
-
-          <article class="spot" data-region="yinchuan" data-day="925">
-            <div class="spot-img" role="img" aria-label="贺兰山清晨山脊" data-caption="贺兰山 · 清晨山脊" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg/1920px-%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg/1920px-%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg" alt="贺兰山" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+        <div class="spot-pager no-print" aria-label="停靠点切换">
+          <button type="button" class="spot-pager-btn" id="spotPrev" aria-label="上一处">‹</button>
+          <div class="spot-dots" id="spotDots" role="tablist" aria-label="停靠点位置"></div>
+          <button type="button" class="spot-pager-btn" id="spotNext" aria-label="下一处">›</button>
+          <div class="spot-count"><span id="spotIndex">1</span>/<span id="spotTotal">23</span></div>
+        </div>
+        <div class="spot-carousel" id="spotCarousel" tabindex="0" aria-label="沿途停靠">
+          <article class="spot-slide" data-region="yinchuan" data-day="925" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg/1920px-%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg" data-caption="贺兰山 · 清晨山脊">
+            <div class="spot-slide-card">
               <h3>贺兰山</h3>
               <p class="spot-teaser">贺兰山在西，黄河在东，银川平原夹在中间。山色青黑，晴天轮廓硬朗——长途抵达后，先把视线交给西边这道脊背，让眼睛从公路上的白线，慢慢对焦到山影。</p>
-              <p class="spot-aside">「贺兰」一名见于史籍，蒙古语意近「骏马」。山形起伏如奔马脊背，古人常以山名边塞。它隔开银川平原与阿拉善荒漠，东麓葡萄、岩画、边墙都贴着山脚铺开——这一站停下来，多半是为了望山：车门一开，风干、光硬，山却安静地站在那里。</p>
+            <p class="spot-aside">「贺兰」一名见于史籍，蒙古语意近「骏马」。山形起伏如奔马脊背，古人常以山名边塞。它隔开银川平原与阿拉善荒漠，东麓葡萄、岩画、边墙都贴着山脚铺开——这一站停下来，多半是为了望山：车门一开，风干、光硬，山却安静地站在那里。</p>
               <div class="spot-meta">望山 · 银川西麓 · 9.25</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.997,38.727&name=贺兰山岩画&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航贺兰山岩画</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>9.25 下午到银川西麓后，先找一处能看见山脊的开阔处停稳——车门一开，先把视线交给西边，别急着赶下一站。</li>
                     <li>天气好就对着山影拍几张；还有余力再近看<strong>贺兰山岩画</strong>。也可留到 9.26 下午，与镇北堡影城二选一。</li>
                     <li>山前昼夜温差大，薄外套备一件；进保护区或景区按现场开放与票务走开放区域。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.997,38.727&name=贺兰山岩画&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航贺兰山岩画</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">贺兰山清晨山脊</span>
           </article>
 
-          <article class="spot" data-region="yinchuan" data-day="926">
-            <div class="spot-img" role="img" aria-label="镇北堡西部影城" data-caption="镇北堡西部影城" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/WestStudio.jpg/1920px-WestStudio.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/WestStudio.jpg/1920px-WestStudio.jpg" alt="镇北堡西部影城" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="yinchuan" data-day="926" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/WestStudio.jpg/1920px-WestStudio.jpg" data-caption="镇北堡西部影城">
+            <div class="spot-slide-card">
               <h3>镇北堡西部影城</h3>
               <p class="spot-teaser">明清边墙遗址改成的电影城。黄土墙与残堡本来就是现成布景——走在巷子里，风沙声比游客声先到。下午可来这里，或去贺兰山岩画。</p>
-              <p class="spot-aside">张贤亮创办；《红高粱》《大话西游》等曾在此取景。他把边塞废墟留住拍电影：夯土墙、残堡、干裂的地面，本身就是西北的布景，镜头只是把它们写进银幕。</p>
+            <p class="spot-aside">张贤亮创办；《红高粱》《大话西游》等曾在此取景。他把边塞废墟留住拍电影：夯土墙、残堡、干裂的地面，本身就是西北的布景，镜头只是把它们写进银幕。</p>
               <div class="spot-meta">9.26 下午可选 · 银川</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.50&name=镇北堡西部影城&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航影城</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>排在 9.26 下午：从宿集换到漫葡安顿后，下午可来影城，或去<strong>贺兰山岩画</strong>——两处选一即可，别两头赶。</li>
                     <li>进园跟着标志走几处拍摄点：夯土墙、残堡、干裂地面，走巷子里感受风沙就够；不必按打卡清单走完。</li>
                     <li>傍晚赶回漫葡，把体力留给夜场灯火；影城与漫葡、宿集都在银川西麓一带，车程不远，但预留回程时间。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.50&name=镇北堡西部影城&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航影城</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">镇北堡西部影城</span>
           </article>
 
-          <article class="spot" data-region="yinchuan" data-day="926">
-            <div class="spot-img" role="img" aria-label="漫葡小镇白天全景" data-caption="漫葡小镇 · 白天全景" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/manpu-panorama.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/manpu-panorama.jpg" alt="漫葡小镇全景" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="yinchuan" data-day="926" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/manpu-panorama.jpg" data-caption="漫葡小镇 · 白天全景">
+            <div class="spot-slide-card">
               <h3>漫葡 · 看见贺兰</h3>
               <p class="spot-teaser">贺兰山东麓的葡萄小镇。白天换房安顿，傍晚跟着节目单逛街区与灯火——山还在远处，灯一盏盏亮起来；不必全看完，留下几处喜欢的就好。</p>
               <div class="spot-meta">9.26 · 住天沐·党项 · 夜场票提前确认</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.52&name=漫葡小镇&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航漫葡</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>9.26 从宿集换到天沐·党项后，先放行李、确认夜场票与入场方式，再出门。</li>
                     <li>傍晚跟着节目单选几场逛街区与灯火即可，不必全看完；下午若去了影城或岩画，更要留体力给夜里。</li>
                     <li>温泉、充电桩出发前向酒店问清楚位置与时段；夜里风凉，外套备一件。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.52&name=漫葡小镇&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航漫葡</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">漫葡小镇白天全景</span>
           </article>
 
-          <article class="spot" data-region="yinchuan" data-day="927">
-            <div class="spot-img" role="img" aria-label="西夏陵" data-caption="西夏陵" data-full="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg" alt="西夏陵" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="yinchuan" data-day="927" data-full="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg" data-caption="西夏陵">
+            <div class="spot-slide-card">
               <h3>西夏陵 + 博物馆</h3>
               <p class="spot-teaser">先在博物馆把西夏的故事听完，再去陵区。夯土陵台矗在贺兰山下，风沙磨去华丽，轮廓却仍旧清楚——九月二十七日的上午留给这里。</p>
               <div class="spot-meta">票+车约 115/人 · 馆多半免费 · 尽量早入园</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.98,38.45&name=西夏陵&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航西夏陵</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>尽量 <strong>8:30–9:00</strong> 到，留足半天；中午前结束，下午才赶得上往张掖。</li>
                     <li>动线：游客中心/售票 → <strong>博物馆</strong>（把背景听清楚）→ 坐<strong>观光车</strong>进陵区看夯土陵台 → 返回。陵区不必硬走。</li>
                     <li>票+车约 115/人、馆多半免费——以现场为准；看完接西夏 → 丹霞（或可选绕沙坡头）。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.98,38.45&name=西夏陵&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航西夏陵</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">西夏陵</span>
           </article>
 
-          <article class="spot" data-region="yinchuan" data-day="927">
-            <div class="spot-img" role="img" aria-label="中卫沙坡头沙漠" data-caption="沙坡头 · 沙漠与黄河一带" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Shapotou_desert_area_%2820171005173240%29.jpg/1920px-Shapotou_desert_area_%2820171005173240%29.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Shapotou_desert_area_%2820171005173240%29.jpg/1920px-Shapotou_desert_area_%2820171005173240%29.jpg" alt="沙坡头" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="yinchuan" data-day="927" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Shapotou_desert_area_%2820171005173240%29.jpg/1920px-Shapotou_desert_area_%2820171005173240%29.jpg" data-caption="沙坡头 · 沙漠与黄河一带">
+            <div class="spot-slide-card">
               <h3>沙坡头（可选）</h3>
               <p class="spot-teaser">腾格里沙漠贴着黄河的一角：一边是沙丘，一边是河水拐弯——九月二十七日西夏之后可顺路停 1–2 小时再继续往张掖。</p>
               <div class="spot-meta">可选路过 · 停 1–2 小时 · 西夏 → 张掖途中</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.005,37.463&name=沙坡头景区&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航沙坡头</a>
-              <details class="spot-more">
-                <summary>看看怎么停</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>夹在<strong>西夏 → 张掖</strong>途中：西夏看完再决定是否拐；停 1–2 小时，只看黄河贴着沙漠的那一角即可。</li>
                     <li>滑沙、羊皮筏子等项目想玩再买，不玩也能走；时间紧就直开丹霞明珠。</li>
                     <li>绕行会更晚到店——夜里别赶星空，星空留给 <strong>10.2 青海湖东岸</strong>。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.005,37.463&name=沙坡头景区&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航沙坡头</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">中卫沙坡头沙漠</span>
           </article>
 
-          <article class="spot" data-region="hexi" data-day="928">
-            <div class="spot-img" role="img" aria-label="张掖七彩丹霞" data-caption="张掖七彩丹霞" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG" alt="张掖七彩丹霞" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="hexi" data-day="928" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG" data-caption="张掖七彩丹霞">
+            <div class="spot-slide-card">
               <h3>七彩丹霞</h3>
               <p class="spot-teaser">彩色山丘，下午到傍晚光更好——斜阳一到，层理才醒；红、黄、白、灰像被风一层层掀开。住北门丹霞明珠，进出省事。</p>
-              <p class="spot-aside">张掖临泽的彩色丘陵：白垩纪砂砾岩经风化侵蚀，铁、锰等氧化物染出红黄白灰。正午晒得发白，傍晚光斜进来时，整片山丘才真正像一只调色盘——风里干燥，颜色却很热闹。</p>
-              <div class="spot-meta">票+车约 75/人 · 9.28 下午 · 日落约 18:30–19:30</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.12,38.97&name=张掖七彩丹霞&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航丹霞</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+            <p class="spot-aside">张掖临泽的彩色丘陵：白垩纪砂砾岩经风化侵蚀，铁、锰等氧化物染出红黄白灰。正午晒得发白，傍晚光斜进来时，整片山丘才真正像一只调色盘——风里干燥，颜色却很热闹。</p>
+              <div class="spot-meta">票+车约 75/人 · 9.28 下午 · 日落约 19:12</div>
+              <div class="spot-detail">
                   <ul>
-                    <li>9.28 上午补觉；下午进园，把时间留给日落前后（约 18:30–19:30）——斜阳一到，层理才醒。</li>
+                    <li>9.28 上午补觉；下午进园，把时间留给日落前后（约 19:12）——斜阳一到，层理才醒。</li>
                     <li>园内必须坐区间环保车串观景台；跟着车次走几处高点即可，不必打卡全集。</li>
                     <li>住北门丹霞明珠，进出省事；日落撤出后开嘉峪关车宿，夜里别拖太晚。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.12,38.97&name=张掖七彩丹霞&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航丹霞</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">张掖七彩丹霞</span>
           </article>
 
-          <article class="spot" data-region="dunhuang" data-day="929">
-            <div class="spot-img" role="img" aria-label="莫高窟崖壁窟檐" data-caption="莫高窟 · 崖壁窟檐" data-full="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920"><img referrerpolicy="no-referrer" src="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="莫高窟" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="dunhuang" data-day="929" data-full="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920" data-caption="莫高窟 · 崖壁窟檐">
+            <div class="spot-slide-card">
               <h3>莫高窟</h3>
               <p class="spot-teaser">从数字展示中心开始，穿过一段影像与等待，最后走进洞窟。这一程订在九月二十九日下午——洞窟里凉、静，脚步也轻；看完再去沙山赶日落。</p>
-              <p class="spot-aside">「莫高」一说为「漠高」，指沙漠高处的佛龛。传说前秦时乐僔和尚见金光如千佛，遂开首窟；其后历代续凿，丝路信仰与壁画叠在崖壁上千余年。灯影未到之处，飞天与供养人仍停在自己的颜色里——看完出来，眼睛会需要一点日光。</p>
+            <p class="spot-aside">「莫高」一说为「漠高」，指沙漠高处的佛龛。传说前秦时乐僔和尚见金光如千佛，遂开首窟；其后历代续凿，丝路信仰与壁画叠在崖壁上千余年。灯影未到之处，飞天与供养人仍停在自己的颜色里——看完出来，眼睛会需要一点日光。</p>
               <div class="spot-meta">约 238/人 · 提前约 30 天抢 · A 类常规票</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.81,40.04&name=莫高窟数字展示中心&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航数字中心</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>导航去<strong>莫高窟数字展示中心</strong>：先看影片，再摆渡进窟区——别直接开去崖壁门口。</li>
                     <li>目标日期 <strong>2026-09-29</strong>，优先下午场；约提前 30 天在官方渠道抢 A 类常规票，别走不明渠道。</li>
                     <li>洞窟里凉、脚步轻；看完出来再开鸣沙山赶日落，中间留足换场时间。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.81,40.04&name=莫高窟数字展示中心&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航数字中心</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">莫高窟崖壁窟檐</span>
           </article>
 
-          <article class="spot" data-region="dunhuang" data-day="929">
-            <div class="spot-img" role="img" aria-label="鸣沙山月牙泉" data-caption="鸣沙山月牙泉" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Mondsichelsee.JPG/1920px-Mondsichelsee.JPG"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Mondsichelsee.JPG/1920px-Mondsichelsee.JPG" alt="鸣沙山月牙泉" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="dunhuang" data-day="929" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Mondsichelsee.JPG/1920px-Mondsichelsee.JPG" data-caption="鸣沙山月牙泉">
+            <div class="spot-slide-card">
               <h3>鸣沙山月牙泉</h3>
               <p class="spot-teaser">沙山围着一汪新月形泉水。傍晚沙色偏金，泉水却仍旧冷静——看完主色就撤；夜里去夜市，再回梵尘。</p>
-              <p class="spot-aside">风过沙丘作声，故称鸣沙。月牙泉形如新月，嵌在沙海中间：沙不掩泉、泉不涸竭，是风与地下水长期较劲留下的形状。站在沙脊上看下去，金色与一抹冷蓝并排——像沙漠忽然留了一口气。</p>
+            <p class="spot-aside">风过沙丘作声，故称鸣沙。月牙泉形如新月，嵌在沙海中间：沙不掩泉、泉不涸竭，是风与地下水长期较劲留下的形状。站在沙脊上看下去，金色与一抹冷蓝并排——像沙漠忽然留了一口气。</p>
               <div class="spot-meta">约 110/人 · 票常可 3 日用 · 住梵尘很近</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.68,40.09&name=鸣沙山月牙泉&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航鸣沙山</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>莫高窟出来后，下午晚一些入园，把光线留给日落前后；主看沙色与月牙泉，看完主色就撤。</li>
                     <li>骑骆驼、滑沙另收费，想玩再买；票常可多日使用，以现场说明为准。</li>
                     <li>住梵尘很近；日落撤出后进城沙州夜市吃晚饭，再回酒店。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.68,40.09&name=鸣沙山月牙泉&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航鸣沙山</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">鸣沙山月牙泉</span>
           </article>
 
-          <article class="spot" data-region="dunhuang" data-day="929">
-            <div class="spot-img" role="img" aria-label="敦煌沙州夜市" data-caption="沙州夜市 · 夜色街区" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dunhuang_Night_Market_%2820230916214410%29.jpg/1920px-Dunhuang_Night_Market_%2820230916214410%29.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dunhuang_Night_Market_%2820230916214410%29.jpg/1920px-Dunhuang_Night_Market_%2820230916214410%29.jpg" alt="沙州夜市" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="dunhuang" data-day="929" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dunhuang_Night_Market_%2820230916214410%29.jpg/1920px-Dunhuang_Night_Market_%2820230916214410%29.jpg" data-caption="沙州夜市 · 夜色街区">
+            <div class="spot-slide-card">
               <h3>沙州夜市</h3>
               <p class="spot-teaser">鸣沙山下来后进城吃一顿。灯火、烤肉香与人群的声响，是敦煌白天之外的另一面——吃完回梵尘即可。</p>
               <div class="spot-meta">9.29 晚饭 · 阳关路一带</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.14&name=沙州夜市&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航沙州夜市</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>日落撤出鸣沙山，开车十几分钟到阳关路一带；以吃饱、尝尝当地味道为主，别拖成深夜逛街。</li>
-                    <li>晚饭后早些回梵尘——第二天要出城去雅丹，赶日落班。</li>
+                    <li>晚饭后早些回梵尘——第二天上午博物馆，中午城里晃完再出城去雅丹赶日落。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.14&name=沙州夜市&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航沙州夜市</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">敦煌沙州夜市</span>
           </article>
 
-          <article class="spot" data-region="dunhuang" data-day="930">
-            <div class="spot-img" role="img" aria-label="玉门关遗址" data-caption="玉门关" data-full="https://upload.wikimedia.org/wikipedia/commons/8/88/Yumen_Pass_in_2004.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/8/88/Yumen_Pass_in_2004.jpg" alt="玉门关" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="dunhuang" data-day="930" data-full="https://upload.wikimedia.org/wikipedia/commons/8/88/20080717_Dunhuang_Museum.jpg" data-caption="敦煌博物馆">
+            <div class="spot-slide-card">
+              <h3>敦煌博物馆</h3>
+              <p class="spot-teaser">莫高看完的第二天上午。展柜把丝路文物与地方史再串一遍——灯下安静，颜色却接到地面上。逛完不急着出城，把中午留给市区漫步。</p>
+              <div class="spot-meta">9.30 上午 · 凭证件以现场为准</div>
+              <div class="spot-detail">
+                  <ul>
+                    <li>开馆后进馆即可；重点厅走一圈，约 1.5–2.5h，别拖到午后。</li>
+                    <li>出馆接市区漫步 与午饭；约 13:00–14:00 前动身去雅丹。</li>
+                  </ul>
+                </div>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.15&name=敦煌博物馆&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航博物馆</a>
+              </div>
+
+            </div>
+            <span class="visually-hidden">敦煌博物馆外观</span>
+          </article>
+
+          <article class="spot-slide" data-region="dunhuang" data-day="930" data-full="https://upload.wikimedia.org/wikipedia/commons/c/cc/DunhuangCity-Traffic.jpg" data-caption="敦煌市区 · 白天街景">
+            <div class="spot-slide-card">
+              <h3>敦煌市区漫步</h3>
+              <p class="spot-teaser">博物馆出来，中午在阳关路／沙州一带慢慢走——书店、小巷、一顿午饭。绿洲城里的白天与昨夜夜市不同：人少一点，光更干净。</p>
+              <div class="spot-meta">9.30 中午 · 午饭后出城</div>
+              <div class="spot-detail">
+                  <ul>
+                    <li>以步行与午饭为主，不必排新景点；书店、街景随走随停即可。</li>
+                    <li>卡好出城时间：市区到雅丹约 2–2.5h，宜 13:00–14:00 前上车。</li>
+                  </ul>
+                </div>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.14&name=沙州夜市&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航阳关路一带</a>
+              </div>
+
+            </div>
+            <span class="visually-hidden">敦煌市区白天街景</span>
+          </article>
+
+          <article class="spot-slide" data-region="dunhuang" data-day="930" data-full="https://upload.wikimedia.org/wikipedia/commons/8/88/Yumen_Pass_in_2004.jpg" data-caption="玉门关">
+            <div class="spot-slide-card">
               <h3>玉门关（短停）</h3>
               <p class="spot-teaser">去雅丹路上可短停。夯土关城立在戈壁里，风大、天远——「春风不度」说的就是这一带的边关气象：关城不大，却把空旷衬得很清楚。</p>
               <div class="spot-meta">9.30 路过短停 · 去雅丹途中</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.86,40.35&name=玉门关&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航玉门关</a>
-              <details class="spot-more">
-                <summary>看看怎么停</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
-                    <li>9.30 出城去雅丹途中短停：关城不大，下车拍几张、站一会儿即可，别耗掉赶日落班的余量。</li>
+                    <li>9.30 午后出城去雅丹途中短停：关城不大，下车拍几张、站一会儿即可，别耗掉赶日落班的余量。</li>
                     <li>风大沙多，帽子、口罩有用；停稳再下车，注意过路车。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.86,40.35&name=玉门关&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航玉门关</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">玉门关遗址</span>
           </article>
 
-          <article class="spot" data-region="dunhuang" data-day="930">
-            <div class="spot-img" role="img" aria-label="敦煌雅丹" data-caption="敦煌雅丹国家地质公园" data-full="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg" alt="敦煌雅丹" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
-              <h3>敦煌雅丹</h3>
+          <article class="spot-slide" data-region="dunhuang" data-day="930" data-full="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg" data-caption="敦煌雅丹国家地质公园">
+            <div class="spot-slide-card">
+              <h3>敦煌雅丹（魔鬼城）</h3>
               <p class="spot-teaser">风蚀留下的土丘站在戈壁里。坐观光车进园，日落时阴影拉长，整片旱地像一座空城慢慢亮起轮廓——看完就回敦煌。</p>
-              <p class="spot-aside">「雅丹」借自维吾尔语，指陡壁小丘。这里是旱地雅丹：风与时间削出城堡状土丘，当地又称魔鬼城——风穿梭其间时，会发出低沉的呜咽。</p>
-              <div class="spot-meta">票+车约 120/人 · 市区约 2–2.5 小时 · 末班常约 18:30</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=92.85,40.52&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+            <p class="spot-aside">「雅丹」借自维吾尔语，指陡壁小丘。这里是旱地雅丹：风与时间削出城堡状土丘，当地又称魔鬼城——风穿梭其间时，会发出低沉的呜咽。</p>
+              <div class="spot-meta">9.30 下午 · 票+车约 120/人 · 市区约 2–2.5 小时 · 末班常约 18:30</div>
+              <div class="spot-detail">
                   <ul>
-                    <li>9.30 建议 <strong>13:00–14:00</strong> 前出城（市区约 2–2.5 小时）；途中可短停玉门关，但要留足赶日落班。</li>
+                    <li>上午博物馆、中午 市区漫步 之后，建议 <strong>13:00–14:00</strong> 前出城；途中可短停玉门关，但要留足赶日落班。</li>
                     <li>进园坐观光车串土丘；末班常约 18:30，以现场为准——日落时阴影拉长最好看，看完当天回敦煌。</li>
                     <li>票+车约 120/人；第二天主线换到乌素特水上雅丹，别把两天景挤成一天。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=92.85,40.52&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">敦煌雅丹</span>
           </article>
 
-          <article class="spot" data-region="dunhuang" data-day="1001">
-            <div class="spot-img" role="img" aria-label="敦煌博物馆外观" data-caption="敦煌博物馆" data-full="https://upload.wikimedia.org/wikipedia/commons/8/88/20080717_Dunhuang_Museum.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/8/88/20080717_Dunhuang_Museum.jpg" alt="敦煌博物馆" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
-              <h3>敦煌博物馆</h3>
-              <p class="spot-teaser">10.1 上午城里走走的选项之一。石窟看完后，这里把丝路文物与地方史再串一遍——展柜里的物件安静，却能把昨天洞窟里的颜色接到地面上；也可换成书店。</p>
-              <div class="spot-meta">10.1 上午任选 · 凭证件参观以现场为准</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.15&name=敦煌博物馆&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航博物馆</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+          <article class="spot-slide" data-region="dunhuang" data-day="1001" data-full="assets/huyangxia.jpg" data-caption="胡杨 · 金秋树影（风景参考）">
+            <div class="spot-slide-card">
+              <h3>多坝沟胡杨峡</h3>
+              <p class="spot-teaser">出城往阿克塞，西拐进沟。沙与石先静下来，再看见那些弯着腰的树——十月若赶上叶子转金，整条峡谷会像被风点燃；赶不上满金，水墨山体与沟底的光，也够停稳看一会儿。</p>
+            <p class="spot-aside">多坝沟在冷湖正线西侧，约 67 km、纯开约 1h；进沟约 1.5–2.5h。金秋常偏下旬，十日前后以峡谷层次为主。与黑独山、冷湖镇边同属走廊「荒凉水墨」任选一——选这里就别再进黑独山，把余光留给水上雅丹。</p>
+              <div class="spot-meta">10.1 走廊三选一 · 支线约 +1–1.5h 车程 · 游玩 1.5–2.5h</div>
+              <div class="spot-detail">
                   <ul>
-                    <li>10.1 上午城里任选：博物馆或书店走一处即可，凭证件参观以现场为准，别排太满。</li>
-                    <li>中午前后上路，下午翻当金山进柴达木——后面还有水上雅丹主停，上午别拖。</li>
+                    <li>早些出城；票价与开放以现场／携程为准。</li>
+                    <li>找安全处停稳再进沟；防晒、防滑鞋底、水要带够。</li>
+                    <li>选了胡杨峡，黑独山与冷湖镇边就车窗带过；别叠停，否则水上雅丹以后多半摸黑。</li>
                   </ul>
                 </div>
-              </details>
-            </div>
-          </article>
-
-          <article class="spot" data-region="dunhuang" data-day="1001">
-            <div class="spot-img" role="img" aria-label="阿克塞胡杨峡戈壁峡谷地貌" data-caption="阿克塞胡杨峡 · 水墨戈壁与峡谷山体（风景参考）" data-full="https://images.pexels.com/photos/8714986/pexels-photo-8714986.jpeg?auto=compress&cs=tinysrgb&w=1920"><img referrerpolicy="no-referrer" src="https://images.pexels.com/photos/8714986/pexels-photo-8714986.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="阿克塞胡杨峡戈壁峡谷" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
-              <h3>可选：胡杨峡</h3>
-              <p class="spot-teaser">出敦煌往阿克塞、翻当金山时，走廊西侧可拐<strong>多坝沟胡杨峡</strong>——短停约 1–2 小时，顺路看一层水墨戈壁与雅丹山体：灰黑砾石铺地，风蚀山脊立在空旷里，像被风吹干的画。</p>
-              <p class="spot-aside">接回主线仍是水上雅丹 → 东台／U315 → 大柴旦。峡谷深处沟壑蜿蜒，山体层次在天光下慢慢铺开；停稳看一会儿，再继续南下。</p>
-              <div class="spot-meta">10.1 可选顺路 · 短停约 1–2 小时</div>
+              <div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.82,39.98&name=多坝沟胡杨峡&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航胡杨峡</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.82,39.98,多坝沟胡杨峡&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 胡杨峡</a>
-              <details class="spot-more">
-                <summary>看看怎么停</summary>
-                <div class="spot-detail">
-                  <ul>
-                    <li>出敦煌往阿克塞、进当金山前可拐多坝沟；短停约 1–2 小时，找安全处停稳再看山体与戈壁。</li>
-                    <li>接回主线：水上雅丹（主停）→ 东台／U315 路边短停 → 大柴旦过夜。时间紧就跳过此处直开水上雅丹。</li>
-                  </ul>
-                </div>
-              </details>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.82,39.98,多坝沟胡杨峡&to=93.34,38.75,冷湖镇&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">胡杨峡 → 冷湖</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">胡杨金秋树影</span>
           </article>
 
-          <article class="spot" data-region="qinghai" data-day="1001">
-            <div class="spot-img" role="img" aria-label="乌素特水上雅丹" data-caption="乌素特水上雅丹" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Wusute_Yardang_on_Water_Geological_Park.jpg/1920px-Wusute_Yardang_on_Water_Geological_Park.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Wusute_Yardang_on_Water_Geological_Park.jpg/1920px-Wusute_Yardang_on_Water_Geological_Park.jpg" alt="水上雅丹" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="qinghai" data-day="1001" data-full="assets/heidushan.jpg" data-caption="黑山戈壁 · 墨色丘陵氛围（风景参考）">
+            <div class="spot-slide-card">
+              <h3>黑独山</h3>
+              <p class="spot-teaser">冷湖镇东北约一刻钟。山体灰黑，像一笔浓墨落在盐壳边上——风过处，连影子都显得干净。常有人写成「像月球」；站在车辙外看一会儿，天地只剩黑、白与很远的天。</p>
+            <p class="spot-aside">黑独山贴在冷湖走廊上，敦煌到冷湖约 3.5–4.5h 之后顺路可停。山下宜 30–60 分钟；末段砂石车辙，L7 跟辙慢开。与胡杨峡、冷湖镇边同属走廊任选一——墨色丘陵最「像月球」；若已进胡杨峡，或只想在镇边看一眼远处黑山，这里可跳过。</p>
+              <div class="spot-meta">10.1 走廊三选一 · 山下宜 30–60 分钟 · 多无大门票</div>
+              <div class="spot-detail">
+                  <ul>
+                    <li>导航搜「黑独山景区」。开放与管制以现场为准，白天去更稳。</li>
+                    <li>风大、补给少；墨镜、外套和水必备。无人机与禁飞看当天公告。</li>
+                    <li>选了这里就别再绕胡杨峡；出山后接火星一号公路往水上雅丹，约 1.5–2h。</li>
+                  </ul>
+                </div>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.42,38.84&name=黑独山景区&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航黑独山</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.34,38.75,冷湖镇&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 冷湖</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
+              </div>
+
+            </div>
+            <span class="visually-hidden">黑山戈壁丘陵</span>
+          </article>
+
+          <article class="spot-slide" data-region="qinghai" data-day="1001" data-full="assets/mars-highway.jpg" data-caption="火星一号公路一带 · 戈壁公路（风景参考）">
+            <div class="spot-slide-card">
+              <h3>火星一号公路</h3>
+              <p class="spot-teaser">冷湖往水上雅丹的一段无人区公路。路碑一公里一棵，戈壁平到天边，车轮声都显得很轻——像把柴达木的空，慢慢铺进后视镜里。</p>
+            <p class="spot-aside">俗称「火星一号」，因荒凉近科幻得名。L7／SUV 约 1.5–2h；按路碑行驶，安全处再停。路况与通行以当天导航为准，不确定时可改走国道，只是更久一点。</p>
+              <div class="spot-meta">10.1 · 冷湖 → 水上雅丹途中 · 约 1.5–2h</div>
+              <div class="spot-detail">
+                  <ul>
+                    <li>右转常为火星一号（有路碑）；直行易入废弃路段，出发前看清导航与路况提示。</li>
+                    <li>无人区信号弱：油、水、干粮提前备好；停车只选安全路肩。</li>
+                    <li>开完即接水上雅丹主停，不必在公路上恋战。</li>
+                  </ul>
+                </div>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
+              </div>
+
+            </div>
+            <span class="visually-hidden">火星一号公路戈壁公路</span>
+          </article>
+
+          <article class="spot-slide" data-region="qinghai" data-day="1001" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Wusute_Yardang_on_Water_Geological_Park.jpg/1920px-Wusute_Yardang_on_Water_Geological_Park.jpg" data-caption="乌素特水上雅丹">
+            <div class="spot-slide-card">
               <h3>乌素特水上雅丹</h3>
-              <p class="spot-teaser">敦煌 → 大柴旦路上的主景点。雅丹泡在浅湖里，倒影干净；风一过，土丘与水光一起轻轻晃——敦煌那处是旱地雅丹，这里多了一层蓝。出园后东台与 U315 作路边短停／车窗风景。</p>
-              <p class="spot-aside">乌素特一带的水上雅丹：风蚀土丘立在湖水中，晴天时天空、盐壳与倒影叠成同一块颜色。停 1–1.5 小时足够——走进去时干燥，站在水边时又忽然觉得安静。</p>
-              <div class="spot-meta">10.1 路过 · 停 1–1.5 小时 · 票+车约 120/人</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.35,37.72&name=乌素特水上雅丹&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航水上雅丹</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <p class="spot-teaser">火星公路尽头附近的主停。雅丹泡在浅湖里，倒影干净；风一过，土丘与水光一起轻轻晃——敦煌那处是旱地雅丹，这里多了一层蓝。</p>
+            <p class="spot-aside">乌素特一带：风蚀土丘立在湖水中，晴天时天空、盐壳与倒影叠成同一块颜色。这是 10.1 白天收尾——停 1–1.5 小时足够，争取日落前（约 19:34）还在园里或刚出园。出园后若已偏晚，东台／U315 车窗带过，优先进大柴旦。</p>
+              <div class="spot-meta">10.1 白天收尾 · 停 1–1.5 小时 · 票+车约 120/人</div>
+              <div class="spot-detail">
                   <ul>
-                    <li>今日主停：进园约 1–1.5 小时，跟着游览线看土丘与倒影即可；票+车约 120/人，以现场为准。</li>
-                    <li>出园后沿 G315 东行：东台、U315 作路边短停／车窗风景；再晚出发就缩短后面短停，优先保大柴旦住宿。</li>
-                    <li>日照强、风干，防晒和水要带够。</li>
+                    <li>进园约 1–1.5 小时，跟着游览线看土丘与倒影；票+车约 120/人，以现场为准。</li>
+                    <li>前面走廊只留一处即可；叠停胡杨峡又进黑独山，这里容易只剩余晖或天黑——宁可前面砍站，也别把倒影留给夜里。</li>
+                    <li>日照强、风干，防晒和水要带够；出园偏晚就直开大柴旦。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.35,37.72&name=乌素特水上雅丹&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航水上雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">乌素特水上雅丹</span>
           </article>
 
-          <article class="spot" data-region="qinghai" data-day="1001">
-            <div class="spot-img" role="img" aria-label="东台吉乃尔湖盐湖风光" data-caption="东台吉乃尔湖 · 盐壳与湖色" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/dongtai.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/dongtai.jpg" alt="东台吉乃尔湖" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="qinghai" data-day="1001" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/dongtai.jpg" data-caption="东台吉乃尔湖 · 盐壳与湖色">
+            <div class="spot-slide-card">
               <h3>东台吉乃尔湖</h3>
-              <p class="spot-teaser">水上雅丹之后、大柴旦之前的路边短停。蓝白盐湖贴着 G315，盐壳反光刺眼又好看——停 15–40 分钟拍几张就走。</p>
-              <p class="spot-aside">东台吉乃尔是 G315 沿线开放式盐湖观景：蓝白盐壳贴着公路，停稳拍几张就继续东行。大柴旦翡翠湖在镇旁，是有门票的多层蓝绿盐湖群，留到次日清晨。</p>
-              <div class="spot-meta">10.1 路边短停 · 约 15–40 分钟 · 水上雅丹之后</div>
+              <p class="spot-teaser">水上雅丹之后、大柴旦之前的路边短停。蓝白盐湖贴着 G315，盐壳反光刺眼又好看——有余光再停 15–40 分钟；天擦黑就别恋战。</p>
+            <p class="spot-aside">东台吉乃尔是 G315 沿线开放式盐湖观景：蓝白盐壳贴着公路。盐壳要靠白天反光才好看；水上雅丹出园已晚，车窗带过即可。大柴旦翡翠湖在镇旁，留到次日清晨。</p>
+              <div class="spot-meta">10.1 有余光再停 · 约 15–40 分钟 · 水上雅丹之后</div>
+              <div class="spot-detail">
+                  <ul>
+                    <li>水上雅丹之后、大柴旦之前：还有余光再导航「东台吉乃尔湖」或 G315 观景点，路边停 15–40 分钟。</li>
+                    <li>只在路肩宽、能看清来车处停稳；水位与蓝白浓淡随季节变化，以现场为准——拍完就走。</li>
+                    <li>已偏晚就直开大柴旦；翡翠湖留到次日清晨。</li>
+                  </ul>
+                </div>
+              <div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.9,37.5&name=东台吉乃尔湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航东台吉乃尔湖</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.35,37.72,乌素特水上雅丹&to=93.90,37.50,东台吉乃尔湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 东台</a>
-              <details class="spot-more">
-                <summary>看看怎么停</summary>
-                <div class="spot-detail">
-                  <ul>
-                    <li>水上雅丹之后、大柴旦之前：导航「东台吉乃尔湖」或 G315 观景点，路边停 15–40 分钟拍几张。</li>
-                    <li>只在路肩宽、能看清来车处停稳；水位与蓝白浓淡随季节变化，以现场为准——拍完就走。</li>
-                    <li>继续东行上 U315 一段，傍晚进大柴旦过夜；翡翠湖留到次日清晨。</li>
-                  </ul>
-                </div>
-              </details>
+              </div>
+
             </div>
+            <span class="visually-hidden">东台吉乃尔湖盐湖风光</span>
           </article>
 
-          <article class="spot" data-region="qinghai" data-day="1001">
-            <div class="spot-img" role="img" aria-label="U315公路一带盐湖风景" data-caption="U315 / U型公路一带 · 盐湖公路风景" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/u315.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/u315.jpg" alt="U315公路一带" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="qinghai" data-day="1001" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/u315.jpg" data-caption="U315 / U型公路一带 · 盐湖公路风景">
+            <div class="spot-slide-card">
               <h3>U315 公路（U 型公路）</h3>
-              <p class="spot-teaser">东台附近顺路开过的风景公路：盐壳、天空与弯道叠在一起——车窗里就能看。慢开路过；想拍再找安全处停几分钟（约 15–40 分钟，也可不下车）。</p>
-              <p class="spot-aside">「U315 / U 型公路」多指 G315 东台吉乃尔一带起伏路段：盐湖贴着路面，弯道把天和地拧在一起。排在东台之后、大柴旦之前，当路开过——风大、紫外线强，车窗风景也够用。</p>
-              <div class="spot-meta">10.1 顺路风景 · 可下车短停约 15–40 分钟</div>
+              <p class="spot-teaser">东台附近顺路开过的风景公路：盐壳、天空与弯道叠在一起——车窗里就能看。有余光可慢开、找安全处停几分钟；天黑了就当进镇路，别为弯道再耽搁。</p>
+            <p class="spot-aside">「U315 / U 型公路」多指 G315 东台吉乃尔一带起伏路段：盐湖贴着路面，弯道把天和地拧在一起。景色吃白天；排在东台之后、大柴旦之前，没余光就当路开过。</p>
+              <div class="spot-meta">10.1 有余光再停 · 可下车短停约 15–40 分钟</div>
+              <div class="spot-detail">
+                  <ul>
+                    <li>接在东台之后：有余光再慢开、找路肩宽处停几分钟；也可不下车。</li>
+                    <li>风大、紫外线强；已擦黑就直开大柴旦，别为弯道再耽搁。</li>
+                  </ul>
+                </div>
+              <div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.1,37.55&name=U型公路&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航 U 型公路一带</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.90,37.50,东台吉乃尔湖&to=94.10,37.55,U型公路&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">东台 → U315</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.10,37.55,U型公路&to=95.37,37.85,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">U315 → 大柴旦</a>
-              <details class="spot-more">
-                <summary>看看怎么开</summary>
-                <div class="spot-detail">
-                  <ul>
-                    <li>接在东台之后：慢开路过；想拍再找路肩宽、能看清来车处停几分钟（约 15–40 分钟，也可不下车）。</li>
-                    <li>风大、紫外线强，车窗风景也够用；傍晚进大柴旦过夜，别在公路上拖到天黑。</li>
-                  </ul>
-                </div>
-              </details>
+              </div>
+
             </div>
+            <span class="visually-hidden">U315公路一带盐湖风景</span>
           </article>
 
-          <article class="spot" data-region="qinghai" data-day="1002">
-            <div class="spot-img" role="img" aria-label="大柴旦翡翠湖一带" data-caption="大柴旦翡翠湖一带" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg" alt="大柴旦翡翠湖一带" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="qinghai" data-day="1002" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg" data-caption="大柴旦翡翠湖一带">
+            <div class="spot-slide-card">
               <h3>大柴旦翡翠湖</h3>
               <p class="spot-teaser">清晨在盐湖边看一层层蓝绿——浅的像冰，深的像玉，风一过，颜色还会轻轻换一层。1～3 号湖转一转就够，然后东行经德令哈补给，往青海湖东岸开。</p>
-              <p class="spot-aside">「翡翠湖」是大柴旦镇旁盐湖群的俗称，因多层蓝绿水色得名。东台是昨天 G315 路边的盐湖短停；这里是镇旁有门票的多层蓝绿湖群。早上来最省事：日照强、干燥，防晒和水要带够。</p>
+            <p class="spot-aside">「翡翠湖」是大柴旦镇旁盐湖群的俗称，因多层蓝绿水色得名。东台是昨天 G315 路边的盐湖短停；这里是镇旁有门票的多层蓝绿湖群。早上来最省事：日照强、干燥，防晒和水要带够。</p>
               <div class="spot-meta">10.2 上午 · 票+车约 100/人量级</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.37,37.85&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.37,37.85,大柴旦翡翠湖&to=97.37,37.37,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>10.2 住大柴旦后早上去最省事；1～3 号湖转一转就够，别恋战——后面还要经德令哈赶到东岸日落。</li>
                     <li>票+车约 100/人量级，以现场为准；日照强、干燥，防晒和水要带够。</li>
                     <li>出镇后东行：德令哈补给 →（可选茶卡）→ 青海湖东岸过夜。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.37,37.85&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.37,37.85,大柴旦翡翠湖&to=97.37,37.37,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">大柴旦翡翠湖一带</span>
           </article>
 
-          <article class="spot" data-region="qinghai" data-day="1002">
-            <div class="spot-img" role="img" aria-label="德令哈尕海一带湖景" data-caption="德令哈 · 尕海一带" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/delingha.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/delingha.jpg" alt="德令哈一带" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="qinghai" data-day="1002" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/delingha.jpg" data-caption="德令哈 · 尕海一带">
+            <div class="spot-slide-card">
               <h3>德令哈（补给 / 路过）</h3>
               <p class="spot-teaser">大柴旦 → 青海湖东岸途中的海西州府。加油、吃饭、超市比盐湖沿线好找——约 15–40 分钟补给路过即可。</p>
-              <p class="spot-aside">德令哈放在翡翠湖之后、茶卡／青海湖之前，只作中途补给。城外尕海等湿地可远眺；进城加油吃饭后继续开——把余量留给东岸的日落与星空。</p>
+            <p class="spot-aside">德令哈放在翡翠湖之后、茶卡／青海湖之前，只作中途补给。城外尕海等湿地可远眺；进城加油吃饭后继续开——把余量留给东岸的日落与星空。</p>
               <div class="spot-meta">10.2 路过补给 · 加油吃饭约 15–40 分钟</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=97.37,37.37&name=德令哈&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航德令哈</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖东岸</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=99.08,36.70,茶卡盐湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：德令哈 → 茶卡</a>
-              <details class="spot-more">
-                <summary>看看怎么停</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>翡翠湖之后、东岸之前：进城优先加油、吃饭、超市补给，约 15–40 分钟量级，补完就走。</li>
                     <li>出城后视时间决定是否短停茶卡；把余量留给东岸日落与夜里看星。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=97.37,37.37&name=德令哈&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航德令哈</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖东岸</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=99.08,36.70,茶卡盐湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">可选：德令哈 → 茶卡</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">德令哈尕海一带湖景</span>
           </article>
 
-          <article class="spot" data-region="qinghai" data-day="1002">
-            <div class="spot-img" role="img" aria-label="茶卡盐湖天空之镜" data-caption="茶卡盐湖 · 盐壳与远山" data-full="https://images.pexels.com/photos/8739403/pexels-photo-8739403.jpeg?auto=compress&cs=tinysrgb&w=1920"><img referrerpolicy="no-referrer" src="https://images.pexels.com/photos/8739403/pexels-photo-8739403.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="茶卡盐湖" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="qinghai" data-day="1002" data-full="https://images.pexels.com/photos/8739403/pexels-photo-8739403.jpeg?auto=compress&cs=tinysrgb&w=1920" data-caption="茶卡盐湖 · 盐壳与远山">
+            <div class="spot-slide-card">
               <h3>茶卡盐湖（可选）</h3>
               <p class="spot-teaser">往青海湖东岸途中，若时间宽裕可短停「天空之镜」。盐壳反光，远山压在天边——人走在白茫茫的盐上，影子会格外清楚。</p>
-              <p class="spot-aside">「茶卡」在藏语里意近盐池。这里是采盐与观景并存的盐湖：清晨的翡翠湖是多层蓝绿，东台是 G315 路边的盐壳，茶卡则以大片反光的「天空之镜」出名。盐壳反光强，墨镜必备。</p>
+            <p class="spot-aside">「茶卡」在藏语里意近盐池。这里是采盐与观景并存的盐湖：清晨的翡翠湖是多层蓝绿，东台是 G315 路边的盐壳，茶卡则以大片反光的「天空之镜」出名。盐壳反光强，墨镜必备。</p>
               <div class="spot-meta">可选短停 · 10.2 路过 · 之后继续东岸日落与星空</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=99.08,36.70&name=茶卡盐湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航茶卡</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=99.08,36.70,茶卡盐湖&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">茶卡 → 青海湖东岸</a>
-              <details class="spot-more">
-                <summary>看看怎么停</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>德令哈补给后、若时间宽裕再短停；看完盐壳反光就继续东岸，别挤掉日落与星空。</li>
                     <li>盐壳反光强，墨镜必备；停车按景区指示，别在危险路段随意停。</li>
                   </ul>
                 </div>
-              </details>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=99.08,36.70&name=茶卡盐湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航茶卡</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=99.08,36.70,茶卡盐湖&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">茶卡 → 青海湖东岸</a>
+              </div>
+
             </div>
+            <span class="visually-hidden">茶卡盐湖天空之镜</span>
           </article>
 
-          <article class="spot" data-region="qinghai" data-day="1002">
-            <div class="spot-img" role="img" aria-label="青海湖东岸" data-caption="青海湖东岸" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/qinghai-east.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/qinghai-east.jpg" alt="青海湖东岸" loading="lazy" decoding="async" /></div>
-            <div class="spot-body">
+          <article class="spot-slide" data-region="qinghai" data-day="1002" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/qinghai-east.jpg" data-caption="青海湖东岸">
+            <div class="spot-slide-card">
               <h3>青海湖东岸</h3>
               <p class="spot-teaser">这一晚住在东岸附近。傍晚湖面先染成深蓝，天黑以后风更冷——看湖，也等一等星星慢慢亮起来。</p>
-              <p class="spot-aside">青海湖古称西海，藏语「措温布」意近「青色的海」。东岸这一晚是本趟星空主场：湖面静下来之后，银河与寒星才显得特别近。风大、夜里冷，外套要有。</p>
+            <p class="spot-aside">青海湖古称西海，藏语「措温布」意近「青色的海」。东岸这一晚是本趟星空主场：湖面静下来之后，银河与寒星才显得特别近。风大、夜里冷，外套要有。</p>
               <div class="spot-meta">景区票约 100/人量级 · 木慧楠 · 海拔略高</div>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.74,36.72&name=青海湖东岸&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航东岸</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 东岸</a>
-              <details class="spot-more">
-                <summary>看看怎么玩</summary>
-                <div class="spot-detail">
+              <div class="spot-detail">
                   <ul>
                     <li>10.2 翡翠湖后经德令哈补给，再经黑马河一带开到东岸；傍晚先把湖面看一眼，天黑以后等星——本趟星空重点在这里。</li>
                     <li>住木慧楠一带；风大、夜里冷，外套要有。景区票约 100/人量级，以现场为准。</li>
                     <li>10.3 上午湖边再晃一下即可，下午经西宁去兰州，别排新景点。</li>
                   </ul>
                 </div>
-              </details>
-            </div>
-          </article>
+              <div class="spot-slide-actions">
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.74,36.72&name=青海湖东岸&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航东岸</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 东岸</a>
+              </div>
 
+            </div>
+            <span class="visually-hidden">青海湖东岸</span>
+          </article>
         </div>
       </div>
     </section>
@@ -1934,12 +2612,19 @@
 
         <div class="extra-panel" data-panel="sunset">
           <div class="layer">
-            <h3>日落大概几点</h3>
+            <h3>每天日落大概几点</h3>
+            <p style="font-size:13px;color:var(--ink-soft);margin:0 0 10px">按 2026 行程日估算（北京时间）；以当天天气与现场公告为准，赶日落宜提前半小时到位。</p>
             <div class="sunset-grid">
-              <div><b>张掖丹霞</b>大概 18:30–19:30</div>
-              <div><b>敦煌</b>大概 19:28 前后</div>
-              <div><b>青海湖</b>大概 19:00–19:20</div>
-              <div><b>雅丹末班</b>常见约 18:30，以当天为准</div>
+              <div><b>9.24</b> 夜行赶路<span class="sun-note">日落在车上路过，不必专等。</span></div>
+              <div><b>9.25–9.26</b> 银川 · 约 <b>19:10</b> 前后<span class="sun-note">宿集／漫葡吃侧光；生日夜与夜游不赶落日班。</span></div>
+              <div><b>9.27</b> 西夏 → 张掖 · 临泽一带约 <b>19:13</b><span class="sun-note">傍晚到店住下；日落留给明天丹霞。</span></div>
+              <div><b>9.28</b> 张掖丹霞 · 约 <b>19:12</b><span class="sun-note">下午进园，日落前留在观景台；撤出后开嘉峪关车宿。</span></div>
+              <div><b>9.29</b> 鸣沙山 · 约 <b>19:32</b><span class="sun-note">莫高出来抓紧换场；沙色偏金时最好看，看完进城夜市。</span></div>
+              <div><b>9.30</b> 敦煌雅丹 · 约 <b>19:30</b><span class="sun-note">末班观光车常见约 18:30——要提前入园等斜光，日落后赶回敦煌。</span></div>
+              <div><b>10.1</b> 冷湖／大柴旦一带 · 约 <b>19:34</b><span class="sun-note">赶路日。走廊胡杨峡／黑独山／冷湖镇边任选一；水上雅丹争取日落前。东台／U315 没余光就过，优先安全到店。</span></div>
+              <div><b>10.2</b> 青海湖东岸 · 约 <b>19:06</b><span class="sun-note">翡翠湖后经德令哈，傍晚落到东岸；湖面看完，夜里才是星空主场。</span></div>
+              <div><b>10.3</b> 青海湖上午 · 兰州傍晚约 <b>19:03</b><span class="sun-note">上午留湖边；下午经西宁去兰州，不必专等落日。</span></div>
+              <div><b>10.4</b> 兰州 → 成都 · 返程<span class="sun-note">早些上路，日落在车上或到家以后。</span></div>
             </div>
           </div>
         </div>
@@ -1968,8 +2653,8 @@
             <h3>最晚起几点</h3>
             <ul class="food-list">
               <li>9.27 去西夏：最好 <b>7:30</b> 起来；若路过沙坡头，中午前离开西夏</li>
-              <li>9.30 去雅丹：<b>11 点</b>前能动，一两点前出城</li>
-              <li>10.1 去大柴旦（主停水上雅丹；东台／U315 路边短停）：城里中午 <b>12:00</b> 前上路</li>
+              <li>9.30 博物馆 + 市区漫步 + 雅丹：<b>九点半</b>前能动；中午城里晃完，<b>一两点前</b>出城</li>
+              <li>10.1 经冷湖去大柴旦：走廊<strong>任选一</strong>（黑独山／冷湖镇边／胡杨峡）再接火星公路与水上雅丹；选前两处宜 <b>8:00–8:30</b> 出城，选胡杨峡宜 <b>7:00–7:30</b></li>
               <li>10.4 回家：<b>七八点</b>上路</li>
               <li>别的日子：睡到九点半、十点半也行</li>
             </ul>
@@ -1978,12 +2663,24 @@
 
         <div class="extra-panel" data-panel="photo" hidden>
           <div class="layer">
-            <h3>拍照</h3>
+            <h3>这一路怎么拍</h3>
             <ul class="food-list">
-              <li>丹霞、鸣沙：傍晚光好；衣服浅一点或红一点都好看。</li>
-              <li>莫高：洞内不摄影；外面和数字中心可以拍。</li>
-              <li>青海湖看星：有三脚架更好；手机屏幕调暗；月亮亮的时候银河没那么明显。</li>
-              <li>梵尘：白天拍泳池沙池，夜里回店拍星就行。</li>
+              <li><b>总原则</b>：西北光硬、风大；黄金时段多在日出后一小时、日落前一小时。浅色或朱红衣更好出片；墨镜、镜头布常备。</li>
+              <li><b>银川／贺兰</b>：宿集与漫葡宜早晚侧光；山脊轮廓清，中午少拍大景。</li>
+              <li><b>张掖丹霞</b>：把时间留给日落前后；层理吃斜光才醒。观景台少走动，等光变。</li>
+              <li><b>莫高窟</b>：洞内不摄影；外面崖壁、数字中心可拍。出来再赶鸣沙。</li>
+              <li><b>鸣沙山</b>：傍晚沙色偏金；人少处走远一点，沙脊线条干净。滑沙扬尘，镜头及时擦。</li>
+              <li><b>敦煌雅丹</b>：专为日落去——阴影一长，土丘像空城。跟观光车节奏，选一处站稳等到光斜。</li>
+              <li><b>胡杨峡</b>：进沟看层次；十月初叶子未必满金，山体水墨与沟底反光仍好拍。逆光易糊，略补曝光。</li>
+              <li><b>黑独山</b>：黑白灰为主，穿亮色或正红更跳。上午 9–11 点层次清楚；跟车辙停，少踩无人区。</li>
+              <li><b>火星一号公路</b>：路碑与直线透视好看；只在安全路肩短停，拍完就走。</li>
+              <li><b>水上雅丹</b>：晴天倒影最好；风一大水面碎。广角收「岛」与天，别只拍脚边。</li>
+              <li><b>东台／U315</b>：路边盐壳反光刺眼，墨镜要有；短停几张即可，车流里注意安全。</li>
+              <li><b>翡翠湖</b>：清晨颜色稳；1～3 号湖转一转。盐渍伤鞋与机身，脚套／湿巾有用。</li>
+              <li><b>茶卡（可选）</b>：天空之镜看有无浅水；风大无倒影就改拍盐壳纹理与远山。</li>
+              <li><b>青海湖星空</b>：本趟主场。三脚架、手机屏幕调暗；月亮太亮时银河会淡，改拍湖面冷光与远山剪影也行。</li>
+              <li><b>梵尘</b>：白天泳池沙池；夜里回店若想拍星，比湖边方便，但光害略多。</li>
+              <li><b>无人机</b>：盐湖、雅丹、黑独山等以现场公告为准；禁飞区不硬飞。风大电池掉得快。</li>
             </ul>
           </div>
         </div>
@@ -2000,9 +2697,6 @@
             <h3>行李</h3>
             <p>细项已写在上方「待办 → 用品」。出门前按清单勾一遍即可：防晒与防风、舒服的鞋、水与干粮、常用药、车充充电宝；想拍星带三脚架。湖边和雅丹夜里冷。</p>
           </div>
-          <div class="callout ok no-print">
-            若想像应用一样打开，可在 Safari 或 Chrome 的分享菜单中选择「添加到主屏幕」。景点配图需要联网加载。
-          </div>
         </div>
       </div>
     </section>
@@ -2014,7 +2708,7 @@
     <details>
       <summary>配图来源与许可</summary>
       <p>
-        <a href="https://unsplash.com/photos/1509316785289-025f5b846b35" target="_blank" rel="noopener">首屏主背景</a>：Unsplash；
+        首屏主背景：本地 assets（河西戈壁气质）；
         <a href="https://unsplash.com/photos/1469854523086-cc02fe5d8800" target="_blank" rel="noopener">夜行公路</a>、
         <a href="https://unsplash.com/photos/1473580044384-7ba9967e16a0" target="_blank" rel="noopener">戈壁公路</a>、
         <a href="https://unsplash.com/photos/1464822759023-fed622ff2c3b" target="_blank" rel="noopener">山地返程</a>：Unsplash 通用图；
@@ -2025,6 +2719,7 @@
         <a href="https://www.pexels.com/photo/view-of-the-mogao-caves-dunhuang-china-25974825/" target="_blank" rel="noopener">莫高窟</a>：Pexels；
         <a href="https://commons.wikimedia.org/wiki/File:Mondsichelsee.JPG" target="_blank" rel="noopener">月牙泉</a>：Wikimedia；
         <a href="https://commons.wikimedia.org/wiki/File:Dunhuang_Night_Market_(20230916214410).jpg" target="_blank" rel="noopener">沙州夜市</a>：Wikimedia；
+        <a href="https://commons.wikimedia.org/wiki/File:DunhuangCity-Traffic.jpg" target="_blank" rel="noopener">敦煌市区白天街景</a>：Wikimedia；
         <a href="https://commons.wikimedia.org/wiki/File:20080717_Dunhuang_Museum.jpg" target="_blank" rel="noopener">敦煌博物馆</a>：Wikimedia；
         <a href="https://commons.wikimedia.org/wiki/File:Dunhuang_Yardang_National_Geopark.jpg" target="_blank" rel="noopener">敦煌雅丹</a>、
         <a href="https://commons.wikimedia.org/wiki/File:Yumen_Pass_in_2004.jpg" target="_blank" rel="noopener">玉门关</a>、
@@ -2037,7 +2732,9 @@
         <a href="https://commons.wikimedia.org/wiki/File:%E6%A0%BC%E5%B0%94%E6%9C%A8_%E4%B8%9C%E5%8F%B0%E5%90%89%E4%B9%83%E5%B0%94%E7%9B%90%E6%B9%96%E9%A3%8E%E6%99%AF_12.jpg" target="_blank" rel="noopener">U315 一带盐湖风景</a>、
         <a href="https://commons.wikimedia.org/wiki/File:%E5%BE%B7%E4%BB%A4%E5%93%88_%E5%B0%95%E6%B5%B7_liuzusai2013-06-05_-_panoramio.jpg" target="_blank" rel="noopener">德令哈尕海一带</a>：Wikimedia Commons；
         <a href="https://www.pexels.com/photo/white-clouds-over-the-chaka-salt-lake-8739403/" target="_blank" rel="noopener">茶卡盐湖</a>、
-        <a href="https://www.pexels.com/photo/rocky-mountains-on-desert-landscape-8714986/" target="_blank" rel="noopener">阿克塞胡杨峡（戈壁峡谷地貌风景参考）</a>：Pexels / yang wu，酒泉戈壁山体纯风景；
+        <a href="https://www.pexels.com/photo/golden-autumn-trees-in-desert-landscape-34266430/" target="_blank" rel="noopener">胡杨金秋</a>：Pexels（胡杨峡氛围参考，本地 assets）；
+        <a href="https://unsplash.com/photos/a-dark-volcanic-slope-with-scattered-rocks-pTKNgJ7kZ4g" target="_blank" rel="noopener">黑山戈壁</a>：Unsplash（黑独山氛围参考，本地 assets）；
+        <a href="https://unsplash.com/photos/an-empty-road-in-the-middle-of-the-desert-ClO174lRM0g" target="_blank" rel="noopener">戈壁公路</a>：Unsplash（火星一号公路氛围参考，本地 assets）；
         青海湖东岸：本地高清风景（assets）。
 </p>
     </details>
@@ -2053,14 +2750,18 @@
 
   <button type="button" class="fab-top no-print" id="fabTop" aria-label="回到顶部">↑</button>
 
+  <div class="more-sheet no-print" id="moreSheet" hidden>
+    <a href="#route">路线导航</a>
+    <a href="#budget">这一路的预算</a>
+    <a href="#todo">出发前待办</a>
+    <a href="#extras">路上的小事</a>
+  </div>
   <nav class="bottom-nav no-print" aria-label="底部导航">
     <a href="#top"><span>⌂</span>开头</a>
     <a href="#days"><span>日</span>安排</a>
-    <a href="#route"><span>⌖</span>路线</a>
-    <a href="#budget"><span>¥</span>预算</a>
-    <a href="#todo"><span>✓</span>出发前</a>
     <a href="#spots"><span>◇</span>停靠</a>
-    <a href="#extras"><span>…</span>小事</a>
+    <a href="#todo"><span>✓</span>出发前</a>
+    <a href="#more" id="moreNav"><span>…</span>更多</a>
   </nav>
 
   <script>
@@ -2079,12 +2780,28 @@
 
       const box = document.getElementById("checklist");
       const countEl = document.getElementById("checkCount");
+      const checkFill = document.getElementById("checkFill");
       const syncCount = () => {
         if (!box || !countEl) return;
         const all = [...box.querySelectorAll("input[type=checkbox]")];
         const done = all.filter((el) => el.checked).length;
         countEl.textContent = done + "/" + all.length;
+        if (checkFill) {
+          checkFill.style.width = (all.length ? (done / all.length) * 100 : 0) + "%";
+        }
       };
+      const setCheckFilter = (onlyOpen) => {
+        if (!box) return;
+        box.querySelectorAll("label").forEach((lab) => {
+          const input = lab.querySelector("input[type=checkbox]");
+          if (!input) return;
+          lab.hidden = !!(onlyOpen && input.checked);
+        });
+      };
+      const checkOpenTodo = document.getElementById("checkOpenTodo");
+      const checkShowAll = document.getElementById("checkShowAll");
+      checkOpenTodo && checkOpenTodo.addEventListener("click", () => setCheckFilter(true));
+      checkShowAll && checkShowAll.addEventListener("click", () => setCheckFilter(false));
       if (box) {
         box.querySelectorAll("input[type=checkbox]").forEach((el) => {
           const k = "rb_" + el.dataset.k;
@@ -2099,17 +2816,60 @@
 
       const days = [...document.querySelectorAll("details.day")];
       let dayLock = false;
+      const stripRetryQuery = (url) =>
+        String(url || "")
+          .replace(/([?&])_r=\d+&t=\d+/g, "$1")
+          .replace(/([?&])_wake=\d+/g, "$1")
+          .replace(/[?&]$/, "")
+          .replace(/\?&/, "?");
+      /* 收起时 display:none + lazy 在部分 WebView 展开后不触发加载；打开时唤醒封面 */
+      const wakeDayCoverImgs = (root) => {
+        if (!root) return;
+        /* 展开即可见，不依赖 IntersectionObserver 先打上 is-in */
+        root.classList.add("is-in");
+        root.querySelectorAll(".day-cover").forEach((cover) => {
+          const full = cover.dataset.full;
+          if (full && !cover.style.backgroundImage) {
+            cover.style.backgroundImage = 'url("' + full.replace(/"/g, "%22") + '")';
+          }
+          const img = cover.querySelector("img");
+          if (!img) return;
+          if (img.complete && img.naturalWidth > 0) {
+            cover.classList.add("is-img-ready");
+            cover.classList.remove("is-img-failed", "is-img-loading");
+            return;
+          }
+          cover.classList.add("is-img-loading");
+          cover.classList.remove("is-img-ready", "is-img-failed");
+          const src =
+            stripRetryQuery(img.getAttribute("data-src-base") || img.getAttribute("src") || img.currentSrc || "") ||
+            full ||
+            "";
+          if (!src) return;
+          img.loading = "eager";
+          img.referrerPolicy = "no-referrer";
+          if (!img.getAttribute("data-src-base")) img.setAttribute("data-src-base", src);
+          /* 未解码成功时用短 cache-bust 强制拉起；已在飞的同 src 赋值在部分 WebView 会被忽略 */
+          if (img.complete && img.naturalWidth === 0) {
+            const joiner = src.indexOf("?") >= 0 ? "&" : "?";
+            img.src = src + joiner + "_wake=" + Date.now();
+          } else {
+            img.src = src;
+          }
+        });
+      };
       const openOnlyDay = (target) => {
         if (!target) return;
         dayLock = true;
         days.forEach((d) => { d.open = d === target; });
         dayLock = false;
+        wakeDayCoverImgs(target);
       };
       // 默认全部收起；若异常出现多个 open，只保留第一个
       const presetOpen = days.filter((d) => d.open);
       if (presetOpen.length > 1) openOnlyDay(presetOpen[0]);
       else if (presetOpen.length === 1) {
-        /* 保持 HTML 里显式写的那一天 */
+        wakeDayCoverImgs(presetOpen[0]);
       } else {
         dayLock = true;
         days.forEach((d) => { d.open = false; });
@@ -2117,6 +2877,7 @@
       }
       days.forEach((d) => {
         d.addEventListener("toggle", () => {
+          if (d.open) wakeDayCoverImgs(d);
           if (dayLock || !d.open) return;
           openOnlyDay(d);
         });
@@ -2229,27 +2990,233 @@
         openAmapApp(parsed, href);
       }, true);
 
-      const spotGrid = document.getElementById("spotGrid");
-      if (spotGrid) {
-        // 按首次停留日（data-day）固定 DOM 顺序，避免后续改稿打乱时间序
-        const spots = Array.from(spotGrid.querySelectorAll(".spot"));
-        spots
-          .sort((a, b) => Number(a.dataset.day || 0) - Number(b.dataset.day || 0))
-          .forEach((s) => spotGrid.appendChild(s));
-      }
 
-      const filter = document.getElementById("spotFilter");
-      if (filter) {
-        filter.addEventListener("click", (e) => {
-          const btn = e.target.closest(".filter-btn");
-          if (!btn) return;
-          filter.querySelectorAll(".filter-btn").forEach((b) => b.classList.toggle("on", b === btn));
-          const f = btn.dataset.f;
-          document.querySelectorAll("#spotGrid .spot").forEach((s) => {
-            s.hidden = !(f === "all" || s.dataset.region === f);
+      /* 停靠舞台：横滑 + 背景换景 */
+      const spotCarousel = document.getElementById("spotCarousel");
+      const spotFilter = document.getElementById("spotFilter");
+      const spotDots = document.getElementById("spotDots");
+      const spotIndexEl = document.getElementById("spotIndex");
+      const spotTotalEl = document.getElementById("spotTotal");
+      const spotPrev = document.getElementById("spotPrev");
+      const spotNext = document.getElementById("spotNext");
+      const spotBgA = document.getElementById("spotBgA");
+      const spotBgB = document.getElementById("spotBgB");
+      const spotWash = document.getElementById("spotWash");
+      let spotBgFlip = false;
+      let spotActive = null;
+      let spotBgTimer = 0;
+
+      const visibleSpotSlides = () =>
+        spotCarousel
+          ? [...spotCarousel.querySelectorAll(".spot-slide")].filter((s) => !s.hidden)
+          : [];
+
+      let spotBgUrl = "";
+      const paintSpotBg = (url) => {
+        const next = spotBgFlip ? spotBgA : spotBgB;
+        const prev = spotBgFlip ? spotBgB : spotBgA;
+        next.style.backgroundImage = 'url("' + String(url).replace(/"/g, "%22") + '")';
+        next.classList.add("is-active");
+        prev.classList.remove("is-active");
+        spotBgFlip = !spotBgFlip;
+        spotBgUrl = url;
+        const img = new Image();
+        img.referrerPolicy = "no-referrer";
+        img.src = url;
+      };
+      const setSpotBg = (url) => {
+        if (!url || !spotBgA || !spotBgB || url === spotBgUrl) return;
+        const reduceMotion =
+          window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const firstPaint = !spotBgUrl;
+        if (spotBgTimer) {
+          window.clearTimeout(spotBgTimer);
+          spotBgTimer = 0;
+        }
+        if (firstPaint || reduceMotion || !spotWash) {
+          if (spotWash) spotWash.classList.remove("is-on");
+          paintSpotBg(url);
+          return;
+        }
+        /* 先淡白盖住，再换图，再揭开——呼吸缩放不停、不重置 */
+        spotWash.classList.add("is-on");
+        spotBgTimer = window.setTimeout(() => {
+          paintSpotBg(url);
+          spotBgTimer = window.setTimeout(() => {
+            spotWash.classList.remove("is-on");
+            spotBgTimer = 0;
+          }, 90);
+        }, 300);
+      };
+
+      const goSpot = (slide) => {
+        if (!slide || !spotCarousel) return;
+        spotCarousel.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
+        syncSpotUI(slide);
+      };
+
+      const syncSpotUI = (slide) => {
+        if (!slide) return;
+        if (slide !== spotActive) {
+          spotActive = slide;
+          if (slide.dataset.full) setSpotBg(slide.dataset.full);
+        }
+        const list = visibleSpotSlides();
+        const i = Math.max(0, list.indexOf(slide));
+        if (spotIndexEl) spotIndexEl.textContent = String(i + 1);
+        if (spotTotalEl) spotTotalEl.textContent = String(list.length || 0);
+        if (spotPrev) spotPrev.disabled = i <= 0;
+        if (spotNext) spotNext.disabled = i >= list.length - 1 || list.length === 0;
+        if (spotDots) {
+          const dots = [...spotDots.children];
+          dots.forEach((d, di) => d.classList.toggle("on", di === i));
+          const onDot = dots[i];
+          if (onDot && spotDots.scrollWidth > spotDots.clientWidth) {
+            const left =
+              onDot.offsetLeft - (spotDots.clientWidth - onDot.offsetWidth) / 2;
+            spotDots.scrollTo({ left: Math.max(0, left), behavior: "smooth" });
+          }
+        }
+        list.forEach((s) => s.classList.toggle("is-current", s === slide));
+      };
+
+      const nearestSpotSlide = () => {
+        if (!spotCarousel) return null;
+        const list = visibleSpotSlides();
+        if (!list.length) return null;
+        const mid = spotCarousel.scrollLeft + spotCarousel.clientWidth / 2;
+        let best = list[0];
+        let bestDist = Infinity;
+        list.forEach((s) => {
+          const center = s.offsetLeft + s.offsetWidth / 2;
+          const d = Math.abs(center - mid);
+          if (d < bestDist) {
+            bestDist = d;
+            best = s;
+          }
+        });
+        return best;
+      };
+
+      const rebuildSpotDots = () => {
+        if (!spotDots) return;
+        spotDots.innerHTML = "";
+        const list = visibleSpotSlides();
+        list.forEach((s, i) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          const titleEl = s.querySelector("h3");
+          b.setAttribute("aria-label", ((titleEl && titleEl.textContent) || ("停靠 " + (i + 1))).trim());
+          b.addEventListener("click", () => goSpot(s));
+          spotDots.appendChild(b);
+        });
+      };
+
+      const applySpotFilter = (f) => {
+        if (!spotCarousel) return;
+        spotActive = null;
+        spotBgUrl = "";
+        [...spotCarousel.querySelectorAll(".spot-slide")].forEach((s) => {
+          s.hidden = !(f === "all" || s.dataset.region === f);
+        });
+        rebuildSpotDots();
+        const first = visibleSpotSlides()[0];
+        if (first) {
+          spotCarousel.scrollTo({ left: first.offsetLeft, behavior: "smooth" });
+          syncSpotUI(first);
+        }
+      };
+
+      if (spotCarousel) {
+        /* 按日排序 */
+        [...spotCarousel.querySelectorAll(".spot-slide")]
+          .sort((a, b) => Number(a.dataset.day || 0) - Number(b.dataset.day || 0))
+          .forEach((s) => spotCarousel.appendChild(s));
+
+        /* 导航：只留主入口，文案收成 ·导航 */
+        spotCarousel.querySelectorAll(".spot-slide-actions").forEach((actions) => {
+          const links = [...actions.querySelectorAll("a")];
+          links.forEach((a, i) => {
+            if (i === 0) {
+              a.classList.add("spot-nav-link");
+              a.classList.remove("btn", "btn-map", "btn-sm");
+              a.textContent = "·导航";
+              if (!a.getAttribute("aria-label")) {
+                a.setAttribute("aria-label", "导航到此处");
+              }
+            } else {
+              a.hidden = true;
+            }
           });
         });
+
+        rebuildSpotDots();
+        const boot = visibleSpotSlides()[0];
+        if (boot) syncSpotUI(boot);
+
+        spotPrev && spotPrev.addEventListener("click", () => {
+          const list = visibleSpotSlides();
+          const i = list.indexOf(nearestSpotSlide());
+          if (i > 0) goSpot(list[i - 1]);
+        });
+        spotNext && spotNext.addEventListener("click", () => {
+          const list = visibleSpotSlides();
+          const i = list.indexOf(nearestSpotSlide());
+          if (i >= 0 && i < list.length - 1) goSpot(list[i + 1]);
+        });
+
+        let spotScrollTick = 0;
+        spotCarousel.addEventListener(
+          "scroll",
+          () => {
+            if (spotScrollTick) return;
+            spotScrollTick = requestAnimationFrame(() => {
+              spotScrollTick = 0;
+              const n = nearestSpotSlide();
+              if (n) syncSpotUI(n);
+            });
+          },
+          { passive: true }
+        );
+
+        spotCarousel.addEventListener("keydown", (e) => {
+          const list = visibleSpotSlides();
+          const cur = nearestSpotSlide();
+          const i = list.indexOf(cur);
+          if (e.key === "ArrowRight" && i < list.length - 1) {
+            e.preventDefault();
+            goSpot(list[i + 1]);
+          }
+          if (e.key === "ArrowLeft" && i > 0) {
+            e.preventDefault();
+            goSpot(list[i - 1]);
+          }
+        });
+
+        /* 点卡片空白看大图 */
+        spotCarousel.addEventListener("click", (e) => {
+          if (e.target.closest("a, button, summary, details, input, label")) return;
+          const slide = e.target.closest(".spot-slide");
+          if (!slide || !slide.dataset.full) return;
+          if (typeof window.openLightbox === "function") {
+            window.openLightbox(slide.dataset.full, slide.dataset.caption || "");
+          }
+        });
       }
+
+      if (spotFilter) {
+        spotFilter.addEventListener("click", (e) => {
+          const btn = e.target.closest(".filter-btn");
+          if (!btn) return;
+          spotFilter.querySelectorAll(".filter-btn").forEach((b) => {
+            const on = b === btn;
+            b.classList.toggle("on", on);
+            b.setAttribute("aria-selected", on ? "true" : "false");
+          });
+          applySpotFilter(btn.dataset.f || "all");
+        });
+      }
+
 
       const tabs = document.getElementById("extrasTabs");
       if (tabs) {
@@ -2264,16 +3231,40 @@
         });
       }
 
-      const links = [...document.querySelectorAll(".bottom-nav a")];
+      const moreSheet = document.getElementById("moreSheet");
+      const moreNav = document.getElementById("moreNav");
+      moreNav && moreNav.addEventListener("click", (e) => {
+        e.preventDefault();
+        if (!moreSheet) return;
+        moreSheet.hidden = !moreSheet.hidden;
+        moreNav.classList.toggle("active", !moreSheet.hidden);
+      });
+      moreSheet && moreSheet.addEventListener("click", (e) => {
+        const a = e.target.closest("a");
+        if (!a) return;
+        moreSheet.hidden = true;
+        moreNav && moreNav.classList.remove("active");
+      });
+      document.addEventListener("click", (e) => {
+        if (!moreSheet || moreSheet.hidden) return;
+        if (e.target.closest("#moreSheet, #moreNav")) return;
+        moreSheet.hidden = true;
+        moreNav && moreNav.classList.remove("active");
+      });
+
+      const links = [...document.querySelectorAll(".bottom-nav a")].filter(
+        (l) => l.id !== "moreNav"
+      );
       const io = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
           if (!e.isIntersecting) return;
           const id = e.target.id;
-          const activeHref = id === "overview" ? "#top" : ("#" + id);
+          let activeHref = id === "overview" ? "#top" : ("#" + id);
+          if (id === "route" || id === "budget" || id === "extras") activeHref = "";
           links.forEach((l) => l.classList.toggle("active", l.getAttribute("href") === activeHref));
         });
       }, { rootMargin: "-40% 0px -50% 0px", threshold: 0 });
-      ["top", "overview", "days", "route", "budget", "todo", "spots", "extras"].forEach((id) => {
+      ["top", "overview", "days", "todo", "spots"].forEach((id) => {
         const el = document.getElementById(id);
         if (el) io.observe(el);
       });
@@ -2293,7 +3284,7 @@
           ".route-fullmap",
           ".map-panel",
           ".callout",
-          ".spot",
+          ".spot-slide-card",
           ".checklist",
           ".total-box",
           ".sunset-grid > div"
@@ -2323,9 +3314,9 @@
       window.addEventListener("hashchange", openHashDay);
 
       const lightbox = document.getElementById("lightbox");
-      const lightboxImg = document.getElementById("lightboxImg");
       const lightboxCaption = document.getElementById("lightboxCaption");
       const lightboxClose = document.getElementById("lightboxClose");
+      const getLightboxImg = () => document.getElementById("lightboxImg");
       const bgUrl = (el) => {
         if (el.dataset.full) return el.dataset.full;
         const nested = el.querySelector("img");
@@ -2339,21 +3330,101 @@
         const m = computed && computed.match(/url\((['"]?)(.+?)\1\)/i);
         return m ? m[2] : "";
       };
+      /* 轻量失败重试：error 时最多 2 次，短延迟 + cache-bust；仍失败再占位 */
+      const setImgPhase = (wrap, phase) => {
+        if (!wrap) return;
+        wrap.classList.toggle("is-img-loading", phase === "loading");
+        wrap.classList.toggle("is-img-ready", phase === "ready");
+        wrap.classList.toggle("is-img-failed", phase === "failed");
+        if (phase === "failed") {
+          wrap.style.backgroundImage = "";
+        }
+      };
+      const bindImgRetry = (img, wrap) => {
+        if (!img || img.dataset.retryBound === "1") return;
+        img.dataset.retryBound = "1";
+        const base =
+          stripRetryQuery(img.getAttribute("data-src-base") || img.getAttribute("src") || "") ||
+          (wrap && wrap.dataset.full) ||
+          "";
+        if (base) img.setAttribute("data-src-base", base);
+        let tries = 0;
+        const maxTries = 2;
+        const markFailed = () => setImgPhase(wrap, "failed");
+        const markReady = () => setImgPhase(wrap, "ready");
+        if (wrap && !(img.complete && img.naturalWidth > 0)) setImgPhase(wrap, "loading");
+        img.addEventListener("error", () => {
+          const origin = img.getAttribute("data-src-base") || base;
+          if (!origin) {
+            markFailed();
+            return;
+          }
+          if (tries >= maxTries) {
+            markFailed();
+            return;
+          }
+          tries += 1;
+          setImgPhase(wrap, "loading");
+          const delay = 280 * tries;
+          window.setTimeout(() => {
+            const joiner = origin.indexOf("?") >= 0 ? "&" : "?";
+            img.referrerPolicy = "no-referrer";
+            img.src = origin + joiner + "_r=" + tries + "&t=" + Date.now();
+          }, delay);
+        });
+        img.addEventListener("load", () => {
+          if (img.naturalWidth > 0) markReady();
+          else markFailed();
+        });
+        /* 外链挂起过久：仍无尺寸则落色块，避免一直空白感 */
+        window.setTimeout(() => {
+          if (!wrap || wrap.classList.contains("is-img-ready")) return;
+          if (!img.complete || img.naturalWidth === 0) markFailed();
+        }, 18000);
+        /* 监听挂上前已失败的图，补一次重试入口 */
+        if (img.complete && img.naturalWidth === 0 && (img.getAttribute("src") || base)) {
+          img.dispatchEvent(new Event("error"));
+        } else if (img.complete && img.naturalWidth > 0) {
+          markReady();
+        }
+      };
+      document.querySelectorAll(".day-cover img, .spot-img img").forEach((img) => {
+        bindImgRetry(img, img.closest(".day-cover, .spot-img"));
+      });
+      const lbBoot = getLightboxImg();
+      if (lbBoot) bindImgRetry(lbBoot, lbBoot.closest(".lightbox-figure"));
       const closeLightbox = () => {
         if (!lightbox || lightbox.hidden) return;
         lightbox.hidden = true;
         document.body.classList.remove("lb-open");
-        if (lightboxImg) {
-          lightboxImg.removeAttribute("src");
-          lightboxImg.alt = "";
+        const img = getLightboxImg();
+        const fig = img && img.closest(".lightbox-figure");
+        if (img) {
+          img.removeAttribute("src");
+          img.alt = "";
+          img.removeAttribute("data-src-base");
+          img.dataset.retryBound = "";
         }
+        if (fig) setImgPhase(fig, "loading");
         if (lightboxCaption) lightboxCaption.textContent = "";
       };
-      const openLightbox = (src, caption) => {
+      const openLightbox = window.openLightbox = (src, caption) => {
+        const lightboxImg = getLightboxImg();
         if (!lightbox || !lightboxImg || !src) return;
-        lightboxImg.referrerPolicy = "no-referrer";
-        lightboxImg.src = src;
-        lightboxImg.alt = caption || "行程配图";
+        const clean = stripRetryQuery(src);
+        const fig = lightboxImg.closest(".lightbox-figure");
+        /* 克隆以重置重试计数，保留 referrerpolicy / id */
+        const next = lightboxImg.cloneNode(false);
+        next.id = "lightboxImg";
+        next.referrerPolicy = "no-referrer";
+        next.setAttribute("referrerpolicy", "no-referrer");
+        next.setAttribute("data-src-base", clean);
+        next.alt = caption || "行程配图";
+        next.dataset.retryBound = "";
+        lightboxImg.replaceWith(next);
+        if (fig) setImgPhase(fig, "loading");
+        bindImgRetry(next, fig);
+        next.src = clean;
         if (lightboxCaption) lightboxCaption.textContent = caption || "";
         lightbox.hidden = false;
         document.body.classList.add("lb-open");
