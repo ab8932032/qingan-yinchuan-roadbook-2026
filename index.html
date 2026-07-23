@@ -230,6 +230,7 @@
       gap: 8px;
       overflow-x: auto;
       padding-bottom: 6px;
+      margin-bottom: 14px;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
@@ -250,6 +251,34 @@
       align-self: center;
       color: var(--sand);
       font-size: 18px;
+    }
+    /* 窄屏：卡片横滑改为可换行城市 chips，只保留城市名 */
+    @media (max-width: 560px) {
+      .route-strip {
+        flex-wrap: wrap;
+        gap: 8px 6px;
+        overflow: visible;
+        padding-bottom: 2px;
+        margin-bottom: 12px;
+      }
+      .route-strip .arrow {
+        display: none;
+      }
+      .route-node {
+        flex: 0 0 auto;
+        min-width: 0;
+        padding: 7px 12px 7px 28px;
+        border-radius: 999px;
+        font-size: 13px;
+        line-height: 1.3;
+      }
+      .route-node strong {
+        display: inline;
+        font-size: 13px;
+        margin: 0;
+        font-weight: 600;
+      }
+      .route-node span { display: none; }
     }
 
     table {
@@ -578,14 +607,63 @@
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid rgba(196,165,116,0.35);
-      background: #e8efe8;
+      background: #fff;
       margin: 10px 0 12px;
+      padding: 10px;
     }
-    .map-panel iframe {
-      width: 100%;
-      height: 220px;
-      border: 0;
+    /* 完整路线：本地 SVG 示意 + 高德多点标注强入口（无 Key、不嵌易空白的 iframe） */
+    .route-fullmap {
+      margin: 0 0 10px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(42,111,127,0.22);
+      background:
+        radial-gradient(ellipse 70% 55% at 28% 32%, rgba(42,111,127,0.18), transparent 58%),
+        radial-gradient(ellipse 55% 45% at 72% 68%, rgba(196,165,116,0.28), transparent 55%),
+        linear-gradient(165deg, #e8f0ef 0%, #efe4d4 48%, #e4d4bc 100%);
+    }
+    .route-fullmap-link {
       display: block;
+      position: relative;
+      color: inherit;
+      text-decoration: none;
+    }
+    .route-fullmap-link:active { opacity: 1; }
+    .route-fullmap-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 10;
+      min-height: 168px;
+      max-height: 260px;
+    }
+    .route-fullmap-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0;
+      padding: 11px 14px;
+      background: linear-gradient(135deg, #2a6f7f, #1e4f5c);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .route-fullmap-note {
+      margin: 0;
+      padding: 6px 12px 10px;
+      font-size: 11px;
+      color: var(--ink-soft);
+      text-align: center;
+      opacity: 0.78;
+      background: rgba(255,252,247,0.55);
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .route-fullmap-link:hover .route-fullmap-cta {
+        filter: brightness(1.06);
+      }
     }
     /* 路线区 / 行程内：导航按钮网格，宽屏约 3 列，窄屏 2/1 列 */
     .nav-grid {
@@ -600,17 +678,14 @@
     }
     @media (max-width: 560px) {
       .nav-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .route-fullmap-svg { min-height: 150px; max-height: 210px; }
+      .route-fullmap-cta { font-size: 13px; padding: 12px 12px; }
     }
     @media (max-width: 380px) {
       .nav-grid { grid-template-columns: 1fr; }
     }
     .day-body > .nav-grid { margin-top: 4px; }
-    .map-leg-nav {
-      padding: 10px;
-      background: #fff;
-      border-top: 1px solid rgba(196,165,116,0.22);
-    }
-    .map-leg-nav .btn-map.btn-sm {
+    .map-panel .btn-map.btn-sm {
       padding: 11px 10px;
       line-height: 1.55;
     }
@@ -789,6 +864,15 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
+    }
+    @media (max-width: 560px) {
+      .route-node::before {
+        top: 50%;
+        transform: translateY(-50%);
+        width: 15px;
+        height: 15px;
+        font-size: 9px;
+      }
     }
     .filter-row {
       display: flex;
@@ -1224,42 +1308,60 @@
           <div class="route-node" data-n="9"><strong>成都</strong><span>10.4 到家</span></div>
         </div>
 
-        <div class="map-panel">
-<!-- OSM 概览：成都→兰州走廊视觉参考；精确导航用下方高德主段 -->
-          <iframe
-            title="路线概览地图"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            src="https://www.openstreetmap.org/export/embed.html?bbox=92.5%2C29.5%2C107.5%2C41.5&amp;layer=mapnik&amp;marker=36.06%2C103.83">
-          </iframe>
-          <div class="map-leg-nav" aria-label="主路段导航">
-            <div class="nav-grid">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=104.066301,30.572961,成都&to=106.278179,38.466370,银川&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">成都 → 银川</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=106.278179,38.466370,银川&to=100.449818,38.925823,张掖七彩丹霞&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">银川 → 丹霞</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=100.449818,38.925823,七彩丹霞&to=98.289152,39.773250,嘉峪关&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">丹霞 → 嘉峪关</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=98.289152,39.773250,嘉峪关&to=94.661881,40.142128,敦煌&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">嘉峪关 → 敦煌</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=93.350000,37.720000,乌素特水上雅丹&to=95.367500,37.852800,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 大柴旦</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=95.367500,37.852800,大柴旦翡翠湖&to=97.370000,37.370000,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=97.370000,37.370000,德令哈&to=100.735000,36.720000,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=100.735000,36.720000,青海湖东岸&to=103.834170,36.061380,兰州&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">青海湖 → 兰州</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-                href="https://uri.amap.com/navigation?from=103.834170,36.061380,兰州&to=104.066301,30.572961,成都&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">兰州 → 成都</a>
-            </div>
+        <div class="map-panel" aria-label="主路段导航">
+          <div class="route-fullmap">
+            <a class="route-fullmap-link" target="_blank" rel="noopener"
+              href="https://uri.amap.com/marker?markers=104.066301,30.572961,成都|106.278179,38.466370,银川|100.449818,38.925823,张掖丹霞|98.289152,39.773250,嘉峪关|94.661881,40.142128,敦煌|95.367500,37.852800,大柴旦|100.735000,36.720000,青海湖|103.834170,36.061380,兰州|104.066301,30.572961,成都&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+              aria-label="在高德地图查看完整路线节点">
+              <svg class="route-fullmap-svg" viewBox="0 0 360 220" role="img" aria-label="行程路线示意：成都经银川、河西、敦煌、柴达木、青海湖、兰州再回成都">
+                <defs>
+                  <linearGradient id="routeLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#c45c26"/>
+                    <stop offset="45%" stop-color="#2a6f7f"/>
+                    <stop offset="100%" stop-color="#c4a574"/>
+                  </linearGradient>
+                </defs>
+                <!-- 粗略地理比例：西←→东 / 北↑南↓ -->
+                <ellipse cx="198" cy="96" rx="34" ry="18" fill="rgba(42,111,127,0.22)" stroke="rgba(42,111,127,0.35)" stroke-width="1"/>
+                <polyline points="266,191 313,60 190,52 144,39 67,33 82,70 196,89 261,100 266,191"
+                  fill="none" stroke="url(#routeLineGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
+                <g fill="#1a1410">
+                  <circle cx="266" cy="191" r="4.2"/><text x="266" y="208" text-anchor="middle" font-size="10" fill="#3d342c">成都</text>
+                  <circle cx="313" cy="60" r="4.2"/><text x="300" y="50" text-anchor="middle" font-size="10" fill="#3d342c">银川</text>
+                  <circle cx="190" cy="52" r="4"/><text x="190" y="42" text-anchor="middle" font-size="10" fill="#3d342c">张掖</text>
+                  <circle cx="144" cy="39" r="4"/><text x="144" y="29" text-anchor="middle" font-size="10" fill="#3d342c">嘉峪关</text>
+                  <circle cx="67" cy="33" r="4.2"/><text x="67" y="23" text-anchor="middle" font-size="10" fill="#3d342c">敦煌</text>
+                  <circle cx="82" cy="70" r="4"/><text x="98" y="78" text-anchor="start" font-size="10" fill="#3d342c">大柴旦</text>
+                  <circle cx="196" cy="89" r="4.2"/><text x="196" y="108" text-anchor="middle" font-size="10" fill="#3d342c">青海湖</text>
+                  <circle cx="261" cy="100" r="4"/><text x="278" y="104" text-anchor="start" font-size="10" fill="#3d342c">兰州</text>
+                </g>
+              </svg>
+              <span class="route-fullmap-cta">在高德查看完整路线</span>
+            </a>
+            <p class="route-fullmap-note">页内为示意；点击打开高德标注全程节点</p>
           </div>
-        </div>
-
-        <div class="callout lake">
-          手机点导航会优先打开本地高德 App；未安装或唤起失败再打开网页版。坐标只作参考，到附近后用酒店或景区官方名称再确认一次。
+          <div class="nav-grid">
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=104.066301,30.572961,成都&to=106.278179,38.466370,银川&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">成都 → 银川</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=106.278179,38.466370,银川&to=100.449818,38.925823,张掖七彩丹霞&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">银川 → 丹霞</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=100.449818,38.925823,七彩丹霞&to=98.289152,39.773250,嘉峪关&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">丹霞 → 嘉峪关</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=98.289152,39.773250,嘉峪关&to=94.661881,40.142128,敦煌&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">嘉峪关 → 敦煌</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=93.350000,37.720000,乌素特水上雅丹&to=95.367500,37.852800,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 大柴旦</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=95.367500,37.852800,大柴旦翡翠湖&to=97.370000,37.370000,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=97.370000,37.370000,德令哈&to=100.735000,36.720000,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=100.735000,36.720000,青海湖东岸&to=103.834170,36.061380,兰州&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">青海湖 → 兰州</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
+              href="https://uri.amap.com/navigation?from=103.834170,36.061380,兰州&to=104.066301,30.572961,成都&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">兰州 → 成都</a>
+          </div>
         </div>
 
         <details class="layer" style="padding:0;overflow:hidden">
@@ -2055,6 +2157,8 @@
             };
           }
           if (u.pathname.indexOf("/marker") !== -1) {
+            // 多点 markers：交给高德网页/APP 展示完整路线，不在此截成单点
+            if (u.searchParams.get("markers")) return null;
             const pos = (u.searchParams.get("position") || "").split(",");
             if (pos.length < 2) return null;
             return {
@@ -2186,6 +2290,7 @@
           ".layer",
           "details.day",
           ".route-strip .route-node",
+          ".route-fullmap",
           ".map-panel",
           ".callout",
           ".spot",
