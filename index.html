@@ -135,6 +135,9 @@
       border-radius: 999px;
       font-size: 14px;
       font-weight: 500;
+      line-height: 1.45;
+      text-align: center;
+      white-space: normal;
       border: none;
       cursor: pointer;
       text-decoration: none;
@@ -151,7 +154,11 @@
       background: linear-gradient(135deg, #2a6f7f, #1e4f5c);
       color: #fff;
     }
-    .btn-sm { padding: 8px 12px; font-size: 13px; }
+    .btn-sm {
+      padding: 9px 12px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
 
     .wrap { width: min(720px, 100%); margin: 0 auto; padding: 0 16px; }
 
@@ -467,71 +474,6 @@
       padding-left: 1.15em;
     }
     .spot-detail li { margin: 5px 0; }
-    .checkin-intro {
-      margin: 0 0 14px;
-      font-size: 13px;
-      color: var(--ink-soft);
-    }
-    .checkin {
-      margin-top: 14px;
-      padding-top: 12px;
-      border-top: 1px dashed rgba(196,165,116,0.45);
-    }
-    .checkin-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 9px;
-    }
-    .checkin-head b { font-size: 14px; }
-    .checkin-count { color: var(--ink-soft); font-size: 12px; }
-    .checkin-form { display: grid; gap: 8px; }
-    .checkin-form input[type="file"] { font: inherit; font-size: 12px; }
-    .checkin-form textarea {
-      min-height: 58px;
-      resize: vertical;
-      font: inherit;
-      font-size: 13px;
-      line-height: 1.5;
-      padding: 9px 10px;
-      color: var(--ink);
-      background: #fffdf9;
-      border: 1px solid rgba(196,165,116,0.5);
-      border-radius: 10px;
-    }
-    .checkin-save { justify-self: start; padding: 8px 13px; }
-    .checkin-note { margin: 2px 0 0; color: var(--ink-soft); font-size: 11px; }
-    .checkin-list { display: grid; gap: 8px; margin-top: 12px; }
-    .checkin-item {
-      position: relative;
-      min-height: 64px;
-      padding: 9px 34px 9px 72px;
-      border-radius: 12px;
-      background: var(--paper-2);
-    }
-    .checkin-item img {
-      position: absolute;
-      left: 8px;
-      top: 8px;
-      width: 54px;
-      height: 54px;
-      object-fit: cover;
-      border-radius: 8px;
-    }
-    .checkin-item time { display: block; color: var(--ink-soft); font-size: 11px; }
-    .checkin-item p { margin: 3px 0 0; font-size: 13px; }
-    .checkin-delete {
-      position: absolute;
-      top: 7px;
-      right: 7px;
-      border: 0;
-      background: transparent;
-      color: var(--warn);
-      font: inherit;
-      font-size: 12px;
-      cursor: pointer;
-    }
 
     .budget-bars { display: grid; gap: 8px; }
     .bar {
@@ -586,6 +528,7 @@
       color: var(--mute, #7a6f63);
       line-height: 1.45;
     }
+    .checklist label a:hover { text-decoration: underline; text-underline-offset: 2px; }
 
     .callout {
       border-left: 3px solid var(--dusk);
@@ -1233,7 +1176,7 @@
         </div>
 
         <div class="callout lake">
-          坐标只作参考。到附近后，用酒店或景区的官方名称再确认一次目的地。
+          手机点导航会优先打开本地高德 App；未安装或唤起失败再打开网页版。坐标只作参考，到附近后用酒店或景区官方名称再确认一次。
         </div>
 
         <details class="layer" style="padding:0;overflow:hidden">
@@ -1306,28 +1249,28 @@
         <div class="check-head"><span>进度</span><strong id="checkCount">0/0</strong></div>
         <div class="layer checklist" id="checklist">
           <div class="check-group">住宿</div>
-          <label><input type="checkbox" data-k="h_suji" /> 9.25 贺兰山宿集（致夏）· 银川</label>
-          <label><input type="checkbox" data-k="h_manpu" /> 9.26 漫葡天沐·党项 · 银川（含夜场相关安排）</label>
-          <label><input type="checkbox" data-k="h_danxia" /> 9.27 丹霞明珠 · 张掖临泽</label>
-          <label><input type="checkbox" data-k="h_jy" /> 9.28 嘉峪关南湖停车场车宿位置与过夜条件确认</label>
-          <label><input type="checkbox" data-k="h_fanchen" /> 9.29–9.30 梵尘别院 ×2 · 敦煌（可取消优先；核对实价）</label>
-          <label><input type="checkbox" data-k="h_juzi" /> 10.1 桔子酒店 · 大柴旦</label>
-          <label><input type="checkbox" data-k="h_mu" /> 10.2 木慧楠 · 青海湖东岸</label>
-          <label><input type="checkbox" data-k="h_atour" /> 10.3 亚朵 · 兰州张掖路一带（确认停车）</label>
+          <label><input type="checkbox" data-k="h_suji" /> 9.25 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%AE%BF%E9%9B%86" target="_blank" rel="noopener">贺兰山宿集（致夏）</a> · 银川</label>
+          <label><input type="checkbox" data-k="h_manpu" /> 9.26 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E6%BC%AB%E8%91%A1%E5%A4%A9%E6%B2%90%E5%85%9A%E9%A1%B9" target="_blank" rel="noopener">漫葡天沐·党项</a> · 银川（含夜场相关安排）</label>
+          <label><input type="checkbox" data-k="h_danxia" /> 9.27 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E4%B8%B9%E9%9C%9E%E6%98%8E%E7%8F%A0%20%E5%BC%A0%E6%8E%96" target="_blank" rel="noopener">丹霞明珠</a> · 张掖临泽</label>
+          <label><input type="checkbox" data-k="h_jy" /> 9.28 嘉峪关南湖停车场车宿位置与过夜条件确认（车宿，无携程订房）</label>
+          <label><input type="checkbox" data-k="h_fanchen" /> 9.29–9.30 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E6%A2%B5%E5%B0%98%E5%88%AB%E9%99%A2%20%E6%95%A6%E7%85%8C" target="_blank" rel="noopener">梵尘别院</a> ×2 · 敦煌（可取消优先；核对实价）</label>
+          <label><input type="checkbox" data-k="h_juzi" /> 10.1 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E6%A1%94%E5%AD%90%E9%85%92%E5%BA%97%20%E5%A4%A7%E6%9F%B4%E6%97%A6" target="_blank" rel="noopener">桔子酒店</a> · 大柴旦</label>
+          <label><input type="checkbox" data-k="h_mu" /> 10.2 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E6%9C%A8%E6%85%A7%E6%A5%A0%20%E9%9D%92%E6%B5%B7%E6%B9%96" target="_blank" rel="noopener">木慧楠</a> · 青海湖东岸</label>
+          <label><input type="checkbox" data-k="h_atour" /> 10.3 <a href="https://m.ctrip.com/webapp/hotel/hotelsearch?keyword=%E4%BA%9A%E6%9C%B5%20%E5%85%B0%E5%B7%9E%E5%BC%A0%E6%8E%96%E8%B7%AF" target="_blank" rel="noopener">亚朵</a> · 兰州张掖路一带（确认停车）</label>
           <label><input type="checkbox" data-k="h_charge" /> 订房时确认充电桩：宿集、漫葡、丹霞明珠、梵尘、桔子、木慧楠、亚朵</label>
 
           <div class="check-group">门票与预约</div>
-          <label><input type="checkbox" data-k="t_mogao" /> 莫高窟 9.29 下午场 · 提前约 30 天官方预约（两人）</label>
-          <span class="check-note">最紧一项；数字中心进窟，按官方渠道下单。</span>
+          <label><input type="checkbox" data-k="t_mogao" /> 莫高窟 9.29 下午场 · 提前约 30 天 <a href="https://www.mgk.org.cn/" target="_blank" rel="noopener">官网预约</a>（两人）</label>
+          <span class="check-note">最紧一项；数字中心进窟，只用官方渠道，勿走倒票。</span>
           <label><input type="checkbox" data-k="t_manpu" /> 漫葡「看见贺兰」夜游票 / 温泉 · 向酒店或官方确认两人名额</label>
-          <label><input type="checkbox" data-k="t_zbb" /> 镇北堡西部影城门票 ×2（若下午去影城）</label>
-          <label><input type="checkbox" data-k="t_xixia" /> 西夏陵（含博物馆/观光车，以园区套票为准）×2</label>
-          <label><input type="checkbox" data-k="t_danxia" /> 张掖七彩丹霞门票 ×2</label>
-          <label><input type="checkbox" data-k="t_mingsha" /> 鸣沙山月牙泉门票 ×2</label>
-          <label><input type="checkbox" data-k="t_yardang" /> 敦煌雅丹国家地质公园门票 ×2</label>
-          <label><input type="checkbox" data-k="t_shui" /> 乌素特水上雅丹门票 ×2</label>
-          <label><input type="checkbox" data-k="t_feicui" /> 大柴旦翡翠湖门票 ×2</label>
-          <label><input type="checkbox" data-k="t_opt" /> 可选票：沙坡头 / 多坝沟胡杨峡 / 敦煌博物馆 / 玉门关 / 茶卡盐湖（按当天要不要去再买）</label>
+          <label><input type="checkbox" data-k="t_zbb" /> 镇北堡西部影城门票 ×2（若下午去影城）· 现场或携程</label>
+          <label><input type="checkbox" data-k="t_xixia" /> 西夏陵（含博物馆/观光车，以园区套票为准）×2 · 现场或携程</label>
+          <label><input type="checkbox" data-k="t_danxia" /> 张掖七彩丹霞门票 ×2 · 现场或携程</label>
+          <label><input type="checkbox" data-k="t_mingsha" /> 鸣沙山月牙泉门票 ×2 · 现场或携程</label>
+          <label><input type="checkbox" data-k="t_yardang" /> 敦煌雅丹国家地质公园门票 ×2 · 现场或携程</label>
+          <label><input type="checkbox" data-k="t_shui" /> 乌素特水上雅丹门票 ×2 · 现场购票</label>
+          <label><input type="checkbox" data-k="t_feicui" /> 大柴旦翡翠湖门票 ×2 · 现场购票</label>
+          <label><input type="checkbox" data-k="t_opt" /> 可选票：沙坡头 / 多坝沟胡杨峡 / 敦煌博物馆 / 玉门关 / 茶卡盐湖（当天要去再买；现场或携程）</label>
           <span class="check-note">青海湖东岸散步观景一般不强绑门票；以现场与导航目的地为准。</span>
 
           <div class="check-group">出行与车辆</div>
@@ -1365,7 +1308,6 @@
           <button type="button" class="filter-btn" data-f="dunhuang">敦煌</button>
           <button type="button" class="filter-btn" data-f="qinghai">青海</button>
         </div>
-        <p class="checkin-intro">到了这里，就留下一张照片和一句当时的心情。记录只保存在这台设备的浏览器里。</p>
         <div class="spot-grid" id="spotGrid">
 
           <article class="spot" data-region="yinchuan" data-day="925">
@@ -2023,6 +1965,98 @@
         });
       }
 
+      // 手机：优先唤起本地高德；桌面仍走 uri.amap.com 网页
+      const isMobileAmap = /Android|iPhone|iPad|iPod|Mobile|HarmonyOS|MicroMessenger|Lark|Feishu/i.test(navigator.userAgent);
+      const isIOSAmap = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const parseAmapWebLink = (href) => {
+        try {
+          const u = new URL(href, location.href);
+          if (!/uri\.amap\.com$/i.test(u.hostname)) return null;
+          if (u.pathname.indexOf("/navigation") !== -1) {
+            const from = (u.searchParams.get("from") || "").split(",");
+            const to = (u.searchParams.get("to") || "").split(",");
+            if (from.length < 2 || to.length < 2) return null;
+            return {
+              type: "nav",
+              slon: from[0],
+              slat: from[1],
+              sname: from.slice(2).join(",") || "起点",
+              dlon: to[0],
+              dlat: to[1],
+              dname: to.slice(2).join(",") || "终点"
+            };
+          }
+          if (u.pathname.indexOf("/marker") !== -1) {
+            const pos = (u.searchParams.get("position") || "").split(",");
+            if (pos.length < 2) return null;
+            return {
+              type: "marker",
+              lon: pos[0],
+              lat: pos[1],
+              name: u.searchParams.get("name") || "目的地"
+            };
+          }
+        } catch (e) { /* ignore */ }
+        return null;
+      };
+      const openAmapApp = (parsed, webHref) => {
+        const enc = encodeURIComponent;
+        let scheme = "";
+        if (parsed.type === "nav") {
+          const q =
+            "sourceApplication=qinggan-roadbook" +
+            "&slat=" + parsed.slat + "&slon=" + parsed.slon + "&sname=" + enc(parsed.sname) +
+            "&dlat=" + parsed.dlat + "&dlon=" + parsed.dlon + "&dname=" + enc(parsed.dname) +
+            "&dev=0&t=0";
+          // amapuri 通用于较新高德；iOS / Android 再各备一条官方 scheme
+          scheme = isIOSAmap
+            ? ("iosamap://path?" + q)
+            : ("amapuri://route/plan/?" + q);
+        } else {
+          const q =
+            "sourceApplication=qinggan-roadbook" +
+            "&poiname=" + enc(parsed.name) +
+            "&lat=" + parsed.lat + "&lon=" + parsed.lon + "&dev=0";
+          scheme = isIOSAmap
+            ? ("iosamap://viewMap?" + q)
+            : ("amapuri://viewMap?" + q);
+        }
+        let left = false;
+        const markLeft = () => { left = true; };
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden) markLeft();
+        }, { once: true });
+        window.addEventListener("pagehide", markLeft, { once: true });
+        window.addEventListener("blur", markLeft, { once: true });
+        // iframe 唤起失败时不离开当前页，便于回退网页版
+        const iframe = document.createElement("iframe");
+        iframe.style.cssText = "display:none;width:0;height:0;border:0";
+        iframe.src = scheme;
+        document.body.appendChild(iframe);
+        setTimeout(() => iframe.remove(), 2800);
+        // iOS Safari / 部分 WebView 更认直接跳转
+        setTimeout(() => {
+          if (!left) {
+            try { window.location.href = scheme; } catch (e) { /* ignore */ }
+          }
+        }, 80);
+        setTimeout(() => {
+          if (left || document.hidden) return;
+          window.location.href = webHref;
+        }, 1800);
+      };
+      document.addEventListener("click", (event) => {
+        const a = event.target.closest && event.target.closest('a[href*="uri.amap.com"]');
+        if (!a) return;
+        if (!isMobileAmap) return;
+        const href = a.href;
+        const parsed = parseAmapWebLink(href);
+        if (!parsed) return;
+        event.preventDefault();
+        event.stopPropagation();
+        openAmapApp(parsed, href);
+      }, true);
+
       const spotGrid = document.getElementById("spotGrid");
       if (spotGrid) {
         // 按首次停留日（data-day）固定 DOM 顺序，避免后续改稿打乱时间序
@@ -2057,115 +2091,6 @@
           });
         });
       }
-
-      // 每个地点的照片与一句话，保存在当前浏览器的 IndexedDB。
-      const checkinDb = () => new Promise((resolve, reject) => {
-        const request = indexedDB.open("qinggan-roadbook", 1);
-        request.onupgradeneeded = () => {
-          const db = request.result;
-          if (!db.objectStoreNames.contains("checkins")) {
-            const store = db.createObjectStore("checkins", { keyPath: "id", autoIncrement: true });
-            store.createIndex("place", "place", { unique: false });
-          }
-        };
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      });
-      const dbRequest = async (mode, action) => {
-        const db = await checkinDb();
-        return new Promise((resolve, reject) => {
-          const tx = db.transaction("checkins", mode);
-          const request = action(tx.objectStore("checkins"));
-          request.onsuccess = () => resolve(request.result);
-          request.onerror = () => reject(request.error);
-        }).finally(() => db.close());
-      };
-      const readFile = (file) => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = () => reject(reader.error);
-        reader.readAsDataURL(file);
-      });
-      const compressPhoto = async (file) => {
-        const source = await readFile(file);
-        const image = new Image();
-        image.src = source;
-        await image.decode();
-        const max = 1600;
-        const scale = Math.min(1, max / Math.max(image.width, image.height));
-        const canvas = document.createElement("canvas");
-        canvas.width = Math.round(image.width * scale);
-        canvas.height = Math.round(image.height * scale);
-        canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
-        return canvas.toDataURL("image/jpeg", 0.82);
-      };
-      const escapeHtml = (value) => value.replace(/[&<>"']/g, (char) => ({
-        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-      })[char]);
-      const makeCheckin = (spot) => {
-        const place = spot.querySelector("h3").textContent.trim();
-        const key = place.replace(/\s+/g, "-");
-        const panel = document.createElement("section");
-        panel.className = "checkin no-print";
-        panel.dataset.place = key;
-        panel.innerHTML = `
-          <div class="checkin-head">
-            <b>留下这一天</b><span class="checkin-count">还没有记录</span>
-          </div>
-          <form class="checkin-form">
-            <input type="file" accept="image/*" aria-label="选择照片" />
-            <textarea maxlength="180" placeholder="写一句当时的风、光、路，或你们说过的话"></textarea>
-            <button class="btn btn-primary btn-sm checkin-save" type="submit">保存这次打卡</button>
-            <p class="checkin-note">照片和文字仅保存在当前浏览器。清理网站数据后，记录会一并消失。</p>
-          </form>
-          <div class="checkin-list" aria-live="polite"></div>`;
-        spot.querySelector(".spot-body").append(panel);
-        const list = panel.querySelector(".checkin-list");
-        const count = panel.querySelector(".checkin-count");
-        const render = async () => {
-          const rows = await dbRequest("readonly", (store) => store.index("place").getAll(key));
-          rows.sort((a, b) => b.createdAt - a.createdAt);
-          count.textContent = rows.length ? `已留下 ${rows.length} 条记录` : "还没有记录";
-          list.innerHTML = rows.map((row) => `
-            <article class="checkin-item">
-              ${row.photo ? `<img referrerpolicy="no-referrer" src="${row.photo}" alt="${escapeHtml(place)}的照片" />` : ""}
-              <time>${new Date(row.createdAt).toLocaleString("zh-CN", { dateStyle: "medium", timeStyle: "short" })}</time>
-              <p>${escapeHtml(row.note || "留下了一张照片。")}</p>
-              <button class="checkin-delete" type="button" data-id="${row.id}">删除</button>
-            </article>`).join("");
-        };
-        panel.querySelector("form").addEventListener("submit", async (event) => {
-          event.preventDefault();
-          const form = event.currentTarget;
-          const file = form.querySelector('input[type="file"]').files[0];
-          const note = form.querySelector("textarea").value.trim();
-          if (!file && !note) return;
-          const button = form.querySelector("button");
-          button.disabled = true;
-          button.textContent = "正在保存";
-          try {
-            const photo = file ? await compressPhoto(file) : "";
-            await dbRequest("readwrite", (store) => store.add({
-              place: key, note, photo, createdAt: Date.now()
-            }));
-            form.reset();
-            await render();
-          } catch (error) {
-            alert("这条记录没有保存成功。请确认浏览器允许本地存储，并换一张小一些的照片再试。");
-          } finally {
-            button.disabled = false;
-            button.textContent = "保存这次打卡";
-          }
-        });
-        list.addEventListener("click", async (event) => {
-          const button = event.target.closest(".checkin-delete");
-          if (!button) return;
-          await dbRequest("readwrite", (store) => store.delete(Number(button.dataset.id)));
-          await render();
-        });
-        render().catch(() => { count.textContent = "浏览器未开放本地记录"; });
-      };
-      document.querySelectorAll("#spotGrid .spot").forEach(makeCheckin);
 
       const links = [...document.querySelectorAll(".bottom-nav a")];
       const io = new IntersectionObserver((entries) => {
