@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="referrer" content="no-referrer" />
   <meta name="theme-color" content="#1a1410" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -49,6 +50,7 @@
 
     .hero {
       position: relative;
+      isolation: isolate;
       min-height: 92vh;
       min-height: 92dvh;
       display: flex;
@@ -56,9 +58,25 @@
       justify-content: flex-end;
       padding: 28px 20px 36px;
       color: #fff;
-      background:
-        linear-gradient(180deg, rgba(26,20,16,0.15) 0%, rgba(26,20,16,0.55) 45%, rgba(26,20,16,0.92) 100%),
-        url("https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1920&q=85") center/cover no-repeat;
+      background: #1a1410;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(180deg, rgba(26,20,16,0.15) 0%, rgba(26,20,16,0.55) 45%, rgba(26,20,16,0.92) 100%);
     }
     .hero-kicker {
       font-size: 13px;
@@ -276,11 +294,18 @@
     details.day:not([open]) > *:not(summary) { display: none !important; }
     .day-body { padding: 0 14px 16px; border-top: 1px dashed rgba(196,165,116,0.4); }
     .day-cover {
+      position: relative;
       margin: 14px -14px 12px;
       height: 160px;
-      background-size: cover;
-      background-position: center;
+      overflow: hidden;
+      background-color: var(--paper-2);
       cursor: zoom-in;
+    }
+    .day-cover > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
     .day-cover:focus-visible,
     .spot-img:focus-visible {
@@ -925,7 +950,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=85')" role="img" aria-label="夜行公路（通用）" data-caption="夜行公路 · 通用图"></div>
+            <div class="day-cover" role="img" aria-label="夜行公路（通用）" data-caption="夜行公路 · 通用图" data-full="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=85"><img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1920&q=85" alt="夜行公路（通用）" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <p class="day-lead">夜里离开盆地，车灯咬着路沿往北。服务区的灯、轮换驾驶的沉默，都算这一程的节奏——只负责把人送到贺兰山下。</p>
             <ul>
               <li>晚上离开成都，第二天下午抵达贺兰山宿集。</li>
@@ -942,7 +967,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/suji-helan.jpg')" role="img" aria-label="贺兰山宿集泳池与贺兰山景" data-caption="贺兰山宿集 · 泳池望山（致夏）"></div>
+            <div class="day-cover" role="img" aria-label="贺兰山宿集泳池与贺兰山景" data-caption="贺兰山宿集 · 泳池望山（致夏）" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/suji-helan.jpg"><img src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/suji-helan.jpg" alt="贺兰山宿集泳池与贺兰山景" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <div class="tag-row"><span class="tag hot">生日惊喜</span></div>
             <p class="day-lead">贺兰山在西，黄河在东，银川平原夹在中间。宿集落在镇北堡一带——明清边墙遗址旁，影城与葡萄园都近；车门一开，先是干燥的风，再是西边那道青黑山脊。</p>
             <p class="day-aside">「贺兰」一名见于史籍，蒙古语意近「骏马」。山形起伏如奔马脊背，古人常以山名边塞。东麓葡萄、岩画、残墙都贴着山脚铺开——到了这里，先把车停稳、人安顿好，把长途的疲倦交给院子和山风。</p>
@@ -961,7 +986,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/manpu-panorama.jpg')" role="img" aria-label="漫葡小镇全景" data-caption="漫葡小镇 · 白天全景"></div>
+            <div class="day-cover" role="img" aria-label="漫葡小镇全景" data-caption="漫葡小镇 · 白天全景" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/manpu-panorama.jpg"><img src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/manpu-panorama.jpg" alt="漫葡小镇全景" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <p class="day-lead">贺兰山东麓种葡萄已久；漫葡就在山前，白天可以去影城或岩画，夜里回到「看见贺兰」的灯火里——街区亮起来时，山影还在远处站着。</p>
             <p class="day-aside">镇北堡西部影城由明清边墙遗址改建，张贤亮创办；《红高粱》《大话西游》等曾在此取景。黄土墙、残堡、风沙磨过的轮廓，本来就是西北边塞的样子——电影只是把它留在镜头里。</p>
             <ul>
@@ -981,7 +1006,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg')" role="img" aria-label="西夏陵" data-caption="西夏陵"></div>
+            <div class="day-cover" role="img" aria-label="西夏陵" data-caption="西夏陵" data-full="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg" alt="西夏陵" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <div class="tag-row"><span class="tag">可选沙坡头</span></div>
             <p class="day-lead">上午把西夏的黄土陵台看完，下午转入河西走廊——戈壁开阔，远山一层层退去，车窗外渐渐只剩风与距离。</p>
             <p class="day-aside">西夏是党项人建立的王朝，陵园俗称「东方金字塔」：夯土塔状陵台矗在贺兰山下，风沙削去了华丽，却留下轮廓。先看博物馆，再上陵区——土黄色的丘岗便有了朝代、人名与沉默的年份。</p>
@@ -1004,7 +1029,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG')" role="img" aria-label="张掖七彩丹霞" data-caption="张掖七彩丹霞"></div>
+            <div class="day-cover" role="img" aria-label="张掖七彩丹霞" data-caption="张掖七彩丹霞" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG" alt="张掖七彩丹霞" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <p class="day-lead">上午补觉，下午专留给彩色山丘。斜阳一到，红黄白灰才一层层醒过来；风里带着干燥的甜腥，像颜料刚被晒开。</p>
             <p class="day-aside">张掖七彩丹霞是彩色丘陵：白垩纪砂砾岩经风化侵蚀，铁、锰等氧化物染出红黄白灰的层理。正午晒得发白，傍晚光斜进来时，整片山丘像一只被慢慢打开的调色盘。</p>
             <ul>
@@ -1023,7 +1048,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920')" role="img" aria-label="莫高窟" data-caption="莫高窟"></div>
+            <div class="day-cover" role="img" aria-label="莫高窟" data-caption="莫高窟" data-full="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920"><img src="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="莫高窟" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <div class="tag-row"><span class="tag hot">莫高预约</span></div>
             <p class="day-lead">一天两头：先走进石窟里的光阴，再去沙山上等日落；夜里回到沙边，城市的热闹留给夜市一顿——洞窟的静、沙山的金、夜市的烟火，叠在同一天里。</p>
             <p class="day-aside">「莫高」一说为「漠高」——沙漠高处的佛龛。传说前秦时乐僔和尚见金光如千佛，遂开窟；其后千余年，丝路商旅与信仰叠在崖壁上，壁画里的飞天与供养人仍停在灯影未到之处。鸣沙山因风过沙丘作声得名，月牙泉形如新月，嵌在沙海中间——傍晚沙色偏金，泉水却仍旧冷静。</p>
@@ -1043,7 +1068,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg')" role="img" aria-label="敦煌雅丹" data-caption="敦煌雅丹国家地质公园"></div>
+            <div class="day-cover" role="img" aria-label="敦煌雅丹" data-caption="敦煌雅丹国家地质公园" data-full="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg" alt="敦煌雅丹" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <p class="day-lead">出城两小时多，戈壁尽头是风削出来的土丘城。专为日落去：光一斜，土丘的阴影就拉长，像一座座空城在暮色里亮起轮廓；看完就回敦煌。</p>
             <p class="day-aside">「雅丹」借自维吾尔语，指陡壁小丘。风与时间把戈壁削成城堡状，当地又称魔鬼城——风穿梭其间时，会发出低沉的呜咽，像有人在土丘缝里走过。</p>
             <ul>
@@ -1061,7 +1086,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=1920&q=85')" role="img" aria-label="戈壁沙漠公路（通用）" data-caption="戈壁公路 · 通用图"></div>
+            <div class="day-cover" role="img" aria-label="戈壁沙漠公路（通用）" data-caption="戈壁公路 · 通用图" data-full="https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=1920&q=85"><img src="https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?w=1920&q=85" alt="戈壁沙漠公路（通用）" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <p class="day-lead">上午把敦煌的城留一点余味，下午翻当金山进柴达木——海拔抬升，绿洲换成盐壳与荒原，空气也更薄、更亮。今日主停<strong>水上雅丹</strong>：雅丹立在浅湖里，倒影干净；出园后沿 G315 东行，<strong>东台</strong>与<strong>U315</strong>作路边短停／车窗风景，夜里仍住大柴旦。</p>
             <ul>
               <li>上午在敦煌城里走走，博物馆或书店任选；中午前后上路。</li>
@@ -1086,7 +1111,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg')" role="img" aria-label="大柴旦翡翠湖一带" data-caption="大柴旦翡翠湖一带"></div>
+            <div class="day-cover" role="img" aria-label="大柴旦翡翠湖一带" data-caption="大柴旦翡翠湖一带" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg" alt="大柴旦翡翠湖一带" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <div class="tag-row"><span class="tag hot">星空</span></div>
             <p class="day-lead">清晨在盐湖边看一层层蓝绿，白天东行经德令哈补给路过，傍晚落到青海湖东岸——湖面渐暗之后，这一晚的星空才是主场。</p>
             <p class="day-aside">「翡翠湖」是大柴旦镇旁盐湖群的俗称，因多层蓝绿水色得名；东台是 G315 路边的盐湖短停，已在昨天路过。青海湖古称西海，藏语「措温布」意近「青色的海」——到了东岸，天黑以后湖面先静下来，星星才一颗颗亮起。</p>
@@ -1112,7 +1137,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/qinghai-east.jpg')" role="img" aria-label="青海湖" data-caption="青海湖东岸 · 再待一会儿"></div>
+            <div class="day-cover" role="img" aria-label="青海湖" data-caption="青海湖东岸 · 再待一会儿" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/qinghai-east.jpg"><img src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/qinghai-east.jpg" alt="青海湖" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <p class="day-lead">不必急着告别。上午再给湖一点时间——白天的青海湖更开阔，风也更软；下午经西宁下到黄河边的兰州。</p>
             <ul>
               <li>上午在湖边再待一会儿——散步、补觉、拍一张白天的湖面都行。</li>
@@ -1129,7 +1154,7 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" style="background-image:url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=85')" role="img" aria-label="山地公路返程（通用）" data-caption="山地公路 · 通用图"></div>
+            <div class="day-cover" role="img" aria-label="山地公路返程（通用）" data-caption="山地公路 · 通用图" data-full="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=85"><img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=85" alt="山地公路返程（通用）" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
             <p class="day-lead">沿着熟悉的高速往南，把这一路的沙、湖和风都关在后视镜里。当天到家即可。</p>
             <ul>
               <li>七八点左右上路，两个人轮流开车。</li>
@@ -1342,7 +1367,7 @@
         <div class="spot-grid" id="spotGrid">
 
           <article class="spot" data-region="yinchuan" data-day="925">
-            <div class="spot-img" role="img" aria-label="贺兰山清晨山脊" data-caption="贺兰山 · 清晨山脊" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg/1920px-%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg/1920px-%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg" alt="贺兰山" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="贺兰山清晨山脊" data-caption="贺兰山 · 清晨山脊" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg/1920px-%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg/1920px-%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg" alt="贺兰山" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>贺兰山</h3>
               <p class="spot-teaser">贺兰山在西，黄河在东，银川平原夹在中间。山色青黑，晴天轮廓硬朗——长途抵达后，先把视线交给西边这道脊背，让眼睛从公路上的白线，慢慢对焦到山影。</p>
@@ -1374,7 +1399,7 @@
           </article>
 
           <article class="spot" data-region="yinchuan" data-day="926">
-            <div class="spot-img" role="img" aria-label="镇北堡西部影城" data-caption="镇北堡西部影城" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/WestStudio.jpg/1920px-WestStudio.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/WestStudio.jpg/1920px-WestStudio.jpg" alt="镇北堡西部影城" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="镇北堡西部影城" data-caption="镇北堡西部影城" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/WestStudio.jpg/1920px-WestStudio.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/WestStudio.jpg/1920px-WestStudio.jpg" alt="镇北堡西部影城" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>镇北堡西部影城</h3>
               <p class="spot-teaser">明清边墙遗址改成的电影城。黄土墙与残堡本来就是现成布景——走在巷子里，风沙声比游客声先到。下午可来这里，或去贺兰山岩画。</p>
@@ -1396,7 +1421,7 @@
           </article>
 
           <article class="spot" data-region="yinchuan" data-day="926">
-            <div class="spot-img" role="img" aria-label="漫葡小镇白天全景" data-caption="漫葡小镇 · 白天全景" data-full="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/manpu-panorama.jpg"><img src="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/manpu-panorama.jpg" alt="漫葡小镇全景" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="漫葡小镇白天全景" data-caption="漫葡小镇 · 白天全景" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/manpu-panorama.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/manpu-panorama.jpg" alt="漫葡小镇全景" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>漫葡 · 看见贺兰</h3>
               <p class="spot-teaser">贺兰山东麓的葡萄小镇。白天换房安顿，傍晚跟着节目单逛街区与灯火——山还在远处，灯一盏盏亮起来；不必全看完，留下几处喜欢的就好。</p>
@@ -1415,7 +1440,7 @@
           </article>
 
           <article class="spot" data-region="yinchuan" data-day="927">
-            <div class="spot-img" role="img" aria-label="西夏陵" data-caption="西夏陵" data-full="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg" alt="西夏陵" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="西夏陵" data-caption="西夏陵" data-full="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Xixia.jpg" alt="西夏陵" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>西夏陵 + 博物馆</h3>
               <p class="spot-teaser">先在博物馆把西夏的故事听完，再去陵区。夯土陵台矗在贺兰山下，风沙磨去华丽，轮廓却仍旧清楚——九月二十七日的上午留给这里。</p>
@@ -1437,7 +1462,7 @@
           </article>
 
           <article class="spot" data-region="yinchuan" data-day="927">
-            <div class="spot-img" role="img" aria-label="中卫沙坡头沙漠" data-caption="沙坡头 · 沙漠与黄河一带" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Shapotou_desert_area_%2820171005173240%29.jpg/1920px-Shapotou_desert_area_%2820171005173240%29.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Shapotou_desert_area_%2820171005173240%29.jpg/1920px-Shapotou_desert_area_%2820171005173240%29.jpg" alt="沙坡头" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="中卫沙坡头沙漠" data-caption="沙坡头 · 沙漠与黄河一带" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Shapotou_desert_area_%2820171005173240%29.jpg/1920px-Shapotou_desert_area_%2820171005173240%29.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Shapotou_desert_area_%2820171005173240%29.jpg/1920px-Shapotou_desert_area_%2820171005173240%29.jpg" alt="沙坡头" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>沙坡头（可选）</h3>
               <p class="spot-teaser">腾格里沙漠贴着黄河的一角：一边是沙丘，一边是河水拐弯——九月二十七日西夏之后可顺路停 1–2 小时再继续往张掖。</p>
@@ -1457,7 +1482,7 @@
           </article>
 
           <article class="spot" data-region="hexi" data-day="928">
-            <div class="spot-img" role="img" aria-label="张掖七彩丹霞" data-caption="张掖七彩丹霞" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG" alt="张掖七彩丹霞" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="张掖七彩丹霞" data-caption="张掖七彩丹霞" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Zhangye_Danxia.JPG/1920px-Zhangye_Danxia.JPG" alt="张掖七彩丹霞" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>七彩丹霞</h3>
               <p class="spot-teaser">彩色山丘，下午到傍晚光更好——斜阳一到，层理才醒；红、黄、白、灰像被风一层层掀开。住北门丹霞明珠，进出省事。</p>
@@ -1477,7 +1502,7 @@
           </article>
 
           <article class="spot" data-region="dunhuang" data-day="929">
-            <div class="spot-img" role="img" aria-label="莫高窟崖壁窟檐" data-caption="莫高窟 · 崖壁窟檐" data-full="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920"><img src="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="莫高窟" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="莫高窟崖壁窟檐" data-caption="莫高窟 · 崖壁窟檐" data-full="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920"><img referrerpolicy="no-referrer" src="https://images.pexels.com/photos/25974825/pexels-photo-25974825.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="莫高窟" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>莫高窟</h3>
               <p class="spot-teaser">从数字展示中心开始，穿过一段影像与等待，最后走进洞窟。这一程订在九月二十九日下午——洞窟里凉、静，脚步也轻；看完再去沙山赶日落。</p>
@@ -1497,7 +1522,7 @@
           </article>
 
           <article class="spot" data-region="dunhuang" data-day="929">
-            <div class="spot-img" role="img" aria-label="鸣沙山月牙泉" data-caption="鸣沙山月牙泉" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Mondsichelsee.JPG/1920px-Mondsichelsee.JPG"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Mondsichelsee.JPG/1920px-Mondsichelsee.JPG" alt="鸣沙山月牙泉" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="鸣沙山月牙泉" data-caption="鸣沙山月牙泉" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Mondsichelsee.JPG/1920px-Mondsichelsee.JPG"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Mondsichelsee.JPG/1920px-Mondsichelsee.JPG" alt="鸣沙山月牙泉" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>鸣沙山月牙泉</h3>
               <p class="spot-teaser">沙山围着一汪新月形泉水。傍晚沙色偏金，泉水却仍旧冷静——看完主色就撤；夜里去夜市，再回梵尘。</p>
@@ -1517,7 +1542,7 @@
           </article>
 
           <article class="spot" data-region="dunhuang" data-day="929">
-            <div class="spot-img" role="img" aria-label="敦煌沙州夜市" data-caption="沙州夜市 · 夜色街区" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dunhuang_Night_Market_%2820230916214410%29.jpg/1920px-Dunhuang_Night_Market_%2820230916214410%29.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dunhuang_Night_Market_%2820230916214410%29.jpg/1920px-Dunhuang_Night_Market_%2820230916214410%29.jpg" alt="沙州夜市" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="敦煌沙州夜市" data-caption="沙州夜市 · 夜色街区" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dunhuang_Night_Market_%2820230916214410%29.jpg/1920px-Dunhuang_Night_Market_%2820230916214410%29.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Dunhuang_Night_Market_%2820230916214410%29.jpg/1920px-Dunhuang_Night_Market_%2820230916214410%29.jpg" alt="沙州夜市" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>沙州夜市</h3>
               <p class="spot-teaser">鸣沙山下来后进城吃一顿。灯火、烤肉香与人群的声响，是敦煌白天之外的另一面——吃完回梵尘即可。</p>
@@ -1536,7 +1561,7 @@
           </article>
 
           <article class="spot" data-region="dunhuang" data-day="930">
-            <div class="spot-img" role="img" aria-label="玉门关遗址" data-caption="玉门关" data-full="https://upload.wikimedia.org/wikipedia/commons/8/88/Yumen_Pass_in_2004.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Yumen_Pass_in_2004.jpg" alt="玉门关" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="玉门关遗址" data-caption="玉门关" data-full="https://upload.wikimedia.org/wikipedia/commons/8/88/Yumen_Pass_in_2004.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/8/88/Yumen_Pass_in_2004.jpg" alt="玉门关" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>玉门关（短停）</h3>
               <p class="spot-teaser">去雅丹路上可短停。夯土关城立在戈壁里，风大、天远——「春风不度」说的就是这一带的边关气象：关城不大，却把空旷衬得很清楚。</p>
@@ -1555,7 +1580,7 @@
           </article>
 
           <article class="spot" data-region="dunhuang" data-day="930">
-            <div class="spot-img" role="img" aria-label="敦煌雅丹" data-caption="敦煌雅丹国家地质公园" data-full="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg" alt="敦煌雅丹" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="敦煌雅丹" data-caption="敦煌雅丹国家地质公园" data-full="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg" alt="敦煌雅丹" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>敦煌雅丹</h3>
               <p class="spot-teaser">风蚀留下的土丘站在戈壁里。坐观光车进园，日落时阴影拉长，整片旱地像一座空城慢慢亮起轮廓——看完就回敦煌。</p>
@@ -1575,7 +1600,7 @@
           </article>
 
           <article class="spot" data-region="dunhuang" data-day="1001">
-            <div class="spot-img" role="img" aria-label="敦煌博物馆外观" data-caption="敦煌博物馆" data-full="https://upload.wikimedia.org/wikipedia/commons/8/88/20080717_Dunhuang_Museum.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/8/88/20080717_Dunhuang_Museum.jpg" alt="敦煌博物馆" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="敦煌博物馆外观" data-caption="敦煌博物馆" data-full="https://upload.wikimedia.org/wikipedia/commons/8/88/20080717_Dunhuang_Museum.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/8/88/20080717_Dunhuang_Museum.jpg" alt="敦煌博物馆" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>敦煌博物馆</h3>
               <p class="spot-teaser">10.1 上午城里走走的选项之一。石窟看完后，这里把丝路文物与地方史再串一遍——展柜里的物件安静，却能把昨天洞窟里的颜色接到地面上；也可换成书店。</p>
@@ -1594,7 +1619,7 @@
           </article>
 
           <article class="spot" data-region="dunhuang" data-day="1001">
-            <div class="spot-img" role="img" aria-label="阿克塞胡杨峡戈壁峡谷地貌" data-caption="阿克塞胡杨峡 · 水墨戈壁与峡谷山体（风景参考）" data-full="https://images.pexels.com/photos/8714986/pexels-photo-8714986.jpeg?auto=compress&cs=tinysrgb&w=1920"><img src="https://images.pexels.com/photos/8714986/pexels-photo-8714986.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="阿克塞胡杨峡戈壁峡谷" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="阿克塞胡杨峡戈壁峡谷地貌" data-caption="阿克塞胡杨峡 · 水墨戈壁与峡谷山体（风景参考）" data-full="https://images.pexels.com/photos/8714986/pexels-photo-8714986.jpeg?auto=compress&cs=tinysrgb&w=1920"><img referrerpolicy="no-referrer" src="https://images.pexels.com/photos/8714986/pexels-photo-8714986.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="阿克塞胡杨峡戈壁峡谷" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>可选：胡杨峡</h3>
               <p class="spot-teaser">出敦煌往阿克塞、翻当金山时，走廊西侧可拐<strong>多坝沟胡杨峡</strong>——短停约 1–2 小时，顺路看一层水墨戈壁与雅丹山体：灰黑砾石铺地，风蚀山脊立在空旷里，像被风吹干的画。</p>
@@ -1615,7 +1640,7 @@
           </article>
 
           <article class="spot" data-region="qinghai" data-day="1001">
-            <div class="spot-img" role="img" aria-label="乌素特水上雅丹" data-caption="乌素特水上雅丹" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Wusute_Yardang_on_Water_Geological_Park.jpg/1920px-Wusute_Yardang_on_Water_Geological_Park.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Wusute_Yardang_on_Water_Geological_Park.jpg/1920px-Wusute_Yardang_on_Water_Geological_Park.jpg" alt="水上雅丹" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="乌素特水上雅丹" data-caption="乌素特水上雅丹" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Wusute_Yardang_on_Water_Geological_Park.jpg/1920px-Wusute_Yardang_on_Water_Geological_Park.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Wusute_Yardang_on_Water_Geological_Park.jpg/1920px-Wusute_Yardang_on_Water_Geological_Park.jpg" alt="水上雅丹" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>乌素特水上雅丹</h3>
               <p class="spot-teaser">敦煌 → 大柴旦路上的主景点。雅丹泡在浅湖里，倒影干净；风一过，土丘与水光一起轻轻晃——敦煌那处是旱地雅丹，这里多了一层蓝。出园后东台与 U315 作路边短停／车窗风景。</p>
@@ -1637,7 +1662,7 @@
           </article>
 
           <article class="spot" data-region="qinghai" data-day="1001">
-            <div class="spot-img" role="img" aria-label="东台吉乃尔湖盐湖风光" data-caption="东台吉乃尔湖 · 盐壳与湖色" data-full="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/dongtai.jpg"><img src="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/dongtai.jpg" alt="东台吉乃尔湖" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="东台吉乃尔湖盐湖风光" data-caption="东台吉乃尔湖 · 盐壳与湖色" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/dongtai.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/dongtai.jpg" alt="东台吉乃尔湖" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>东台吉乃尔湖</h3>
               <p class="spot-teaser">水上雅丹之后、大柴旦之前的路边短停。蓝白盐湖贴着 G315，盐壳反光刺眼又好看——停 15–40 分钟拍几张就走。</p>
@@ -1659,7 +1684,7 @@
           </article>
 
           <article class="spot" data-region="qinghai" data-day="1001">
-            <div class="spot-img" role="img" aria-label="U315公路一带盐湖风景" data-caption="U315 / U型公路一带 · 盐湖公路风景" data-full="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/u315.jpg"><img src="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/u315.jpg" alt="U315公路一带" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="U315公路一带盐湖风景" data-caption="U315 / U型公路一带 · 盐湖公路风景" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/u315.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/u315.jpg" alt="U315公路一带" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>U315 公路（U 型公路）</h3>
               <p class="spot-teaser">东台附近顺路开过的风景公路：盐壳、天空与弯道叠在一起——车窗里就能看。慢开路过；想拍再找安全处停几分钟（约 15–40 分钟，也可不下车）。</p>
@@ -1681,7 +1706,7 @@
           </article>
 
           <article class="spot" data-region="qinghai" data-day="1002">
-            <div class="spot-img" role="img" aria-label="大柴旦翡翠湖一带" data-caption="大柴旦翡翠湖一带" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg" alt="大柴旦翡翠湖一带" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="大柴旦翡翠湖一带" data-caption="大柴旦翡翠湖一带" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg"><img referrerpolicy="no-referrer" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Dachaidamu_Lake_2018-08-01.jpg/1920px-Dachaidamu_Lake_2018-08-01.jpg" alt="大柴旦翡翠湖一带" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>大柴旦翡翠湖</h3>
               <p class="spot-teaser">清晨在盐湖边看一层层蓝绿——浅的像冰，深的像玉，风一过，颜色还会轻轻换一层。1～3 号湖转一转就够，然后东行经德令哈补给，往青海湖东岸开。</p>
@@ -1702,7 +1727,7 @@
           </article>
 
           <article class="spot" data-region="qinghai" data-day="1002">
-            <div class="spot-img" role="img" aria-label="德令哈尕海一带湖景" data-caption="德令哈 · 尕海一带" data-full="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/delingha.jpg"><img src="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/delingha.jpg" alt="德令哈一带" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="德令哈尕海一带湖景" data-caption="德令哈 · 尕海一带" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/delingha.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/delingha.jpg" alt="德令哈一带" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>德令哈（补给 / 路过）</h3>
               <p class="spot-teaser">大柴旦 → 青海湖东岸途中的海西州府。加油、吃饭、超市比盐湖沿线好找——约 15–40 分钟补给路过即可。</p>
@@ -1724,7 +1749,7 @@
           </article>
 
           <article class="spot" data-region="qinghai" data-day="1002">
-            <div class="spot-img" role="img" aria-label="茶卡盐湖天空之镜" data-caption="茶卡盐湖 · 盐壳与远山" data-full="https://images.pexels.com/photos/8739403/pexels-photo-8739403.jpeg?auto=compress&cs=tinysrgb&w=1920"><img src="https://images.pexels.com/photos/8739403/pexels-photo-8739403.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="茶卡盐湖" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="茶卡盐湖天空之镜" data-caption="茶卡盐湖 · 盐壳与远山" data-full="https://images.pexels.com/photos/8739403/pexels-photo-8739403.jpeg?auto=compress&cs=tinysrgb&w=1920"><img referrerpolicy="no-referrer" src="https://images.pexels.com/photos/8739403/pexels-photo-8739403.jpeg?auto=compress&cs=tinysrgb&w=1920" alt="茶卡盐湖" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>茶卡盐湖（可选）</h3>
               <p class="spot-teaser">往青海湖东岸途中，若时间宽裕可短停「天空之镜」。盐壳反光，远山压在天边——人走在白茫茫的盐上，影子会格外清楚。</p>
@@ -1745,7 +1770,7 @@
           </article>
 
           <article class="spot" data-region="qinghai" data-day="1002">
-            <div class="spot-img" role="img" aria-label="青海湖东岸" data-caption="青海湖东岸" data-full="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/qinghai-east.jpg"><img src="https://raw.githubusercontent.com/ab8932032/qingan-yinchuan-roadbook-2026/main/assets/qinghai-east.jpg" alt="青海湖东岸" loading="lazy" decoding="async" /></div>
+            <div class="spot-img" role="img" aria-label="青海湖东岸" data-caption="青海湖东岸" data-full="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/qinghai-east.jpg"><img referrerpolicy="no-referrer" src="https://cdn.jsdelivr.net/gh/ab8932032/qingan-yinchuan-roadbook-2026@main/assets/qinghai-east.jpg" alt="青海湖东岸" loading="lazy" decoding="async" /></div>
             <div class="spot-body">
               <h3>青海湖东岸</h3>
               <p class="spot-teaser">这一晚住在东岸附近。傍晚湖面先染成深蓝，天黑以后风更冷——看湖，也等一等星星慢慢亮起来。</p>
@@ -1900,7 +1925,7 @@
   <div class="lightbox no-print" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="查看全图">
     <button type="button" class="lightbox-close" id="lightboxClose" aria-label="关闭全图">×</button>
     <figure class="lightbox-figure">
-      <img id="lightboxImg" alt="" />
+      <img referrerpolicy="no-referrer" id="lightboxImg" alt="" />
       <figcaption class="lightbox-caption" id="lightboxCaption"></figcaption>
     </figure>
   </div>
@@ -2101,7 +2126,7 @@
           count.textContent = rows.length ? `已留下 ${rows.length} 条记录` : "还没有记录";
           list.innerHTML = rows.map((row) => `
             <article class="checkin-item">
-              ${row.photo ? `<img src="${row.photo}" alt="${escapeHtml(place)}的照片" />` : ""}
+              ${row.photo ? `<img referrerpolicy="no-referrer" src="${row.photo}" alt="${escapeHtml(place)}的照片" />` : ""}
               <time>${new Date(row.createdAt).toLocaleString("zh-CN", { dateStyle: "medium", timeStyle: "short" })}</time>
               <p>${escapeHtml(row.note || "留下了一张照片。")}</p>
               <button class="checkin-delete" type="button" data-id="${row.id}">删除</button>
