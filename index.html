@@ -935,7 +935,7 @@
           </div>
         </details>
 
-        <details class="day" id="d925" name="roadbook-days" open>
+        <details class="day" id="d925" name="roadbook-days">
           <summary>
             <div class="day-date"><b>9.25</b>周五</div>
             <div><div class="day-title">宿集 · 生日惊喜 <span class="day-kind play">银川</span></div><div class="day-sub">今晚，留一点小心思</div></div>
@@ -1957,10 +1957,16 @@
         days.forEach((d) => { d.open = d === target; });
         dayLock = false;
       };
-      // 默认只展开一天（优先 9.25；若都没有 open 则打开第一天）
+      // 默认全部收起；若异常出现多个 open，只保留第一个
       const presetOpen = days.filter((d) => d.open);
       if (presetOpen.length > 1) openOnlyDay(presetOpen[0]);
-      else if (presetOpen.length === 0) openOnlyDay(document.getElementById("d925") || days[0]);
+      else if (presetOpen.length === 1) {
+        /* 保持 HTML 里显式写的那一天 */
+      } else {
+        dayLock = true;
+        days.forEach((d) => { d.open = false; });
+        dayLock = false;
+      }
       days.forEach((d) => {
         d.addEventListener("toggle", () => {
           if (dayLock || !d.open) return;
