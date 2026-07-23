@@ -64,7 +64,7 @@
     .hero-bg {
       position: absolute;
       inset: 0;
-      z-index: -2;
+      z-index: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -74,10 +74,11 @@
       content: "";
       position: absolute;
       inset: 0;
-      z-index: -1;
+      z-index: 1;
       pointer-events: none;
       background: linear-gradient(180deg, rgba(26,20,16,0.15) 0%, rgba(26,20,16,0.55) 45%, rgba(26,20,16,0.92) 100%);
     }
+    .hero > *:not(.hero-bg) { position: relative; z-index: 2; }
     .hero-kicker {
       font-size: 13px;
       letter-spacing: 0.18em;
@@ -879,6 +880,7 @@
 <body>
   <div class="progress-bar" id="progress" aria-hidden="true"></div>
   <header class="hero" id="top">
+    <img class="hero-bg" src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1920&q=85" alt="" referrerpolicy="no-referrer" fetchpriority="high" decoding="async" />
     <div class="hero-kicker">2026 · 两人 · 理想 L7</div>
     <h1>青甘银川<br />自驾路书</h1>
     <p class="hero-verse">「无垠的沙漠热烈追求一叶绿草的爱，她摇摇头笑着飞开了。」</p>
