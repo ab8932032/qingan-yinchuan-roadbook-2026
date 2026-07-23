@@ -272,6 +272,8 @@
     .day-sub { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
     .chev { color: var(--sand); transition: transform .2s; padding-right: 12px; }
     details.day[open] .chev { transform: rotate(90deg); }
+    /* 兜底：部分内置浏览器对 details 收起支持不完整 */
+    details.day:not([open]) > *:not(summary) { display: none !important; }
     .day-body { padding: 0 14px 16px; border-top: 1px dashed rgba(196,165,116,0.4); }
     .day-cover {
       margin: 14px -14px 12px;
@@ -916,7 +918,7 @@
           <button type="button" class="filter-btn" id="collapseDays">收起全部行程</button>
         </div>
 
-        <details class="day" id="d924">
+        <details class="day" id="d924" name="roadbook-days">
           <summary>
             <div class="day-date"><b>9.24</b>周四</div>
             <div><div class="day-title">从成都出发 <span class="day-kind drive">行车日</span></div><div class="day-sub">晚上出发，轮流开车</div></div>
@@ -933,7 +935,7 @@
           </div>
         </details>
 
-        <details class="day" id="d925" open>
+        <details class="day" id="d925" name="roadbook-days" open>
           <summary>
             <div class="day-date"><b>9.25</b>周五</div>
             <div><div class="day-title">宿集 · 生日惊喜 <span class="day-kind play">银川</span></div><div class="day-sub">今晚，留一点小心思</div></div>
@@ -952,7 +954,7 @@
           </div>
         </details>
 
-        <details class="day" id="d926">
+        <details class="day" id="d926" name="roadbook-days">
           <summary>
             <div class="day-date"><b>9.26</b>周六</div>
             <div><div class="day-title">漫葡的白天与夜晚 <span class="day-kind play">银川</span></div><div class="day-sub">影城、夜游和小镇</div></div>
@@ -972,7 +974,7 @@
           </div>
         </details>
 
-        <details class="day" id="d927">
+        <details class="day" id="d927" name="roadbook-days">
           <summary>
             <div class="day-date"><b>9.27</b>周日</div>
             <div><div class="day-title">西夏陵之后，去张掖 <span class="day-kind drive">行车日</span></div><div class="day-sub">上午看陵，下午赶路</div></div>
@@ -995,7 +997,7 @@
           </div>
         </details>
 
-        <details class="day" id="d928">
+        <details class="day" id="d928" name="roadbook-days">
           <summary>
             <div class="day-date"><b>9.28</b>周一</div>
             <div><div class="day-title">在丹霞等日落 <span class="day-kind play">河西</span></div><div class="day-sub">夜里去嘉峪关车宿</div></div>
@@ -1014,7 +1016,7 @@
           </div>
         </details>
 
-        <details class="day" id="d929">
+        <details class="day" id="d929" name="roadbook-days">
           <summary>
             <div class="day-date"><b>9.29</b>周二</div>
             <div><div class="day-title">莫高窟、鸣沙山与夜市 <span class="day-kind play">敦煌</span></div><div class="day-sub">日落以后，回到沙边住下</div></div>
@@ -1034,7 +1036,7 @@
           </div>
         </details>
 
-        <details class="day" id="d930">
+        <details class="day" id="d930" name="roadbook-days">
           <summary>
             <div class="day-date"><b>9.30</b>周三</div>
             <div><div class="day-title">去雅丹看一场日落 <span class="day-kind play">敦煌</span></div><div class="day-sub">午后出城，傍晚返回</div></div>
@@ -1052,7 +1054,7 @@
           </div>
         </details>
 
-        <details class="day" id="d1001">
+        <details class="day" id="d1001" name="roadbook-days">
           <summary>
             <div class="day-date"><b>10.1</b>周四</div>
             <div><div class="day-title">从敦煌到大柴旦 <span class="day-kind drive">行车日</span></div><div class="day-sub">上午在城里走走，下午上路</div></div>
@@ -1077,7 +1079,7 @@
           </div>
         </details>
 
-        <details class="day" id="d1002">
+        <details class="day" id="d1002" name="roadbook-days">
           <summary>
             <div class="day-date"><b>10.2</b>周五</div>
             <div><div class="day-title">从翡翠湖到青海湖 <span class="day-kind play">青海</span></div><div class="day-sub">日落以后，在湖边住一晚</div></div>
@@ -1103,7 +1105,7 @@
           </div>
         </details>
 
-        <details class="day" id="d1003">
+        <details class="day" id="d1003" name="roadbook-days">
           <summary>
             <div class="day-date"><b>10.3</b>周六</div>
             <div><div class="day-title">离开湖边，去兰州 <span class="day-kind drive">行车日</span></div><div class="day-sub">上午留在湖边，下午出发</div></div>
@@ -1120,7 +1122,7 @@
           </div>
         </details>
 
-        <details class="day" id="d1004">
+        <details class="day" id="d1004" name="roadbook-days">
           <summary>
             <div class="day-date"><b>10.4</b>周日</div>
             <div><div class="day-title">从兰州回成都 <span class="day-kind drive">返程</span></div><div class="day-sub">早些出发，当天到家</div></div>
@@ -1948,22 +1950,35 @@
       }
 
       const days = [...document.querySelectorAll("details.day")];
+      let dayLock = false;
+      const openOnlyDay = (target) => {
+        if (!target) return;
+        dayLock = true;
+        days.forEach((d) => { d.open = d === target; });
+        dayLock = false;
+      };
+      // 默认只展开一天（优先 9.25；若都没有 open 则打开第一天）
+      const presetOpen = days.filter((d) => d.open);
+      if (presetOpen.length > 1) openOnlyDay(presetOpen[0]);
+      else if (presetOpen.length === 0) openOnlyDay(document.getElementById("d925") || days[0]);
       days.forEach((d) => {
         d.addEventListener("toggle", () => {
-          if (!d.open) return;
-          days.forEach((o) => { if (o !== d) o.open = false; });
+          if (dayLock || !d.open) return;
+          openOnlyDay(d);
         });
       });
       const collapseDays = document.getElementById("collapseDays");
       const expandPlay = document.getElementById("expandPlay");
-      collapseDays && collapseDays.addEventListener("click", () => days.forEach((d) => { d.open = false; }));
+      collapseDays && collapseDays.addEventListener("click", () => {
+        dayLock = true;
+        days.forEach((d) => { d.open = false; });
+        dayLock = false;
+      });
       expandPlay && expandPlay.addEventListener("click", () => {
         const playDays = days.filter((d) => d.querySelector(".day-kind.play"));
-        days.forEach((d) => { d.open = false; });
-        if (playDays[0]) {
-          playDays[0].open = true;
-          playDays[0].scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+        const first = playDays[0] || days[0];
+        openOnlyDay(first);
+        first && first.scrollIntoView({ behavior: "smooth", block: "start" });
       });
 
       const mapActions = document.getElementById("mapActions");
@@ -2138,7 +2153,7 @@
         if (!id || !id.startsWith("d")) return;
         const el = document.getElementById(id);
         if (!el || !el.classList.contains("day")) return;
-        days.forEach((d) => { d.open = d === el; });
+        openOnlyDay(el);
         setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 40);
       };
       openHashDay();
