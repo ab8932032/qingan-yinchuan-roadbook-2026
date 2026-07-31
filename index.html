@@ -914,12 +914,20 @@
       line-height: 1.72;
       color: rgba(255, 250, 243, 0.9);
     }
-    .spot-slide-card .spot-detail ul {
+    #spots .spot-slide-card .spot-detail ul {
       margin: 0;
-      padding: 0;
-      list-style: none;
+      padding: 0 !important;
+      list-style: none !important;
     }
-    .spot-slide-card .spot-detail li { margin: 9px 0; }
+    #spots .spot-slide-card .spot-detail li {
+      display: block;
+      margin: 9px 0;
+      list-style: none !important;
+    }
+    #spots .spot-slide-card .spot-detail li::marker {
+      content: "";
+      font-size: 0;
+    }
     .spot-slide-card .spot-prose p {
       margin: 0 0 10px;
       text-indent: 2em;
@@ -3648,12 +3656,19 @@
       document.querySelectorAll("#spots .spot-detail ul").forEach((list) => {
         const prose = document.createElement("div");
         prose.className = "spot-prose";
-        [...list.children].forEach((item) => {
+        const items = [...list.children];
+        const groupSize = Math.ceil(items.length / 2);
+        let paragraph = null;
+        items.forEach((item, index) => {
           const heading = item.querySelector(":scope > strong:first-child");
           if (heading && /：$/.test(heading.textContent.trim())) heading.remove();
-          const paragraph = document.createElement("p");
+          if (index % groupSize === 0) {
+            paragraph = document.createElement("p");
+            prose.appendChild(paragraph);
+          } else {
+            paragraph.appendChild(document.createTextNode(" "));
+          }
           while (item.firstChild) paragraph.appendChild(item.firstChild);
-          prose.appendChild(paragraph);
         });
         list.replaceWith(prose);
       });
