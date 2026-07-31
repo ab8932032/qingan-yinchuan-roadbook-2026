@@ -511,7 +511,7 @@
       background-image: linear-gradient(160deg, var(--paper-2), var(--sand-light));
       background-size: cover;
       background-position: center;
-      cursor: zoom-in;
+      cursor: default;
     }
     .day-cover > img,
     .day-cover > video {
@@ -907,18 +907,25 @@
     }
     .spot-slide-card .spot-detail {
       margin: 10px 2.5em 0 0;
-      max-width: 22em;
+      max-width: 28em;
       padding: 0;
       border: 0;
-      font-size: 12.5px;
-      line-height: 1.45;
-      color: rgba(255, 250, 243, 0.78);
+      font-size: 13.5px;
+      line-height: 1.72;
+      color: rgba(255, 250, 243, 0.9);
     }
     .spot-slide-card .spot-detail ul {
       margin: 0;
-      padding-left: 1.05em;
+      padding: 0;
+      list-style: none;
     }
-    .spot-slide-card .spot-detail li { margin: 3px 0; }
+    .spot-slide-card .spot-detail li { margin: 9px 0; }
+    .spot-slide-card .spot-prose p {
+      margin: 0 0 10px;
+      text-indent: 2em;
+      line-height: 1.72;
+    }
+    .spot-slide-card .spot-prose p:last-child { margin-bottom: 0; }
     .spot-slide-actions {
       display: flex;
       flex-direction: column;
@@ -929,7 +936,8 @@
       padding-right: 2px;
     }
     #spots.spot-stage .spot-slide-actions .btn-map,
-    #spots.spot-stage .spot-nav-link {
+    #spots.spot-stage .spot-nav-link,
+    #spots.spot-stage .spot-image-link {
       width: auto;
       display: inline-flex;
       align-items: center;
@@ -950,7 +958,8 @@
       transform: none !important;
     }
     #spots.spot-stage .spot-slide-actions .btn-map:active,
-    #spots.spot-stage .spot-nav-link:active {
+    #spots.spot-stage .spot-nav-link:active,
+    #spots.spot-stage .spot-image-link:active {
       opacity: 0.75;
     }
     #spots.spot-stage .spot-slide-actions a[hidden] { display: none !important; }
@@ -3632,6 +3641,23 @@
       const progress = document.getElementById("progress");
       const fab = document.getElementById("fabTop");
 
+      /*
+       * “风里的站”以杂志短章呈现：保留攻略信息，但拿掉说明书式标签与项目符号，
+       * 让每一条建议成为自然衔接的正文段落。
+       */
+      document.querySelectorAll("#spots .spot-detail ul").forEach((list) => {
+        const prose = document.createElement("div");
+        prose.className = "spot-prose";
+        [...list.children].forEach((item) => {
+          const heading = item.querySelector(":scope > strong:first-child");
+          if (heading && /：$/.test(heading.textContent.trim())) heading.remove();
+          const paragraph = document.createElement("p");
+          while (item.firstChild) paragraph.appendChild(item.firstChild);
+          prose.appendChild(paragraph);
+        });
+        list.replaceWith(prose);
+      });
+
       /* 统一旅途媒体：照片呼吸；Live Photo／视频保持原始画面播放。 */
       document.querySelectorAll(".day-cover").forEach((cover) => {
         const video = cover.querySelector(":scope > video");
@@ -4230,6 +4256,20 @@
               a.hidden = true;
             }
           });
+          const slide = actions.closest(".spot-slide");
+          if (slide && slide.dataset.media !== "video" && slide.dataset.media !== "live" && slide.dataset.full) {
+            const imageButton = document.createElement("button");
+            imageButton.type = "button";
+            imageButton.className = "spot-image-link no-print";
+            imageButton.textContent = "·看图";
+            imageButton.setAttribute("aria-label", "查看此处大图");
+            imageButton.addEventListener("click", () => {
+              if (typeof window.openLightbox === "function") {
+                window.openLightbox(slide.dataset.full, slide.dataset.caption || "");
+              }
+            });
+            actions.appendChild(imageButton);
+          }
         });
 
         rebuildSpotDots();
@@ -4275,15 +4315,6 @@
           }
         });
 
-        /* 点卡片空白看大图 */
-        spotCarousel.addEventListener("click", (e) => {
-          if (e.target.closest("a, button, summary, details, input, label")) return;
-          const slide = e.target.closest(".spot-slide");
-          if (!slide || slide.dataset.media === "video" || slide.dataset.media === "live" || !slide.dataset.full) return;
-          if (typeof window.openLightbox === "function") {
-            window.openLightbox(slide.dataset.full, slide.dataset.caption || "");
-          }
-        });
       }
 
       if (spotFilter) {
