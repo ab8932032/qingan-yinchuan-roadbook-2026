@@ -42,3 +42,37 @@
 python -m http.server 8080
 # 浏览器打开 http://localhost:8080
 ```
+
+## 后续加入旅途影像
+
+- 照片可直接替换日程卡片或景点卡片中的 `<img>` 地址，现有大图灯箱会自动沿用。
+- 视频可放进同一个 `.day-cover` 或 `.spot-img` 容器，使用 `<video controls playsinline preload="metadata" poster="封面图地址">`；页面已预留与照片一致的比例、底色和移动端播放样式。
+- 建议每一天只留一张主图，其余素材放在对应景点卡片中；照片与短视频穿插会比连续堆叠更像一本旅途影集。
+- 每个日期展开后都有“途中补记”，可以填写当天一句、实际节奏，并直接加入照片或视频。文字使用本地存储，媒体使用浏览器 IndexedDB；两者都只存在当前设备。清理浏览器数据或更换设备前，应先把重要内容另行备份。
+
+### 统一媒体格式
+
+所有正式素材使用同一套 `data-media` 规则：
+
+```html
+<!-- 静态照片：自动使用缓慢呼吸效果 -->
+<div class="day-cover" data-media="photo" data-caption="9.28 · 平山湖">
+  <img src="assets/2026-09-28-pingshanhu.jpg" alt="平山湖大峡谷" />
+</div>
+
+<!-- Live Photo：使用关联的 MOV/MP4，poster 是静态封面；自动静音循环 -->
+<div class="day-cover" data-media="live" data-caption="风穿过峡谷">
+  <video src="assets/2026-09-28-live.mov" poster="assets/2026-09-28-live.jpg" muted loop autoplay playsinline controls></video>
+</div>
+
+<!-- 普通视频：不使用呼吸效果，显示原生播放控件 -->
+<div class="day-cover" data-media="video" data-caption="去往丹霞的路上">
+  <video src="assets/2026-09-28-road.mp4" poster="assets/2026-09-28-road-cover.jpg" playsinline controls preload="metadata"></video>
+</div>
+```
+
+“风里的站”背景也使用相同规则：照片保留 `data-full="图片地址"`；视频或 Live Photo 在对应 `.spot-slide` 上填写 `data-media="video"` 或 `data-media="live"`、`data-video="视频地址"`，并可用 `data-poster="封面地址"`。切换到视频时，照片呼吸动画会自动停止。
+
+## 高德配置
+
+高德 Web 端 Key 与安全密钥集中在 `scripts/amap-config.js`，主 HTML 不直接出现具体值。该文件会随 Git 提交。浏览器端地图无法从技术上完全隐藏 Key，正式部署时必须在高德控制台配置域名白名单和额度告警；若要隐藏安全密钥，需要改为服务端代理。
