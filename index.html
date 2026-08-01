@@ -824,15 +824,10 @@
       padding: 2px 0 8px;
       margin: 0;
       -webkit-overflow-scrolling: touch;
-      touch-action: pan-y pinch-zoom;
+      touch-action: pan-x pan-y pinch-zoom;
       overscroll-behavior-inline: contain;
       scrollbar-width: none;
       outline: none;
-    }
-    .spot-carousel.is-dragging {
-      scroll-snap-type: none;
-      user-select: none;
-      -webkit-user-select: none;
     }
     .spot-carousel::-webkit-scrollbar { display: none; }
     .spot-slide {
@@ -1504,18 +1499,29 @@
     .map-marker-label { position: relative; transform: translate(-50%,-100%); padding: 4px 7px; color: #fff; background: rgba(26,20,16,.86); border: 1px solid rgba(255,255,255,.2); border-radius: 8px; font-size: 10px; line-height: 1.25; white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,.2); }
     .map-marker-label.hotel { background: rgba(42,111,127,.92); }
     .map-marker-label.optional { background: rgba(166,93,46,.9); }
-    .weather-live-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-    .weather-live-head p { margin: 0; color: var(--ink-soft); font-size: 11px; }
+    .weather-live-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .weather-live-head h3 { margin-bottom: 4px; }
+    .weather-live-head p { margin: 0; max-width: 680px; color: var(--ink-soft); font-size: 11px; line-height: 1.65; }
     .weather-refresh { padding: 6px 10px; color: var(--lake); background: transparent; border: 1px solid rgba(42,111,127,.3); border-radius: 999px; font: inherit; font-size: 10px; cursor: pointer; }
-    .weather-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
-    .weather-card { min-height: 116px; padding: 12px; background: linear-gradient(150deg, rgba(255,252,247,.8), rgba(232,226,212,.7)); border: 1px solid rgba(61,52,44,.1); border-radius: 13px; }
+    .weather-refresh:disabled { opacity: .45; cursor: wait; }
+    .weather-window-note { margin: 0 0 12px; padding: 10px 12px; color: var(--ink-soft); background: rgba(42,111,127,.06); border-left: 2px solid rgba(42,111,127,.38); font-size: 11px; line-height: 1.7; }
+    .weather-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 8px; }
+    .weather-card { min-height: 154px; padding: 13px; background: linear-gradient(150deg, rgba(255,252,247,.84), rgba(232,226,212,.72)); border: 1px solid rgba(61,52,44,.1); border-radius: 13px; }
     .weather-city { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
     .weather-city strong { font-family: "ZCOOL XiaoWei", serif; font-size: 17px; font-weight: 400; }
+    .weather-date { display: inline-block; margin-bottom: 5px; color: var(--lake); font-size: 9px; letter-spacing: .08em; }
+    .weather-badge { flex: 0 0 auto; padding: 3px 7px; color: var(--lake); background: rgba(42,111,127,.08); border-radius: 999px; font-size: 8px; letter-spacing: .06em; }
+    .weather-badge.is-trend { color: var(--dusk); background: rgba(166,93,46,.09); }
+    .weather-badge.is-waiting { color: var(--ink-soft); background: rgba(61,52,44,.07); }
     .weather-temp { color: var(--dusk); font-size: 20px; font-weight: 700; }
-    .weather-condition { margin-top: 6px; font-size: 12px; }
-    .weather-detail, .weather-time { display: block; margin-top: 4px; color: var(--ink-soft); font-size: 9px; }
+    .weather-condition { margin-top: 8px; font-size: 12px; line-height: 1.6; }
+    .weather-detail, .weather-time, .weather-point { display: block; margin-top: 5px; color: var(--ink-soft); font-size: 9px; line-height: 1.55; }
+    .weather-point { padding-top: 6px; border-top: 1px solid rgba(61,52,44,.08); }
+    .weather-risk { display: inline-block; margin-top: 7px; padding: 3px 7px; color: #87502f; background: rgba(166,93,46,.09); border-radius: 999px; font-size: 8px; }
+    .weather-source { margin: 12px 2px 0; color: var(--ink-soft); font-size: 9px; line-height: 1.65; }
+    .weather-source a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
     .weather-card.is-error { opacity: .6; }
-    @media (min-width: 720px) { .weather-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+    @media (min-width: 720px) { .weather-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
     .route-fullmap::before {
       content: "";
       position: absolute;
@@ -2520,7 +2526,7 @@
               <li>第二天是去水上雅丹的长途，今晚回住处后早点休息；早晨不摸黑赶路，看星空安排在青海湖东岸。</li>
             </ul>
             <div class="nav-grid">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=92.85,40.52&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.10,40.50&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.14,40.35&name=玉门关&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航玉门关</a>
             </div>
           </div>
@@ -2547,8 +2553,8 @@
               <summary>本段导航</summary>
               <div class="nav-grid">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.42,38.84,黑独山景区&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 黑独山</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.42,38.84,黑独山景区&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">黑独山 → 水上雅丹（选铺装路）</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.35,37.72&name=乌素特水上雅丹&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航当晚住宿区域</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.42,38.84,黑独山景区&to=93.773859,37.617639,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">黑独山 → 水上雅丹（选铺装路）</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.773859,37.617639&name=乌素特水上雅丹&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航当晚住宿区域</a>
             </div>
             </details>
           </div>
@@ -2573,8 +2579,8 @@
             <details class="nav-fold no-print">
               <summary>本段导航</summary>
               <div class="nav-grid">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.35,37.72,乌素特水上雅丹&to=95.37,37.85,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 大柴旦</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.37,37.85&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.773859,37.617639,乌素特水上雅丹&to=95.3675,37.8528,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 大柴旦</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.26415,37.86702&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
             </div>
             </details>
           </div>
@@ -2594,7 +2600,7 @@
               <li><strong>11:00–12:00：</strong>德令哈加油、午饭和超市补给。</li>
               <li><strong>17:00 前后：</strong>抵达青海湖东岸，入住木慧楠；傍晚看湖，夜里视云量等星空。</li>
             </ul>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.37,37.85,大柴旦&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">大柴旦 → 青海湖</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.3675,37.8528,大柴旦&to=100.51,36.579,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">大柴旦 → 青海湖</a>
           </div>
         </details>
 
@@ -2611,7 +2617,7 @@
               <li>08:30–10:30 在湖边散步，约 11:00 出发。</li>
               <li>17:00–19:00 抵达兰州亚朵，提前确认停车。</li>
             </ul>
-            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=100.74,36.72,青海湖东岸&to=103.83,36.06,兰州&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">青海湖 → 兰州</a>
+            <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=100.51,36.579,青海湖东岸&to=103.83,36.06,兰州&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">青海湖 → 兰州</a>
           </div>
         </details>
 
@@ -2929,7 +2935,7 @@
                     <li>观光车停靠点不只看“孔雀”“舰队”等命名造型，也要转身看看土丘之间的风道与长阴影；最后一站把时间留给日落前后的颜色变化。</li>
                     <li>回敦煌的路长、照明少，出园前上洗手间并确认油电余量。车里备水和简餐，司机疲劳便停车休息，遇风沙按道路提示降速。</li>
                   </ul></div><div class="spot-slide-actions">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=92.85,40.52&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.10,40.50&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
               </div>
 
             </div>
@@ -2953,7 +2959,7 @@
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.42,38.84&name=黑独山景区&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航黑独山</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.42,38.84,黑独山景区&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 黑独山</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.773859,37.617639,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
               </div>
 
             </div>
@@ -2973,8 +2979,8 @@
                     <li>无风时靠近开放步道看完整倒影，风起以后则看水纹怎样改变土丘边缘。广角适合水面与天空，中长焦能隔开一座座孤丘；盐碱地表可能松软，不离开景区步道。</li>
                     <li>进园前问清酒店晚餐时间，车里留一份简餐。观光车常运营到 21:00，日落后回园区住宿，不再连夜去大柴旦；具体时间以当天公告为准。</li>
                   </ul></div><div class="spot-slide-actions">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.35,37.72&name=乌素特水上雅丹&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航水上雅丹</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.773859,37.617639&name=乌素特水上雅丹&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航水上雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.773859,37.617639,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
               <a class="btn btn-sm" target="_blank" rel="noopener" href="https://www.wusuteyadan.com/list/hotel.html">景区玩法与住宿</a>
               </div>
 
@@ -2993,7 +2999,7 @@
                     <li>这只是上午的一次短停，下午的大柴旦翡翠湖才会留出完整时间。离开水上雅丹前上洗手间、补水，不为了接近湖色踩进盐壳或绕入不明道路。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.9,37.5&name=东台吉乃尔湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航东台吉乃尔湖</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.35,37.72,乌素特水上雅丹&to=93.90,37.50,东台吉乃尔湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 东台</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.773859,37.617639,乌素特水上雅丹&to=93.90,37.50,东台吉乃尔湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 东台</a>
               </div>
 
             </div>
@@ -3030,8 +3036,8 @@
                     <li>票+车约 100/人量级，以现场为准；日照强、干燥，防晒和水要带够。</li>
                     <li>不必追问“第几号湖最好看”，先看地图与当时光线，步行距离合适便停下来。偏振镜转得过度会让湖色失真，盐壳边缘也可能湿滑；只走开放步道，回车后把鞋与镜头上的盐及时擦净。</li>
                   </ul></div><div class="spot-slide-actions">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.37,37.85&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.37,37.85,大柴旦翡翠湖&to=97.37,37.37,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.26415,37.86702&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.26415,37.86702,大柴旦翡翠湖&to=97.37,37.37,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
               </div>
 
             </div>
@@ -3049,7 +3055,7 @@
                     <li>超市里补水、次日早餐、热饮和夜间零食，顺手检查轮胎与玻璃水。补齐后继续去东岸，傍晚的时间留给青海湖。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=97.37,37.37&name=德令哈&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航德令哈</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖东岸</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.51,36.579,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖东岸</a>
               </div>
 
             </div>
@@ -3067,7 +3073,7 @@
                     <li>若决定入园，选一处倒影区停留，先确认小火车、步行距离和最晚离场时间。阴天没有倒影也不久等；盐壳反光强，墨镜要戴上。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=99.08,36.70&name=茶卡盐湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航茶卡</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=99.08,36.70,茶卡盐湖&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">茶卡 → 青海湖东岸</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=99.08,36.70,茶卡盐湖&to=100.51,36.579,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">茶卡 → 青海湖东岸</a>
               </div>
 
             </div>
@@ -3090,8 +3096,8 @@
                     <li>睡前查云量、月相和风力；晴朗时关掉车灯，让眼睛适应黑暗后再架三脚架，位置远离公路。云厚便早点休息，第二天早晨还会再看一次湖。</li>
                     <li>在高原慢走、少酒、多喝水。持续头痛、胸闷或明显不适时立刻停止拍摄并求助，不为寻找僻静机位离开有信号与照明的区域。</li>
                   </ul></div><div class="spot-slide-actions">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.74,36.72&name=青海湖东岸&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航东岸</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 东岸</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.495767,36.578633&name=青海湖二郎剑东岸&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航东岸</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.51,36.579,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 东岸</a>
               </div>
 
             </div>
@@ -3121,8 +3127,10 @@
 
         <div class="extra-panel" data-panel="weather">
           <div class="layer">
-            <div class="weather-live-head"><div><h3>沿途此刻</h3><p>当前实况，不是 9.24–10.5 的远期预报；高德返回后每30分钟自动更新。</p></div><button type="button" class="weather-refresh no-print" id="weatherRefresh">刷新天气</button></div>
+            <div class="weather-live-head"><div><h3>游玩地点天气</h3><p id="weatherSummary">按实际游玩的景点坐标查询，不再用整座城市或整个州代替。进入未来 16 天后自动显示对应日期与大致游玩时刻的预报。</p></div><button type="button" class="weather-refresh no-print" id="weatherRefresh">刷新预报</button></div>
+            <p class="weather-window-note" id="weatherWindowNote">正在核对每个地点的预报范围……</p>
             <div class="weather-grid" id="weatherGrid" aria-live="polite"></div>
+            <p class="weather-source">坐标天气由 <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> 提供（CC BY 4.0）；页面使用地点坐标、海拔订正与北京时间。8–16 天的数据只作为趋势，最终判断以出发前 3–5 天的逐小时预报、景区公告和现场风力为准。</p>
           </div>
         </div>
 
@@ -3280,7 +3288,7 @@
           </div>
           <div class="route-fullmap">
             <a class="route-fullmap-link" target="_blank" rel="noopener"
-              href="https://uri.amap.com/marker?markers=104.066301,30.572961,成都|106.278179,38.466370,银川|100.449818,38.925823,张掖丹霞|98.289152,39.773250,嘉峪关|94.661881,40.142128,敦煌|93.420000,38.840000,黑独山|93.350000,37.720000,水上雅丹|95.367500,37.852800,大柴旦|100.735000,36.720000,青海湖|103.834170,36.061380,兰州|104.066301,30.572961,成都&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+              href="https://uri.amap.com/marker?markers=104.066301,30.572961,成都|106.278179,38.466370,银川|100.062804,38.972010,张掖丹霞|98.289152,39.773250,嘉峪关|94.661881,40.142128,敦煌|93.420000,38.840000,黑独山|93.773859,37.617639,水上雅丹|95.367500,37.852800,大柴旦|100.495767,36.578633,青海湖二郎剑|103.834170,36.061380,兰州|104.066301,30.572961,成都&src=qinggan-roadbook&coordinate=gaode&callnative=1"
               aria-label="在高德地图查看完整路线节点">
               <svg class="route-fullmap-svg" viewBox="0 0 360 220" role="img" aria-label="行程路线示意：成都经银川、河西、敦煌、柴达木、青海湖、兰州再回成都">
                 <defs>
@@ -3324,15 +3332,15 @@
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
               href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.420000,38.840000,黑独山景区&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 黑独山</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=93.420000,38.840000,黑独山景区&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">黑独山 → 水上雅丹（选铺装路）</a>
+              href="https://uri.amap.com/navigation?from=93.420000,38.840000,黑独山景区&to=93.773859,37.617639,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">黑独山 → 水上雅丹（选铺装路）</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=93.350000,37.720000,乌素特水上雅丹&to=95.367500,37.852800,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 大柴旦</a>
+              href="https://uri.amap.com/navigation?from=93.773859,37.617639,乌素特水上雅丹&to=95.367500,37.852800,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 大柴旦</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=95.367500,37.852800,大柴旦翡翠湖&to=97.370000,37.370000,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
+              href="https://uri.amap.com/navigation?from=95.264150,37.867020,大柴旦翡翠湖&to=97.370000,37.370000,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=97.370000,37.370000,德令哈&to=100.735000,36.720000,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖</a>
+              href="https://uri.amap.com/navigation?from=97.370000,37.370000,德令哈&to=100.510000,36.579000,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=100.735000,36.720000,青海湖东岸&to=103.834170,36.061380,兰州&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">青海湖 → 兰州</a>
+              href="https://uri.amap.com/navigation?from=100.510000,36.579000,青海湖东岸&to=103.834170,36.061380,兰州&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">青海湖 → 兰州</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
               href="https://uri.amap.com/navigation?from=103.834170,36.061380,兰州&to=104.066301,30.572961,成都&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">兰州 → 成都</a>
           </div>
@@ -4203,9 +4211,16 @@
         }, 300);
       };
 
+      const spotSlideLeft = (slide) => {
+        if (!slide || !spotCarousel) return 0;
+        const carouselRect = spotCarousel.getBoundingClientRect();
+        const slideRect = slide.getBoundingClientRect();
+        return spotCarousel.scrollLeft + slideRect.left - carouselRect.left;
+      };
+
       const goSpot = (slide) => {
         if (!slide || !spotCarousel) return;
-        spotCarousel.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
+        spotCarousel.scrollTo({ left: spotSlideLeft(slide), behavior: "smooth" });
         syncSpotUI(slide);
       };
 
@@ -4248,7 +4263,7 @@
         let best = list[0];
         let bestDist = Infinity;
         list.forEach((s) => {
-          const center = s.offsetLeft + s.offsetWidth / 2;
+          const center = spotSlideLeft(s) + s.offsetWidth / 2;
           const d = Math.abs(center - mid);
           if (d < bestDist) {
             bestDist = d;
@@ -4282,7 +4297,7 @@
         rebuildSpotDots();
         const first = visibleSpotSlides()[0];
         if (first) {
-          spotCarousel.scrollTo({ left: first.offsetLeft, behavior: "smooth" });
+          spotCarousel.scrollTo({ left: spotSlideLeft(first), behavior: "smooth" });
           syncSpotUI(first);
         }
       };
@@ -4353,71 +4368,8 @@
           { passive: true }
         );
 
-        /* 手机与 iPad：纵向仍交给页面滚动，明确横滑后才接管并吸附一页。 */
-        let spotDrag = null;
-        const endSpotDrag = (event, cancelled = false) => {
-          if (!spotDrag || (event && event.pointerId !== spotDrag.pointerId)) return;
-          const drag = spotDrag;
-          spotDrag = null;
-          spotCarousel.classList.remove("is-dragging");
-          if (spotCarousel.hasPointerCapture && spotCarousel.hasPointerCapture(drag.pointerId)) {
-            try { spotCarousel.releasePointerCapture(drag.pointerId); } catch (e) { /* ignore */ }
-          }
-          if (drag.axis !== "x") return;
-          const list = visibleSpotSlides();
-          if (!list.length) return;
-          const dx = (event ? event.clientX : drag.lastX) - drag.startX;
-          const elapsed = Math.max(1, performance.now() - drag.startedAt);
-          const velocity = Math.abs(dx) / elapsed;
-          const threshold = Math.min(72, Math.max(42, spotCarousel.clientWidth * 0.11));
-          let nextIndex = drag.startIndex;
-          if (!cancelled && (Math.abs(dx) >= threshold || (Math.abs(dx) >= 18 && velocity > 0.45))) {
-            nextIndex += dx < 0 ? 1 : -1;
-          }
-          nextIndex = Math.max(0, Math.min(list.length - 1, nextIndex));
-          goSpot(list[nextIndex] || list[drag.startIndex] || list[0]);
-        };
-
-        spotCarousel.addEventListener("pointerdown", (event) => {
-          if (event.pointerType === "mouse" || event.button !== 0) return;
-          if (event.target.closest("a, button, input, select, textarea, summary")) return;
-          const list = visibleSpotSlides();
-          const current = nearestSpotSlide();
-          const startIndex = Math.max(0, list.indexOf(current));
-          spotDrag = {
-            pointerId: event.pointerId,
-            startX: event.clientX,
-            startY: event.clientY,
-            lastX: event.clientX,
-            startScrollLeft: spotCarousel.scrollLeft,
-            startIndex,
-            axis: null,
-            startedAt: performance.now()
-          };
-        });
-
-        spotCarousel.addEventListener("pointermove", (event) => {
-          if (!spotDrag || event.pointerId !== spotDrag.pointerId) return;
-          const dx = event.clientX - spotDrag.startX;
-          const dy = event.clientY - spotDrag.startY;
-          spotDrag.lastX = event.clientX;
-          if (!spotDrag.axis) {
-            if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
-            spotDrag.axis = Math.abs(dx) > Math.abs(dy) * 1.15 ? "x" : "y";
-            if (spotDrag.axis === "y") {
-              spotDrag = null;
-              return;
-            }
-            spotCarousel.classList.add("is-dragging");
-            try { spotCarousel.setPointerCapture(event.pointerId); } catch (e) { /* ignore */ }
-          }
-          if (spotDrag.axis !== "x") return;
-          event.preventDefault();
-          spotCarousel.scrollLeft = spotDrag.startScrollLeft - dx;
-        }, { passive: false });
-
-        spotCarousel.addEventListener("pointerup", (event) => endSpotDrag(event));
-        spotCarousel.addEventListener("pointercancel", (event) => endSpotDrag(event, true));
+        /* 手机与 iPad 使用浏览器原生横向滚动和 CSS scroll-snap。
+           避免 pointercancel 在 iOS 上把已经滑动的页面强制送回起点。 */
 
         spotCarousel.addEventListener("keydown", (e) => {
           const list = visibleSpotSlides();
@@ -4480,10 +4432,10 @@
         ] },
         { id: "928", label: "9.28", points: [
           { name: "和颐至尚酒店", lng: 100.449818, lat: 38.925823, type: "hotel" },
-          { name: "平山湖大峡谷", lng: 100.70, lat: 39.10 },
+          { name: "平山湖大峡谷", lng: 100.830488, lat: 39.165658 },
           { name: "张掖市区午饭", lng: 100.45, lat: 38.93 },
           { name: "张掖大佛寺", lng: 100.454, lat: 38.929, type: "optional" },
-          { name: "七彩丹霞", lng: 100.07, lat: 38.97 },
+          { name: "七彩丹霞", lng: 100.062804, lat: 38.972010 },
           { name: "嘉峪关南湖车宿", lng: 98.289152, lat: 39.773250, type: "hotel" }
         ] },
         { id: "929", label: "9.29", points: [
@@ -4495,28 +4447,28 @@
         { id: "930", label: "9.30", points: [
           { name: "梵尘别院", lng: 94.67, lat: 40.10, type: "hotel" },
           { name: "玉门关", lng: 93.86, lat: 40.35, type: "optional" },
-          { name: "敦煌雅丹", lng: 92.85, lat: 40.52 },
+          { name: "敦煌雅丹", lng: 93.10, lat: 40.50 },
           { name: "梵尘别院", lng: 94.67, lat: 40.10, type: "hotel" }
         ] },
         { id: "1001", label: "10.1", points: [
           { name: "梵尘别院", lng: 94.67, lat: 40.10, type: "hotel" },
           { name: "黑独山景区", lng: 93.42, lat: 38.84 },
           { name: "冷湖镇补给", lng: 93.34, lat: 38.75 },
-          { name: "乌素特水上雅丹住宿", lng: 93.35, lat: 37.72, type: "hotel" }
+          { name: "乌素特水上雅丹住宿", lng: 93.773859, lat: 37.617639, type: "hotel" }
         ] },
         { id: "1002", label: "10.2", points: [
-          { name: "乌素特水上雅丹住宿", lng: 93.35, lat: 37.72, type: "hotel" },
+          { name: "乌素特水上雅丹住宿", lng: 93.773859, lat: 37.617639, type: "hotel" },
           { name: "G315东台一带", lng: 93.90, lat: 37.50, type: "optional" },
-          { name: "大柴旦翡翠湖", lng: 95.37, lat: 37.85 },
+          { name: "大柴旦翡翠湖", lng: 95.26415, lat: 37.86702 },
           { name: "大柴旦桔子酒店", lng: 95.3675, lat: 37.8528, type: "hotel" }
         ] },
         { id: "1003", label: "10.3", points: [
           { name: "大柴旦桔子酒店", lng: 95.3675, lat: 37.8528, type: "hotel" },
           { name: "德令哈补给", lng: 97.37, lat: 37.37 },
-          { name: "青海湖东岸住宿", lng: 100.735, lat: 36.72, type: "hotel" }
+          { name: "青海湖东岸住宿", lng: 100.51, lat: 36.579, type: "hotel" }
         ] },
         { id: "1004", label: "10.4", points: [
-          { name: "青海湖东岸住宿", lng: 100.735, lat: 36.72, type: "hotel" },
+          { name: "青海湖东岸住宿", lng: 100.51, lat: 36.579, type: "hotel" },
           { name: "兰州亚朵", lng: 103.83417, lat: 36.06138, type: "hotel" }
         ] },
         { id: "1005", label: "10.5", points: [
@@ -4615,57 +4567,178 @@
         mapStatus.textContent = "高德地图未载入；请检查网络、域名白名单或通过 HTTP/HTTPS 打开页面。";
       }
 
-      /* 沿途当前天气：页面打开、手动点击及每30分钟同步一次。 */
+      /* 行程天气：直接查询实际游玩地点坐标，并在进入16天窗口后对齐行程日期与时刻。 */
       const weatherPlaces = [
-        { label: "银川", query: "银川市" },
-        { label: "张掖", query: "张掖市" },
-        { label: "敦煌", query: "敦煌市" },
-        { label: "大柴旦", query: "海西蒙古族藏族自治州" },
-        { label: "青海湖", query: "共和县" },
-        { label: "兰州", query: "兰州市" }
+        { label: "贺兰山宿集", date: "2026-09-25", dateLabel: "9.25", timeLabel: "17:00 前后", hour: 17, lat: 38.55, lng: 106.05, nearby: "银川市／西夏区" },
+        { label: "贺兰山西麓", date: "2026-09-26", dateLabel: "9.26", timeLabel: "15:00 前后", hour: 15, lat: 38.55, lng: 106.08, nearby: "银川市／西夏区" },
+        { label: "漫葡夜游", date: "2026-09-26", dateLabel: "9.26", timeLabel: "20:00 前后", hour: 20, lat: 38.52, lng: 106.08, nearby: "银川市／西夏区" },
+        { label: "西夏陵", date: "2026-09-27", dateLabel: "9.27", timeLabel: "09:00 前后", hour: 9, lat: 38.45, lng: 105.98, nearby: "银川市" },
+        { label: "平山湖大峡谷", date: "2026-09-28", dateLabel: "9.28", timeLabel: "11:00 前后", hour: 11, lat: 39.165658, lng: 100.830488, nearby: "平山湖大峡谷；搜不到时查甘州区" },
+        { label: "七彩丹霞", date: "2026-09-28", dateLabel: "9.28", timeLabel: "18:00 前后", hour: 18, lat: 38.972010, lng: 100.062804, nearby: "七彩丹霞；搜不到时查临泽县" },
+        { label: "莫高窟", date: "2026-09-29", dateLabel: "9.29", timeLabel: "14:00 前后", hour: 14, lat: 40.04, lng: 94.81, nearby: "敦煌市" },
+        { label: "鸣沙山", date: "2026-09-29", dateLabel: "9.29", timeLabel: "18:00 前后", hour: 18, lat: 40.09, lng: 94.68, nearby: "敦煌市" },
+        { label: "敦煌雅丹", date: "2026-09-30", dateLabel: "9.30", timeLabel: "18:00 前后", hour: 18, lat: 40.50, lng: 93.10, nearby: "敦煌雅丹；搜不到时查敦煌市", pointNote: "园区中心采样" },
+        { label: "黑独山", date: "2026-10-01", dateLabel: "10.1", timeLabel: "11:00 前后", hour: 11, lat: 38.84, lng: 93.42, nearby: "黑独山；搜不到时查冷湖镇", pointNote: "景区核心区采样" },
+        { label: "水上雅丹", date: "2026-10-01", dateLabel: "10.1", timeLabel: "18:00 前后", hour: 18, lat: 37.617639, lng: 93.773859, nearby: "乌素特水上雅丹；搜不到时查大柴旦" },
+        { label: "大柴旦翡翠湖", date: "2026-10-02", dateLabel: "10.2", timeLabel: "17:00 前后", hour: 17, lat: 37.86702, lng: 95.26415, nearby: "大柴旦翡翠湖；搜不到时查大柴旦" },
+        { label: "青海湖东岸", date: "2026-10-03", dateLabel: "10.3", timeLabel: "傍晚至夜间", hour: 20, lat: 36.578633, lng: 100.495767, nearby: "二郎剑／共和县；北岸才查刚察县", star: true },
+        { label: "青海湖晨间", date: "2026-10-04", dateLabel: "10.4", timeLabel: "09:00 前后", hour: 9, lat: 36.578633, lng: 100.495767, nearby: "二郎剑／共和县；北岸才查刚察县" },
+        { label: "兰州入住", date: "2026-10-04", dateLabel: "10.4", timeLabel: "18:00 前后", hour: 18, lat: 36.061, lng: 103.834, nearby: "兰州市" }
       ];
       const weatherGrid = document.getElementById("weatherGrid");
       const weatherRefresh = document.getElementById("weatherRefresh");
+      const weatherSummary = document.getElementById("weatherSummary");
+      const weatherWindowNote = document.getElementById("weatherWindowNote");
       let weatherSyncing = false;
+      const weatherCacheKey = "roadbook-weather-v3";
+      const weatherCacheMs = 30 * 60 * 1000;
+      const weatherDayMs = 24 * 60 * 60 * 1000;
+      const weatherText = (code) => {
+        const map = {
+          0: "晴", 1: "大部晴朗", 2: "多云", 3: "阴",
+          45: "雾", 48: "雾凇", 51: "小毛毛雨", 53: "毛毛雨", 55: "较强毛毛雨",
+          56: "轻微冻雨", 57: "冻雨", 61: "小雨", 63: "中雨", 65: "大雨",
+          66: "轻微冻雨", 67: "较强冻雨", 71: "小雪", 73: "中雪", 75: "大雪", 77: "米雪",
+          80: "小阵雨", 81: "阵雨", 82: "强阵雨", 85: "小阵雪", 86: "强阵雪",
+          95: "雷雨", 96: "雷雨伴冰雹", 99: "强雷雨伴冰雹"
+        };
+        return map[Number(code)] || "天气变化中";
+      };
+      const weatherRound = (value) => value !== null && value !== "" && Number.isFinite(Number(value)) ? Math.round(Number(value)) : null;
+      const weatherDateAtBeijing = (dateString) => new Date(dateString + "T00:00:00+08:00");
+      const weatherTodayAtBeijing = () => {
+        const now = new Date();
+        const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Shanghai", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(now);
+        const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+        return weatherDateAtBeijing(values.year + "-" + values.month + "-" + values.day);
+      };
+      const weatherDaysFromToday = (dateString) => Math.round((weatherDateAtBeijing(dateString) - weatherTodayAtBeijing()) / weatherDayMs);
+      const weatherShortDate = (date) => new Intl.DateTimeFormat("zh-CN", { timeZone: "Asia/Shanghai", month: "numeric", day: "numeric" }).format(date);
+      const weatherOpenDate = (dateString) => new Date(weatherDateAtBeijing(dateString).getTime() - 15 * weatherDayMs);
+      const weatherPointLine = (place, data) => {
+        const elevation = data && Number.isFinite(Number(data.elevation)) ? " · 模型海拔 " + Math.round(Number(data.elevation)) + "m" : "";
+        return (place.pointNote || "景点坐标") + " " + place.lat.toFixed(3) + ", " + place.lng.toFixed(3) + elevation + " · 手动检索可查“" + place.nearby + "”";
+      };
+      const weatherRiskText = (place, apparent, rain, gust, cloud) => {
+        const risks = [];
+        if (gust !== null && Number(gust) >= 50) risks.push("阵风较强");
+        else if (gust !== null && Number(gust) >= 38) risks.push("风力需留意");
+        if (rain !== null && Number(rain) >= 50) risks.push("降水概率较高");
+        if (apparent !== null && Number(apparent) <= 3) risks.push("体感偏冷");
+        if (place.star && cloud !== null && Number(cloud) >= 70) risks.push("星空条件一般");
+        return risks.join(" · ");
+      };
       const renderWeatherLoading = () => {
         if (!weatherGrid) return;
-        weatherGrid.innerHTML = weatherPlaces.map((place) => '<div class="weather-card"><div class="weather-city"><strong>' + place.label + '</strong><span class="weather-temp">…</span></div><div class="weather-condition">正在同步</div><span class="weather-detail">高德实时天气</span></div>').join("");
+        weatherGrid.innerHTML = weatherPlaces.map((place) => '<div class="weather-card"><span class="weather-date">' + place.dateLabel + ' · ' + place.timeLabel + '</span><div class="weather-city"><strong>' + place.label + '</strong><span class="weather-temp">…</span></div><div class="weather-condition">正在读取景点坐标预报</div><span class="weather-detail">未来 16 天内会对齐到实际游玩时刻</span></div>').join("");
       };
-      const syncWeather = () => {
+      const weatherApiUrl = () => {
+        const params = new URLSearchParams({
+          latitude: weatherPlaces.map((place) => place.lat).join(","),
+          longitude: weatherPlaces.map((place) => place.lng).join(","),
+          current: "temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_gusts_10m,cloud_cover",
+          hourly: "temperature_2m,apparent_temperature,precipitation_probability,weather_code,cloud_cover,wind_speed_10m,wind_gusts_10m",
+          daily: "weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_min,precipitation_probability_max,wind_gusts_10m_max,cloud_cover_mean,sunrise,sunset",
+          timezone: "Asia/Shanghai",
+          forecast_days: "16"
+        });
+        return "https://api.open-meteo.com/v1/forecast?" + params.toString();
+      };
+      const readWeatherCache = () => {
+        try {
+          const cache = JSON.parse(localStorage.getItem(weatherCacheKey) || "null");
+          return cache && Array.isArray(cache.data) ? cache : null;
+        } catch (_) { return null; }
+      };
+      const writeWeatherCache = (data) => {
+        try { localStorage.setItem(weatherCacheKey, JSON.stringify({ savedAt: Date.now(), data })); } catch (_) {}
+      };
+      const renderWeatherData = (payload, stale = false) => {
+        if (!weatherGrid) return;
+        const list = Array.isArray(payload) ? payload : [payload];
+        let available = 0;
+        weatherGrid.innerHTML = weatherPlaces.map((place, index) => {
+          const data = list[index] || {};
+          const daysAhead = weatherDaysFromToday(place.date);
+          const daily = data.daily || {};
+          const hourly = data.hourly || {};
+          const dayIndex = Array.isArray(daily.time) ? daily.time.indexOf(place.date) : -1;
+          const hourKey = place.date + "T" + String(place.hour).padStart(2, "0") + ":00";
+          const hourIndex = Array.isArray(hourly.time) ? hourly.time.indexOf(hourKey) : -1;
+          const point = weatherPointLine(place, data);
+          if (daysAhead < 0) {
+            return '<div class="weather-card"><span class="weather-date">' + place.dateLabel + ' · ' + place.timeLabel + '</span><div class="weather-city"><strong>' + place.label + '</strong><span class="weather-badge is-waiting">行程日已过</span></div><div class="weather-condition">这一天已经结束</div><span class="weather-point">' + point + '</span></div>';
+          }
+          if (dayIndex >= 0 && hourIndex >= 0) {
+            available += 1;
+            const isTrend = daysAhead > 7;
+            const temp = weatherRound(hourly.temperature_2m && hourly.temperature_2m[hourIndex]);
+            const apparent = weatherRound(hourly.apparent_temperature && hourly.apparent_temperature[hourIndex]);
+            const rain = weatherRound(hourly.precipitation_probability && hourly.precipitation_probability[hourIndex]);
+            const gust = weatherRound(hourly.wind_gusts_10m && hourly.wind_gusts_10m[hourIndex]);
+            const cloud = weatherRound(hourly.cloud_cover && hourly.cloud_cover[hourIndex]);
+            const max = weatherRound(daily.temperature_2m_max && daily.temperature_2m_max[dayIndex]);
+            const min = weatherRound(daily.temperature_2m_min && daily.temperature_2m_min[dayIndex]);
+            const dayRain = weatherRound(daily.precipitation_probability_max && daily.precipitation_probability_max[dayIndex]);
+            const dayGust = weatherRound(daily.wind_gusts_10m_max && daily.wind_gusts_10m_max[dayIndex]);
+            const risk = weatherRiskText(place, apparent, Math.max(rain || 0, dayRain || 0), Math.max(gust || 0, dayGust || 0), cloud);
+            return '<div class="weather-card"><span class="weather-date">' + place.dateLabel + ' · ' + place.timeLabel + '</span><div class="weather-city"><strong>' + place.label + '</strong><span class="weather-badge' + (isTrend ? ' is-trend' : '') + '">' + (isTrend ? '8–16 天趋势' : '短期预报') + '</span></div><div class="weather-condition">' + weatherText(hourly.weather_code && hourly.weather_code[hourIndex]) + ' · <span class="weather-temp">' + (temp === null ? '—' : temp + '℃') + '</span> · 体感 ' + (apparent === null ? '—' : apparent + '℃') + '</div><span class="weather-detail">全天 ' + (max === null ? '—' : max + '℃') + ' / ' + (min === null ? '—' : min + '℃') + ' · 降水 ' + (rain === null ? '—' : rain + '%') + ' · 阵风 ' + (gust === null ? '—' : gust + 'km/h') + ' · 云量 ' + (cloud === null ? '—' : cloud + '%') + '</span>' + (risk ? '<span class="weather-risk">' + risk + '</span>' : '') + '<span class="weather-point">' + point + '</span><span class="weather-time">' + (stale ? '网络异常，显示上次缓存' : '坐标预报已同步') + '</span></div>';
+          }
+          const current = data.current || {};
+          const openDate = weatherOpenDate(place.date);
+          const currentTemp = weatherRound(current.temperature_2m);
+          const currentApparent = weatherRound(current.apparent_temperature);
+          const currentGust = weatherRound(current.wind_gusts_10m);
+          const waitingRisk = weatherRiskText(place, currentApparent, 0, currentGust, current.cloud_cover);
+          return '<div class="weather-card"><span class="weather-date">' + place.dateLabel + ' · ' + place.timeLabel + '</span><div class="weather-city"><strong>' + place.label + '</strong><span class="weather-badge is-waiting">尚未开放</span></div><div class="weather-condition">预计 ' + weatherShortDate(openDate) + ' 进入 16 天预报窗口</div><span class="weather-detail">此刻 ' + weatherText(current.weather_code) + (currentTemp === null ? '' : ' ' + currentTemp + '℃') + (currentApparent === null ? '' : ' · 体感 ' + currentApparent + '℃') + (currentGust === null ? '' : ' · 阵风 ' + currentGust + 'km/h') + '；这是地点实况，不是行程日预测。</span>' + (waitingRisk ? '<span class="weather-risk">此刻：' + waitingRisk + '</span>' : '') + '<span class="weather-point">' + point + '</span></div>';
+        }).join("");
+        const firstOpenDate = weatherOpenDate(weatherPlaces[0].date);
+        const daysToFirst = Math.max(0, Math.ceil((firstOpenDate - weatherTodayAtBeijing()) / weatherDayMs));
+        const firstDailyTimes = list[0] && list[0].daily && list[0].daily.time;
+        const forecastEnd = Array.isArray(firstDailyTimes) && firstDailyTimes.length ? weatherDateAtBeijing(firstDailyTimes[firstDailyTimes.length - 1]) : null;
+        const forecastRangeText = forecastEnd ? "当前坐标预报可查至 " + weatherShortDate(forecastEnd) + "。" : "";
+        if (weatherWindowNote) {
+          weatherWindowNote.textContent = available
+            ? forecastRangeText + "目前已有 " + available + " 个游玩点进入范围；7 天内参考价值较高，8–16 天只看冷暖、降水和大风趋势。"
+            : forecastRangeText + "本次行程最早将在 " + weatherShortDate(firstOpenDate) + " 进入 16 天预报范围" + (daysToFirst ? "（约 " + daysToFirst + " 天后）" : "") + "。现在显示的是各景点坐标的此刻天气，用来比较海拔与风力，不代表 9 月底的天气。";
+        }
+        if (weatherSummary) weatherSummary.textContent = "已按 " + weatherPlaces.length + " 个实际游玩点分别定位；黑独山、水上雅丹、敦煌雅丹和青海湖均使用景点坐标，不再套用州级天气。";
+      };
+      const syncWeather = async (force = false) => {
         if (!weatherGrid || weatherSyncing) return;
         weatherSyncing = true;
         renderWeatherLoading();
         if (weatherRefresh) weatherRefresh.disabled = true;
-        if (!window.AMap) {
-          weatherGrid.innerHTML = '<div class="weather-card is-error"><strong>天气暂不可用</strong><span class="weather-detail">请检查网络或高德域名白名单。</span></div>';
+        const cache = readWeatherCache();
+        if (!force && cache && Date.now() - cache.savedAt < weatherCacheMs) {
+          renderWeatherData(cache.data);
           weatherSyncing = false;
           if (weatherRefresh) weatherRefresh.disabled = false;
           return;
         }
-        AMap.plugin("AMap.Weather", () => {
-          const weather = new AMap.Weather();
-          let done = 0;
-          weatherPlaces.forEach((place, index) => {
-            weather.getLive(place.query, (error, data) => {
-              const card = weatherGrid.children[index];
-              if (card) {
-                if (error || !data) {
-                  card.classList.add("is-error");
-                  card.innerHTML = '<div class="weather-city"><strong>' + place.label + '</strong><span class="weather-temp">—</span></div><div class="weather-condition">暂未取到</div><span class="weather-detail">稍后可手动刷新</span>';
-                } else {
-                  card.innerHTML = '<div class="weather-city"><strong>' + place.label + '</strong><span class="weather-temp">' + data.temperature + '℃</span></div><div class="weather-condition">' + data.weather + '</div><span class="weather-detail">' + data.windDirection + '风 ' + data.windPower + '级 · 湿度 ' + data.humidity + '%</span><span class="weather-time">高德发布 ' + (data.reportTime || "刚刚") + '</span>';
-                }
-              }
-              done += 1;
-              if (done === weatherPlaces.length) {
-                weatherSyncing = false;
-                if (weatherRefresh) weatherRefresh.disabled = false;
-              }
-            });
-          });
-        });
+        try {
+          const controller = new AbortController();
+          const timer = window.setTimeout(() => controller.abort(), 18000);
+          const response = await fetch(weatherApiUrl(), { signal: controller.signal });
+          window.clearTimeout(timer);
+          if (!response.ok) throw new Error("weather http " + response.status);
+          const data = await response.json();
+          const list = Array.isArray(data) ? data : [data];
+          if (list.length !== weatherPlaces.length) throw new Error("weather location mismatch");
+          writeWeatherCache(list);
+          renderWeatherData(list);
+        } catch (_) {
+          if (cache) renderWeatherData(cache.data, true);
+          else {
+            weatherGrid.innerHTML = '<div class="weather-card is-error"><strong>坐标天气暂不可用</strong><span class="weather-detail">请检查网络后刷新；也可按每张卡片列出的附近县市，在手机天气 App 中手动查询。</span></div>';
+            if (weatherWindowNote) weatherWindowNote.textContent = "天气服务暂未返回数据，行程和导航不受影响。";
+          }
+        } finally {
+          weatherSyncing = false;
+          if (weatherRefresh) weatherRefresh.disabled = false;
+        }
       };
-      weatherRefresh && weatherRefresh.addEventListener("click", syncWeather);
+      weatherRefresh && weatherRefresh.addEventListener("click", () => syncWeather(true));
       syncWeather();
       window.setInterval(() => { if (!document.hidden) syncWeather(); }, 30 * 60 * 1000);
 
