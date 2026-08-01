@@ -632,8 +632,8 @@
     #spots.spot-stage {
       position: relative;
       isolation: isolate;
-      padding: 28px 0 36px;
-      min-height: min(92vh, 820px);
+      padding: 42px 0 58px;
+      min-height: min(92vh, 860px);
       overflow: hidden;
       color: #fffaf3;
       background: #1a1410;
@@ -691,8 +691,9 @@
       z-index: 0;
       pointer-events: none;
       background:
-        linear-gradient(180deg, rgba(26,20,16,0.42) 0%, rgba(26,20,16,0.12) 42%, rgba(26,20,16,0.38) 72%, rgba(26,20,16,0.72) 100%),
-        linear-gradient(90deg, rgba(26,20,16,0.22) 0%, transparent 45%, transparent 55%, rgba(26,20,16,0.22) 100%);
+        linear-gradient(180deg, rgba(18,14,11,0.56) 0%, rgba(18,14,11,0.24) 34%, rgba(18,14,11,0.45) 70%, rgba(18,14,11,0.78) 100%),
+        radial-gradient(ellipse 76% 70% at 50% 56%, rgba(12,10,8,0.40), transparent 82%),
+        linear-gradient(90deg, rgba(18,14,11,0.24) 0%, transparent 42%, transparent 58%, rgba(18,14,11,0.24) 100%);
     }
     /* 换景时淡白盖住，避免缩放/切图跳变 */
     .spot-stage-wash {
@@ -711,6 +712,8 @@
     .spot-stage-ui {
       position: relative;
       z-index: 1;
+      width: min(1080px, 100%);
+      padding-inline: clamp(16px, 3vw, 34px);
     }
     .spot-regions {
       display: flex;
@@ -743,11 +746,11 @@
     }
     .spot-pager {
       display: grid;
-      grid-template-columns: 40px 1fr 40px;
+      grid-template-columns: 44px 1fr 44px;
       align-items: center;
-      gap: 8px;
-      margin: 6px 0 14px;
-      opacity: 0.72;
+      gap: 12px;
+      width: min(260px, 100%);
+      margin: 10px 0 18px;
     }
     .spot-pager-btn {
       width: 40px;
@@ -767,15 +770,7 @@
     }
     .spot-pager-btn:active:not(:disabled) { background: rgba(255,252,247,0.22); }
     .spot-dots {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 7px;
-      overflow-x: auto;
-      padding: 8px 4px;
-      scrollbar-width: none;
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
+      display: none;
     }
     .spot-dots::-webkit-scrollbar { display: none; }
     .spot-dots button {
@@ -795,17 +790,33 @@
       background: #fffaf3;
     }
     .spot-count {
-      grid-column: 1 / -1;
+      grid-column: 2;
+      grid-row: 1;
       justify-self: center;
-      margin-top: -4px;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      color: rgba(255,250,243,0.48);
+      margin: 0;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      color: rgba(255,250,243,0.78);
       font-variant-numeric: tabular-nums;
       font-family: "ZCOOL XiaoWei", serif;
     }
+    .spot-swipe-hint {
+      display: none;
+      margin: -8px 0 14px;
+      text-align: center;
+      color: rgba(255, 250, 243, 0.58);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+    }
+    #spotPrev { grid-column: 1; grid-row: 1; }
+    #spotNext { grid-column: 3; grid-row: 1; }
+    @media (hover: none) and (pointer: coarse) {
+      .spot-pager { margin-inline: auto; }
+      .spot-swipe-hint { display: block; }
+    }
     .spot-carousel {
       display: flex;
+      align-items: flex-start;
       gap: 0;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
@@ -813,14 +824,25 @@
       padding: 2px 0 8px;
       margin: 0;
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-y pinch-zoom;
+      overscroll-behavior-inline: contain;
       scrollbar-width: none;
       outline: none;
+    }
+    .spot-carousel.is-dragging {
+      scroll-snap-type: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .spot-carousel::-webkit-scrollbar { display: none; }
     .spot-slide {
       flex: 0 0 100%;
       width: 100%;
       max-width: 100%;
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      justify-items: center;
       scroll-snap-align: start;
       scroll-snap-stop: always;
       box-sizing: border-box;
@@ -829,30 +851,28 @@
     .spot-slide[hidden] { display: none !important; }
     .spot-slide-card {
       position: relative;
+      width: min(760px, 100%);
+      max-width: 100%;
+      min-width: 0;
+      margin-inline: auto;
       background: transparent;
       color: #fffaf3;
       border: 0;
-      border-radius: 18px;
+      border-radius: 0;
       box-shadow: none;
       backdrop-filter: none;
       -webkit-backdrop-filter: none;
-      min-height: min(58vh, 560px);
-      padding: 18px 16px 16px;
+      min-height: 0;
+      padding: clamp(26px, 4vw, 42px) clamp(14px, 4.5vw, 44px) 30px;
       display: flex;
       flex-direction: column;
-      cursor: zoom-in;
-      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
-      overflow: hidden;
+      cursor: default;
+      text-shadow: 0 2px 18px rgba(0, 0, 0, 0.48);
+      overflow: visible;
     }
-    /* 淡灰蒙板：夜市等亮杂背景上保证字可读，仍透出景色 */
+    /* 文字直接留在全幅影像上，不再另铺一张矩形卡片。 */
     .spot-slide-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: rgba(32, 30, 28, 0.34);
-      pointer-events: none;
-      z-index: 0;
+      content: none;
     }
     .spot-slide-card > * {
       position: relative;
@@ -861,58 +881,64 @@
     .spot-slide.is-current .spot-slide-card { box-shadow: none; }
     .spot-slide-card a { cursor: pointer; }
     .spot-slide-card > h3 {
+      order: 1;
       margin: 0;
-      max-width: 9em;
+      max-width: none;
       font-family: "ZCOOL XiaoWei", serif;
-      font-size: clamp(2rem, 9vw, 2.75rem);
+      font-size: clamp(2.15rem, 5vw, 3.2rem);
       font-weight: 400;
-      line-height: 1.2;
-      letter-spacing: 0.12em;
+      line-height: 1.16;
+      letter-spacing: 0.08em;
       color: #fffaf3;
     }
     .spot-slide-card .spot-meta {
-      position: absolute;
-      top: 6px;
-      right: 0;
-      margin: 0;
-      writing-mode: vertical-rl;
-      text-orientation: mixed;
+      order: 2;
+      position: static;
+      margin: 10px 0 24px;
+      padding-bottom: 12px;
+      writing-mode: horizontal-tb;
       font-size: 11px;
-      letter-spacing: 0.28em;
-      color: rgba(255, 250, 243, 0.78);
-      line-height: 1.4;
-      max-height: 42vh;
-      overflow: hidden;
+      letter-spacing: 0.16em;
+      color: rgba(255, 250, 243, 0.72);
+      line-height: 1.6;
+      max-height: none;
+      overflow: visible;
+      border-bottom: 1px solid rgba(255, 250, 243, 0.28);
     }
     .spot-slide-card .spot-teaser {
-      margin: 22px 2.5em 0 0;
-      max-width: 22em;
-      font-size: 14px;
-      line-height: 1.75;
-      color: rgba(255, 250, 243, 0.9);
+      order: 3;
+      margin: 0 0 18px;
+      max-width: none;
+      font-size: 16px;
+      line-height: 1.82;
+      color: rgba(255, 250, 243, 0.98);
+      font-weight: 500;
     }
     .spot-slide-card > .spot-aside {
-      margin: 12px 2.5em 0 0;
-      max-width: 22em;
+      order: 4;
+      margin: 0 0 14px;
+      max-width: none;
       padding: 0;
       border: 0;
       border-radius: 0;
       background: none;
       box-shadow: none;
-      font-size: 13px;
-      line-height: 1.75;
-      color: #fffaf3;
-      opacity: 0.92;
-      text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
+      font-size: 15px;
+      line-height: 1.9;
+      color: rgba(255, 250, 243, 0.86);
+      opacity: 1;
+      text-shadow: inherit;
     }
     .spot-slide-card .spot-detail {
-      margin: 10px 2.5em 0 0;
-      max-width: 28em;
-      padding: 0;
+      order: 5;
+      margin: 6px 0 0;
+      max-width: none;
+      padding: 18px 0 0;
       border: 0;
-      font-size: 13.5px;
-      line-height: 1.72;
-      color: rgba(255, 250, 243, 0.9);
+      border-top: 1px solid rgba(255, 250, 243, 0.25);
+      font-size: 14px;
+      line-height: 1.8;
+      color: rgba(255, 250, 243, 0.88);
     }
     #spots .spot-slide-card .spot-detail ul {
       margin: 0;
@@ -929,19 +955,23 @@
       font-size: 0;
     }
     .spot-slide-card .spot-prose p {
-      margin: 0 0 10px;
-      text-indent: 2em;
-      line-height: 1.72;
+      margin: 0 0 12px;
+      text-indent: 0;
+      line-height: 1.8;
     }
     .spot-slide-card .spot-prose p:last-child { margin-bottom: 0; }
     .spot-slide-actions {
+      order: 6;
       display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 8px;
-      margin-top: auto;
-      padding-top: 28px;
-      padding-right: 2px;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px 10px;
+      margin-top: 8px;
+      padding-top: 18px;
+      padding-right: 0;
+      border-top: 1px solid rgba(255, 250, 243, 0.20);
     }
     #spots.spot-stage .spot-slide-actions .btn-map,
     #spots.spot-stage .spot-nav-link,
@@ -950,20 +980,20 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 4px 0;
-      border: 0;
-      border-radius: 0;
-      background: transparent !important;
+      padding: 7px 12px;
+      border: 1px solid rgba(255, 250, 243, 0.34);
+      border-radius: 999px;
+      background: rgba(255, 250, 243, 0.08) !important;
       color: #fffaf3 !important;
-      font-family: "ZCOOL XiaoWei", serif;
-      font-size: 16px;
-      font-weight: 400;
-      letter-spacing: 0.42em;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
       line-height: 1.4;
-      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+      text-shadow: none;
       box-shadow: none !important;
-      border-bottom: 1px solid rgba(255, 250, 243, 0.7);
       transform: none !important;
+      cursor: pointer;
     }
     #spots.spot-stage .spot-slide-actions .btn-map:active,
     #spots.spot-stage .spot-nav-link:active,
@@ -971,6 +1001,39 @@
       opacity: 0.75;
     }
     #spots.spot-stage .spot-slide-actions a[hidden] { display: none !important; }
+    @media (max-width: 700px) {
+      #spots.spot-stage {
+        padding: 30px 0 42px;
+        min-height: 0;
+      }
+      .spot-stage-ui { padding-inline: 12px; }
+      .spot-stage-ui > .section-label,
+      .spot-stage-ui > h2,
+      .spot-stage-ui > .section-verse,
+      .spot-stage-ui > .section-desc,
+      .spot-stage-ui > .section-bridge,
+      .spot-regions,
+      .spot-pager { margin-left: 4px; margin-right: 4px; }
+      .spot-pager { margin-inline: auto; }
+      .spot-slide { padding: 0 2px; }
+      .spot-slide-card {
+        width: 100%;
+        max-width: 100%;
+        margin-inline: auto;
+        padding: 26px 16px 24px;
+        border-radius: 0;
+        background: transparent;
+      }
+      .spot-slide-card > h3 {
+        font-size: clamp(2rem, 10vw, 2.6rem);
+        letter-spacing: 0.06em;
+      }
+      .spot-slide-card .spot-meta { margin-bottom: 20px; }
+      .spot-slide-card .spot-teaser { font-size: 15.5px; line-height: 1.78; }
+      .spot-slide-card > .spot-aside { font-size: 14.5px; line-height: 1.84; }
+      .spot-slide-card .spot-detail { font-size: 13.5px; line-height: 1.76; }
+      .spot-slide-card .spot-prose p { line-height: 1.76; }
+    }
     @media (prefers-reduced-motion: reduce) {
       .spot-stage-bg,
       .spot-stage-bg-layer,
@@ -1003,6 +1066,12 @@
         color: var(--ink);
         text-shadow: none;
         min-height: 0;
+        width: 100%;
+        max-width: none;
+        margin: 0;
+        background: none;
+        border: 1px solid rgba(61,52,44,.18);
+        box-shadow: none;
       }
       .spot-slide-card > h3,
       .spot-slide-card .spot-teaser,
@@ -1015,6 +1084,7 @@
         max-width: none;
       }
       .spot-slide-card > .spot-aside { display: block; }
+      #spots.spot-stage .spot-slide-card > .spot-aside { color: var(--ink); }
       #spots.spot-stage .spot-slide-actions .btn-map,
       #spots.spot-stage .spot-nav-link {
         color: var(--lake) !important;
@@ -1188,9 +1258,9 @@
       color: var(--ink-soft);
       opacity: 0.92;
     }
-    /* 停靠背景段：舞台内强制白字，无底板；印刷态见上方 print 规则 */
-    #spots.spot-stage .spot-aside {
-      color: #fffaf3;
+    /* 停靠文字直接落在全幅影像上；印刷态再切回正文色。 */
+    #spots.spot-stage .spot-slide-card > .spot-aside {
+      color: rgba(255, 250, 243, 0.86);
       background: none;
       border: 0;
       box-shadow: none;
@@ -2238,7 +2308,7 @@
         <div class="section-label">这一路</div>
         <h2>从贺兰山到青海湖</h2>
         <p class="section-verse">山脊、走廊、沙海与湖泊，十二个日子向西，再沿黄河回家。</p>
-        <p class="section-desc">先在银川停几天，把一个值得记住的日子过好；后面的路，一段一段慢慢走。车是理想 L7。</p>
+        <p class="section-desc">先在银川停几天，把一个值得记住的日子过好；随后沿河西走到敦煌，再穿过柴达木抵达青海湖。车是理想 L7。</p>
 
         <div class="editorial-intro">
           <p>这不是一条只为抵达而存在的路线。从成都盆地向北，城市的湿润渐渐退到身后；贺兰山把银川平原与荒漠分开，河西走廊则像一条狭长的缝，把绿洲、关隘和戈壁一站站串在一起。再往西是敦煌，往南翻过当金山，地貌忽然变成柴达木的盐湖与风蚀台地。</p>
@@ -2255,33 +2325,33 @@
 
         <div class="rhythm-head" id="rhythm">
           <h3>十二个日子，一路向西</h3>
-          <p>时间写得清楚，上路以后便不用反复计算。若遇见堵车、天气或临时闭园，先取消次要停靠，保证当天最想看的景点。</p>
+          <p>时间写得清楚，上路以后便不用反复计算。若遇见堵车、天气或临时闭园，后面的抵达时间跟着顺延，当天最想看的地方仍留足时间。</p>
         </div>
         <ol class="trip-timeline" aria-label="每日出发与抵达时间线">
           <li class="trip-beat"><time class="trip-date" datetime="2026-09-24"><b>9.24</b><span>周四</span></time><a class="trip-card" href="#d924"><div class="trip-route"><strong>成都 → 贺兰山宿集</strong><em>夜行约 14–16h</em></div><div class="trip-anchors"><span><b>21:00</b> 成都出发</span><span><b>每 2h</b> 换驾／休息</span><span><b>次日 13:00–15:00</b> 抵达</span></div><div class="trip-note">这一夜只求平安抵达。困倦就进服务区，不拿入住时间追进度。</div></a></li>
           <li class="trip-beat"><time class="trip-date" datetime="2026-09-25"><b>9.25</b><span>周五</span></time><a class="trip-card" href="#d925"><div class="trip-route"><strong>宿集 · 留在贺兰山下</strong><em>不再赶路</em></div><div class="trip-anchors"><span><b>14:00前后</b> 入住补觉</span><span><b>17:30</b> 院内散步拍照</span><span><b>18:30以后</b> 晚餐与散步</span></div><div class="trip-note">9.25 当晚不安排其他活动；若抵达偏晚，下午也直接休息。</div></a></li>
           <li class="trip-beat"><time class="trip-date" datetime="2026-09-26"><b>9.26</b><span>周六</span></time><a class="trip-card" href="#d926"><div class="trip-route"><strong>宿集 → 影城／岩画 → 漫葡</strong><em>短途换住</em></div><div class="trip-anchors"><span><b>10:30</b> 退房换酒店</span><span><b>13:00–17:00</b> 影城或岩画</span><span><b>18:30以后</b> 漫葡夜游</span></div><div class="trip-note">影城和岩画只安排一处，夜游开始前还要预留吃饭时间。</div></a></li>
           <li class="trip-beat"><time class="trip-date" datetime="2026-09-27"><b>9.27</b><span>周日</span></time><a class="trip-card" href="#d927"><div class="trip-route"><strong>银川 → 西夏陵 → 张掖市区</strong><em>行车约 6h</em></div><div class="trip-anchors"><span><b>08:30</b> 出发</span><span><b>09:00–12:00</b> 西夏陵</span><span><b>12:30</b> 离开银川</span><span><b>19:00–20:00</b> 市区入住</span></div><div class="trip-note">住甘州区市区，方便晚饭，也便于明早向东北去平山湖；当天默认不加沙坡头。</div></a></li>
-          <li class="trip-beat"><time class="trip-date" datetime="2026-09-28"><b>9.28</b><span>周一</span></time><a class="trip-card" href="#d928"><div class="trip-route"><strong>平山湖 → 张掖城里 → 七彩丹霞 → 嘉峪关</strong><em>松弛但要卡入园</em></div><div class="trip-anchors"><span><b>09:00</b> 市区出发</span><span><b>10:00–13:00</b> 平山湖常规线</span><span><b>14:00–16:30</b> 午饭／逛街</span><span><b>17:00前</b> 离开市区</span><span><b>17:30前</b> 丹霞入园</span></div><div class="trip-note">18:00 是九月常见的停止售票／入园节点，不是从市区出发时间；大佛寺仅在平山湖提前结束时再选。</div></a></li>
+            <li class="trip-beat"><time class="trip-date" datetime="2026-09-28"><b>9.28</b><span>周一</span></time><a class="trip-card" href="#d928"><div class="trip-route"><strong>平山湖 → 张掖城里 → 七彩丹霞 → 嘉峪关</strong><em>白天慢慢逛，17:30 前进丹霞</em></div><div class="trip-anchors"><span><b>09:00</b> 市区出发</span><span><b>10:00–13:00</b> 平山湖游览</span><span><b>14:00–16:30</b> 午饭／逛街</span><span><b>17:00前</b> 离开市区</span><span><b>17:30前</b> 丹霞入园</span></div><div class="trip-note">18:00 是九月常见的停止售票／入园节点，不是从市区出发时间；大佛寺仅在平山湖提前结束时再选。</div></a></li>
           <li class="trip-beat"><time class="trip-date" datetime="2026-09-29"><b>9.29</b><span>周二</span></time><a class="trip-card" href="#d929"><div class="trip-route"><strong>嘉峪关 → 莫高窟 → 鸣沙山</strong><em>行车约 4h</em></div><div class="trip-anchors"><span><b>07:30</b> 出发</span><span><b>11:30</b> 到敦煌</span><span><b>13:00–17:00</b> 莫高</span><span><b>17:30–20:00</b> 鸣沙日落</span></div><div class="trip-note">莫高窟必须以预约场次反推当天出发时间；夜市放在日落以后。</div></a></li>
           <li class="trip-beat"><time class="trip-date" datetime="2026-09-30"><b>9.30</b><span>周三</span></time><a class="trip-card" href="#d930"><div class="trip-route"><strong>敦煌 → 玉门关 → 雅丹 → 敦煌</strong><em>往返约 5–6h</em></div><div class="trip-anchors"><span><b>13:00</b> 出发</span><span><b>14:30–15:10</b> 玉门关</span><span><b>16:30–19:30</b> 雅丹</span><span><b>22:00–23:00</b> 回住处</span></div><div class="trip-note">这一天要等的是雅丹日落；13:30 仍未出城，就缩短玉门关的停留。</div></a></li>
-          <li class="trip-beat"><time class="trip-date" datetime="2026-10-01"><b>10.1</b><span>周四</span></time><a class="trip-card" href="#d1001"><div class="trip-route"><strong>敦煌 → 冷湖 → 水上雅丹</strong><em>全天行车约 7–9h</em></div><div class="trip-anchors"><span><b>05:30–06:00</b> 退房出发</span><span><b>中午</b> 冷湖补给</span><span><b>16:00后</b> 水上雅丹</span><span><b>当晚</b> 园区附近住宿</span></div><div class="trip-note">傍晚游览水上雅丹并在附近住宿，不再摸黑赶往大柴旦；黑独山只有在道路开放且时间充裕时才短停。</div></a></li>
-          <li class="trip-beat"><time class="trip-date" datetime="2026-10-02"><b>10.2</b><span>周五</span></time><a class="trip-card" href="#d1002"><div class="trip-route"><strong>水上雅丹 → G315 → 翡翠湖 → 大柴旦</strong><em>行车约 3–4h</em></div><div class="trip-anchors"><span><b>09:00</b> 出发</span><span><b>上午</b> 东台／U型公路途经</span><span><b>13:00</b> 午饭入住</span><span><b>15:30–日落</b> 翡翠湖</span></div><div class="trip-note">不追网红机位，下午主要游览翡翠湖，看完日落再回镇。</div></a></li>
-          <li class="trip-beat"><time class="trip-date" datetime="2026-10-03"><b>10.3</b><span>周六</span></time><a class="trip-card" href="#d1003"><div class="trip-route"><strong>大柴旦 → 德令哈 → 青海湖东岸</strong><em>行车约 6–8h</em></div><div class="trip-anchors"><span><b>08:00</b> 出发</span><span><b>11:00</b> 德令哈补给</span><span><b>17:00前后</b> 湖东岸</span><span><b>夜里</b> 星空</span></div><div class="trip-note">途中不再增加盐湖景点，争取傍晚到达青海湖；夜里视天气决定是否拍星空。</div></a></li>
+            <li class="trip-beat"><time class="trip-date" datetime="2026-10-01"><b>10.1</b><span>周四</span></time><a class="trip-card" href="#d1001"><div class="trip-route"><strong>敦煌 → 黑独山 → 水上雅丹</strong><em>铺装路为主 · 长途约 10h</em></div><div class="trip-anchors"><span><b>06:30–07:00</b> 退房出发</span><span><b>10:30–12:00</b> 黑独山</span><span><b>12:15前后</b> 冷湖吃饭加油</span><span><b>16:30–17:30</b> 水上雅丹</span></div><div class="trip-note">上午走进黑独山的黑色山谷，中午在冷湖吃饭加油，随后沿铺装道路南下；傍晚抵达水上雅丹，看完日落便住在景区。</div></a></li>
+          <li class="trip-beat"><time class="trip-date" datetime="2026-10-02"><b>10.2</b><span>周五</span></time><a class="trip-card" href="#d1002"><div class="trip-route"><strong>水上雅丹 → G315 → 翡翠湖 → 大柴旦</strong><em>行车约 3–4h</em></div><div class="trip-anchors"><span><b>09:00</b> 出发</span><span><b>上午</b> 东台／U型公路途经</span><span><b>13:00</b> 午饭入住</span><span><b>15:30–日落</b> 翡翠湖</span></div><div class="trip-note">东台只在正规区域短停，U 型公路从车内经过；下午把完整时间留给翡翠湖。</div></a></li>
+            <li class="trip-beat"><time class="trip-date" datetime="2026-10-03"><b>10.3</b><span>周六</span></time><a class="trip-card" href="#d1003"><div class="trip-route"><strong>大柴旦 → 德令哈 → 青海湖东岸</strong><em>行车约 6–8h</em></div><div class="trip-anchors"><span><b>08:00</b> 出发</span><span><b>11:00</b> 德令哈吃饭加油</span><span><b>17:00前后</b> 湖东岸</span><span><b>夜里</b> 星空</span></div><div class="trip-note">中午在德令哈坐下来吃顿饭，傍晚到青海湖东岸；天气晴朗，夜里便去湖边看星空。</div></a></li>
           <li class="trip-beat"><time class="trip-date" datetime="2026-10-04"><b>10.4</b><span>周日</span></time><a class="trip-card" href="#d1004"><div class="trip-route"><strong>青海湖东岸 → 兰州</strong><em>行车约 5–7h</em></div><div class="trip-anchors"><span><b>08:30–10:30</b> 湖边</span><span><b>11:00</b> 出发</span><span><b>17:00–19:00</b> 兰州入住</span></div><div class="trip-note">国庆车流需留缓冲；到兰州后只安排一顿热饭。</div></a></li>
           <li class="trip-beat"><time class="trip-date" datetime="2026-10-05"><b>10.5</b><span>周一</span></time><a class="trip-card" href="#d1005"><div class="trip-route"><strong>兰州 → 成都</strong><em>行车约 10–12h</em></div><div class="trip-anchors"><span><b>07:30</b> 出发</span><span><b>每 2h</b> 换驾／休息</span><span><b>18:00–20:00</b> 到家</span></div><div class="trip-note">返程不加景点；严重拥堵时宁可晚到，也不压缩休息。</div></a></li>
         </ol>
 
         <div class="layer">
           <h3>途经</h3>
-          <p>银川（贺兰山、漫葡、西夏）→ 张掖市区 → 平山湖大峡谷 → 大佛寺可选 → 七彩丹霞 → 敦煌（莫高、鸣沙、雅丹）→ 水上雅丹（住一晚）→ G315 与翡翠湖 → 大柴旦（住一晚）→ 青海湖东岸 → 兰州 → 成都。</p>
+          <p>银川（贺兰山、漫葡、西夏）→ 张掖市区 → 平山湖大峡谷 → 大佛寺可选 → 七彩丹霞 → 敦煌（莫高、鸣沙、雅丹）→ 黑独山 → 水上雅丹（住一晚）→ G315 与翡翠湖 → 大柴旦（住一晚）→ 青海湖东岸 → 兰州 → 成都。</p>
         </div>
         <details class="layer">
           <summary style="cursor:pointer;margin:0 0 10px">留一点余地</summary>
           <ul>
             <li>赶路日以行车为主；沙坡头只作西夏→张掖途中可选。</li>
             <li>9.30：可睡懒觉；下午西线雅丹赶日落（可顺路玉门关），当晚回梵尘。</li>
-            <li>10.1：05:30–06:00 从敦煌出发，傍晚留在水上雅丹并就近住下；火星一号仅在官方确认通行、无雨且车辆状态合适时采用。</li>
+            <li>10.1：06:30–07:00 从敦煌出发，在黑独山官方游览区停留约一小时；冷湖补给后全程走铺装道路，约 16:30–17:30 抵达水上雅丹并住下。</li>
             <li>10.2 住大柴旦，10.3 住青海湖，10.4 再去兰州；返程顺延至 10.5。</li>
           </ul>
         </details>
@@ -2291,7 +2361,7 @@
       <div class="wrap">
         <div class="section-label">日子里</div>
         <h2>日子慢慢过</h2>
-        <p class="section-desc">每天先写清出发、抵达和必须预约的时间；天气不好或路上耽搁时，就删掉次要停靠。</p>
+          <p class="section-desc">每天写清几点出发、几点抵达，以及需要提前预约的时间；路上若有变化，也能一眼看出当天还剩多少余地。</p>
         <p class="section-bridge no-print"><a href="#spots">看完一天，去风里的站 →</a></p>
         <div class="day-tools no-print">
           <button type="button" class="filter-btn" id="expandPlay">从游玩的日子开始看</button>
@@ -2309,7 +2379,7 @@
             <p class="day-lead">21:00 左右从成都出发，夜里沿高速向北。两人轮换驾驶，每两小时进服务区休息一次，预计第二天下午抵达贺兰山宿集。</p>
             <ul>
               <li>晚上离开成都，第二天下午抵达贺兰山宿集。</li>
-              <li>路上以加油、吃饭和轮换驾驶为主，不安排停留；困了就换人驾驶。</li>
+              <li>路上只安排加油、吃饭和轮换驾驶；任何一人困倦都进服务区，若两人都累便停车睡一会儿。</li>
             </ul>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=104.066301,30.572961,成都&to=106.050000,38.550000,贺兰山宿集镇北堡&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航：成都 → 宿集一带</a>
           </div>
@@ -2395,7 +2465,7 @@
             <p class="day-lead">上午向东北去平山湖，走完峡谷常规游线；下午回张掖城里吃饭逛街，有时间再看大佛寺。傍晚转向西边，到七彩丹霞看日落。</p>
             <div class="day-lore"><p class="day-aside">张掖七彩丹霞是彩色丘陵：白垩纪砂砾岩经风化侵蚀，铁、锰等氧化物染出红黄白灰的层理。正午晒得发白，傍晚光斜进来时，整片山丘像一只被慢慢打开的调色盘。</p></div>
             <ul>
-              <li><strong>09:00</strong> 从张掖市区出发，约一小时到平山湖；走约 3 小时常规线，争取 13:00 离园、14:00–14:30 回到市区。</li>
+              <li><strong>09:00</strong> 从张掖市区出发，约一小时到平山湖；在景区游览约 3 小时，争取 13:00 离园、14:00–14:30 回到市区。</li>
               <li><strong>14:00–16:30</strong> 午饭、钟鼓楼一带散步；大佛寺仅在平山湖提前结束时再选，不为它赶时间。</li>
               <li><strong>最迟 17:00</strong> 离开市区，约 17:30 前抵达并入园；跟观光车去重点观景台，在当天允许的游览时段内等斜光。</li>
               <li>别把离开市区拖到 18:00。九月常见闭园或停止售票时间为 18:00，具体仍以出发前的景区公告为准。</li>
@@ -2429,6 +2499,7 @@
             <div class="nav-grid">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.81,40.04&name=莫高窟数字展示中心&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航数字中心</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.68,40.09&name=鸣沙山月牙泉&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航鸣沙山</a>
+              <a class="btn btn-sm" target="_blank" rel="noopener" href="https://www.mssyyq.com/">景区官方攻略</a>
             </div>
           </div>
         </details>
@@ -2441,12 +2512,12 @@
           </summary>
           <div class="day-body">
             <div class="day-cover" role="img" aria-label="敦煌雅丹" data-caption="敦煌雅丹国家地质公园" data-full="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Dunhuang_Yardang_National_Geopark.jpg" alt="敦煌雅丹" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
-            <p class="day-lead">今天可睡懒觉，约 <strong>13:00</strong> 前出城更稳：玉门关短停后进<strong>雅丹</strong>赶日落——光一斜，土丘阴影拉长；看完当天回梵尘。若上午醒得早，可以在博物馆或城里散一会儿步，中午便收束回来。</p>
+        <p class="day-lead">今天可以睡个懒觉，约 <strong>13:00</strong> 前出城更稳：玉门关短停后进<strong>雅丹</strong>赶日落——光一斜，土丘阴影拉长；看完当天回梵尘。若上午醒得早，可以去博物馆，或在城里散一会儿步，吃过午饭再出发。</p>
             <div class="day-lore"><p class="day-aside">「雅丹」借自维吾尔语，指陡壁小丘。风与时间把戈壁削成城堡状，当地又称魔鬼城——风穿梭其间时，会发出低沉的呜咽，像有人在土丘缝里走过。</p></div>
             <ul>
               <li>一两点前动身更稳；途中可短停玉门关，但要保证日落前进入雅丹。</li>
               <li>进园乘观光车，日落前到观景点；末班常见约 18:30（以当天公告为准）。日落后赶回梵尘第二晚。</li>
-              <li>第二天要很早出发去水上雅丹，今晚回住处后早点休息；看星空安排在青海湖东岸。</li>
+              <li>第二天是去水上雅丹的长途，今晚回住处后早点休息；早晨不摸黑赶路，看星空安排在青海湖东岸。</li>
             </ul>
             <div class="nav-grid">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=92.85,40.52&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
@@ -2462,18 +2533,21 @@
             <div class="chev">›</div>
           </summary>
           <div class="day-body">
-            <div class="day-cover" role="img" aria-label="火星一号公路一带戈壁公路" data-caption="火星一号公路一带 · 戈壁公路" data-full="https://images.unsplash.com/photo-1724469986740-f969e22f0676?w=1920&q=85"><img src="https://images.unsplash.com/photo-1724469986740-f969e22f0676?w=1920&q=85" alt="火星一号公路一带戈壁公路" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
-            <p class="day-lead">天刚亮便离开敦煌，越过当金山，沿冷湖走廊进入柴达木。下午抵达<strong>乌素特水上雅丹</strong>，游览到日落，当晚住在园区附近，不再摸黑赶往大柴旦。</p>
+            <div class="day-cover" role="img" aria-label="黑独山墨色山脊与浅色盐壳" data-caption="黑独山 · 墨色山脊与浅色盐壳（风景参考）" data-full="https://static.bjd.com.cn/dams-res-external/mps/image/202511/15/69183a96d5de5f38d75bc1d7_m.jpg"><img src="https://static.bjd.com.cn/dams-res-external/mps/image/202511/15/69183a96d5de5f38d75bc1d7_m.jpg" alt="黑独山墨色山脊与浅色盐壳" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
+            <p class="day-lead">06:30–07:00 离开敦煌，越过当金山后，戈壁渐渐收走了路边所有鲜亮的颜色。中午以前抵达<strong>黑独山</strong>，在开放步道上看墨色山脊从浅白盐碱地里升起；冷湖补给后继续走铺装道路，傍晚抵达<strong>乌素特水上雅丹</strong>，把最后一段光留在湖边。</p>
             <ul>
-              <li><strong>05:30–06:00：</strong>退房出发；前一晚加满油／电，备好水和简餐。当金山、阿克塞以行车观景为主。</li>
-              <li><strong>10:00 前后：</strong>在冷湖加满油并确认道路。当天不安排黑独山；只有明显提前且正式开放时，才在管理区域短停。</li>
-              <li>火星一号约有 90 公里非铺装路，笔记实测纯开约 3 小时。若遇雨雪、沙尘，官方尚未确认通行，或车辆状态不合适，就不进入，改走当天的备用路线。</li>
-              <li><strong>16:00 以后：</strong>抵达水上雅丹，游览到日落；结束后入住园区酒店或房车营地。</li>
+              <li><strong>06:30–07:00：</strong>退房出发；前一晚加满油／电，备好水、早餐和简餐。当金山与阿克塞以行车观景为主。</li>
+              <li><strong>10:30–12:00：</strong>进入黑独山官方游览区。沿步道和观景台看山，不循车辙深入，也不踩进黑色砾石坡；国庆若排队明显，就把时间留给山谷里最开阔的一段。</li>
+              <li><strong>12:15前后：</strong>在冷湖加油并吃简餐，随后沿铺装道路前往水上雅丹。</li>
+              <li>两段纯驾驶约八到九小时，加上黑独山、补给和国庆车流，全天按十到十一个小时准备。若 12:30 仍未离开冷湖，黑独山不再延长停留，先保证天黑前抵达水上雅丹。</li>
+              <li><strong>16:30–17:30：</strong>抵达水上雅丹后先办入住或寄存行李，再坐观光车前往西海舰队、黄金沙滩等主要停靠点，最后在水边看日落。</li>
+              <li>若入园顺利且排队不长，可以在快艇和越野车里选一项；前者从水面看雅丹，后者会开进更远的戈壁。日落优先，不为项目排队压缩观景时间。</li>
             </ul>
             <details class="nav-fold no-print">
               <summary>本段导航</summary>
               <div class="nav-grid">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 水上雅丹</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.42,38.84,黑独山景区&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 黑独山</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.42,38.84,黑独山景区&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">黑独山 → 水上雅丹（选铺装路）</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.35,37.72&name=乌素特水上雅丹&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航当晚住宿区域</a>
             </div>
             </details>
@@ -2514,7 +2588,7 @@
           </summary>
           <div class="day-body">
             <div class="day-cover" role="img" aria-label="青海湖" data-caption="青海湖东岸 · 再待一会儿" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Qinghai_Lake.jpg/1920px-Qinghai_Lake.jpg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Qinghai_Lake.jpg/1920px-Qinghai_Lake.jpg" alt="青海湖" loading="lazy" decoding="async" referrerpolicy="no-referrer" /></div>
-            <p class="day-lead">离开大柴旦后，公路经德令哈通往青海湖。今天不再增加景点，中午在德令哈吃饭、加油并补齐物资，争取 17:00 左右抵达东岸。</p>
+        <p class="day-lead">离开大柴旦后，公路经德令哈通往青海湖。中午在德令哈吃饭、加油并补齐物资，约 17:00 抵达东岸，正好赶上傍晚的湖光。</p>
             <ul>
               <li><strong>08:00：</strong>大柴旦退房出发；约每两小时换驾或休息。</li>
               <li><strong>11:00–12:00：</strong>德令哈加油、午饭和超市补给。</li>
@@ -2542,7 +2616,7 @@
         </details>
 
         <details class="day" id="d1005" name="roadbook-days">
-          <summary><div class="day-date"><b>10.5</b>周一</div><div><div class="day-title">从兰州回成都 <span class="day-kind drive">返程</span></div><div class="day-sub">把沙与湖收进后视镜</div></div><div class="chev">›</div></summary>
+          <summary><div class="day-date"><b>10.5</b>周一</div><div><div class="day-title">从兰州回成都 <span class="day-kind drive">返程</span></div><div class="day-sub">沿高速南下，傍晚到家</div></div><div class="chev">›</div></summary>
           <div class="day-body"><p class="day-lead">07:30 左右从兰州出发回成都，每两小时换驾或休息，途中只安排加油和吃饭。</p><a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=103.83,36.06,兰州&to=104.06,30.67,成都&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">兰州 → 成都</a></div>
         </details>
       </div>
@@ -2573,19 +2647,20 @@
           <button type="button" class="spot-pager-btn" id="spotNext" aria-label="下一处">›</button>
           <div class="spot-count"><span id="spotIndex">1</span>/<span id="spotTotal">25</span></div>
         </div>
-        <div class="spot-carousel" id="spotCarousel" tabindex="0" aria-label="风里的站">
+        <p class="spot-swipe-hint no-print" aria-hidden="true">‹ 左右滑动翻页 ›</p>
+        <div class="spot-carousel" id="spotCarousel" tabindex="0" aria-label="风里的站，可左右滑动翻页">
           <article class="spot-slide" data-region="yinchuan" data-day="925" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg/1920px-%E6%B8%85%E6%99%A8%E7%9A%84%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%92%8C%E8%A5%BF%E5%A4%8F%E7%8E%8B%E9%99%B5.jpg" data-caption="贺兰山 · 清晨山脊">
             <div class="spot-slide-card">
               <h3>贺兰山</h3>
               <p class="spot-teaser">贺兰山在西，黄河在东，银川平原夹在中间。山色青黑，晴天轮廓硬朗。长途抵达后看见西边这道山脊，便知道西北已经到了。</p>
             <p class="spot-aside">「贺兰」一名见于史籍，蒙古语意近「骏马」。山形起伏如奔马脊背，古人常以山名边塞。它隔开银川平原与阿拉善荒漠，东麓的葡萄园、岩画和边墙都沿山脚分布。晴天光线很硬，傍晚更适合看山脊。</p>
-              <div class="spot-meta">望山 · 银川西麓 · 9.25</div>
+              <div class="spot-meta">9.25 下午 · 贺兰山脚下</div>
               <div class="spot-detail"><ul>
                     <li>9.25 下午到银川西麓后，找一处能看见山脊的开阔位置停车，休息一会儿再入住。</li>
                     <li>天气好就对着山影拍几张；还有余力再近看<strong>贺兰山岩画</strong>。也可留到 9.26 下午，与镇北堡影城二选一。</li>
                     <li>山前昼夜温差大，薄外套备一件；进保护区或景区按现场开放与票务走开放区域。</li>
-                    <li><strong>怎么看：</strong>重点不是收集景点，而是辨认山、荒漠与银川平原的边界。傍晚让山脊做剪影，人物缩小放在画面下方，比贴近山体更有“初到西北”的尺度。</li>
-                    <li><strong>补给：</strong>西麓景点之间距离不长，但便利店不如城里密；离开市区前补水。若去岩画，先看馆内图示再进沟，知道岩羊、太阳神等母题后更容易看懂。</li>
+                <li>与其匆忙收集景点，不如在这里看看山、荒漠与银川平原怎样相接。傍晚的山脊会变成剪影，人物缩小放在画面下方，比贴近山体更能显出“初到西北”的尺度。</li>
+                    <li>西麓景点之间距离不长，但便利店不如城里密，离开市区前先补水。若去岩画，先看馆内图示再进沟，知道岩羊、太阳神等母题后更容易看懂。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.997,38.727&name=贺兰山岩画&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航贺兰山岩画</a>
               </div>
@@ -2599,13 +2674,14 @@
               <h3>镇北堡西部影城</h3>
               <p class="spot-teaser">明清边墙遗址改成的电影城。黄土墙与残堡本来就是现成布景——走在巷子里，风沙声比游客声先到。下午可来这里，或去贺兰山岩画。</p>
             <p class="spot-aside">张贤亮创办；《红高粱》《大话西游》等曾在此取景。他把边塞废墟留住拍电影：夯土墙、残堡、干裂的地面，本身就是西北的布景，镜头只是把它们写进银幕。</p>
-              <div class="spot-meta">9.26 下午可选 · 银川</div>
+              <div class="spot-meta">9.26 下午 · 与贺兰山岩画二选一</div>
               <div class="spot-detail"><ul>
                     <li>排在 9.26 下午：从宿集换到漫葡安顿后，影城与<strong>贺兰山岩画</strong>只安排其中一处，晚上还要回漫葡夜游。</li>
                     <li>进园后沿标志游览夯土墙、残堡和老街巷，不用逐个寻找电影机位。</li>
+                <li>2026 年景区还会安排实景解谜一类互动项目。若当天仍在运行，可以进门先问问需要多久；想体验互动，就少逛一部分街巷，不把两种玩法都塞满。</li>
                     <li>傍晚早点离园回漫葡；影城与漫葡、宿集都在银川西麓一带，车程不远，但仍要预留回程和吃饭时间。</li>
-                    <li><strong>怎么玩：</strong>重点看《大话西游》相关场景、月亮门和夯土街巷。先逛清城／明城主线，有时间再走支线。</li>
-                    <li><strong>怎么拍：</strong>穿低饱和、纯色衣服更衬黄土；利用门洞框景，避开正午顶光。园区无遮阴，帽子、防晒和一双不怕灰的鞋比道具更重要。</li>
+                <li>清城、明城与夯土街巷最值得慢慢走，《大话西游》的月亮门只是其中一个熟悉的画面。先看看残堡本身，时间宽裕再往更远的街巷走。</li>
+                    <li>低饱和的纯色衣服更衬黄土，门洞也天然适合框景。园区无遮阴，帽子、防晒和一双不怕灰的鞋比临时准备道具更重要。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.50&name=镇北堡西部影城&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航影城</a>
               </div>
@@ -2617,14 +2693,14 @@
           <article class="spot-slide" data-region="yinchuan" data-day="926" data-full="https://www.yinchuan.gov.cn/sshc/lyjd/zdlyjq/4ajjq/202409/W020240919560118156313.jpg" data-caption="漫葡小镇 · 白天街景">
             <div class="spot-slide-card">
               <h3>漫葡 · 看见贺兰</h3>
-              <p class="spot-teaser">贺兰山东麓的葡萄小镇。白天换房安顿，傍晚按节目单逛街区与演艺。远处还能看见山影，入夜后街区逐渐亮起灯光。</p>
-              <div class="spot-meta">9.26 · 住漫葡天沐 · 夜场票提前确认</div>
+              <p class="spot-teaser">漫葡把贺兰山东麓的葡萄酒、温泉和夜游放进一座小镇。白天看得见远山与葡萄园，入夜以后，演员从剧场走进街巷，整片街区才慢慢成为一场演出。</p>
+              <p class="spot-aside">贺兰山挡住西来的风沙，也让山前的日照、砂砾土壤和昼夜温差适合葡萄生长。漫葡不是一座真正的古镇，它更像银川写给夜晚的一封新信：酒庄文化是底色，温泉让人从长途里缓下来，「看见贺兰」再把西夏、边塞与当代舞台放进灯火里。知道它是现代营造的空间，反而不必急着寻找“古意”，沿街遇见一段表演、听完一首曲子，才是这里自然的打开方式。</p>
+              <div class="spot-meta">9.26 入住漫葡天沐 · 晚上逛小镇</div>
               <div class="spot-detail"><ul>
-                    <li>9.26 从宿集换到漫葡天沐后，先放行李、确认夜场票与入场方式，再出门。</li>
-                    <li>傍晚选两三场感兴趣的演出，按节目地点顺路逛街区；下午若去了影城或岩画，晚上不要排得太满。</li>
-                    <li>温泉、充电桩出发前向酒店问清楚位置与时段；夜里风凉，外套备一件。</li>
-                    <li><strong>先做功课：</strong>入住时拍下当天节目单，圈出两场真正想看的演出，按演出位置串街区；不要跟着人群来回折返，把空档留给吃饭和喝东西。</li>
-                    <li><strong>怎么吃：</strong>小镇内适合边走边尝，正餐若价格或排队不合适就回酒店／西夏区解决。葡萄酒只在不再驾车后品尝，司机当晚完全不饮酒。</li>
+                    <li>9.26 从宿集换到漫葡天沐后，先放下行李。下午在影城与岩画之间选一处，傍晚回小镇吃饭，顺手看一眼当晚节目单。</li>
+                    <li>不必逐个追赶街区和舞台。先沿主街闲逛，碰上街头小戏便停一会儿，再选一场完整演出坐下来看看；一路偶遇的片段，会比按表奔波更像夜游。</li>
+                    <li>温泉是这一天的另一种收尾。若下午没有外出，可以在天黑前去泡；若白天已经走了不少路，就把它留在演出之后。房费是否包含温泉、最晚入场时间，入住时问清楚。</li>
+                    <li>红酒街适合在不再开车以后慢慢经过。正餐若排队太久，酒店或西夏区都能解决；司机当晚不碰酒，夜里从温泉出来也要添一件外套。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=106.08,38.52&name=漫葡小镇&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航漫葡</a>
               </div>
@@ -2637,13 +2713,12 @@
             <div class="spot-slide-card">
               <h3>西夏陵 + 博物馆</h3>
               <p class="spot-teaser">先在博物馆了解西夏的历史，再去陵区。夯土陵台矗在贺兰山下，装饰早已被风沙磨去，留下的轮廓反而更醒目。计划在 9.27 上午游览。</p>
-              <div class="spot-meta">票+车约 115/人 · 馆多半免费 · 尽量早入园</div>
+              <p class="spot-aside">西夏没有留下像唐宋那样完整的正史，许多关于王朝的认识，来自文字残碑、器物与贺兰山下的陵园。陵台原本并非今天这样裸露：夯土核心外曾有砖木构件与赭红色饰面，千年风沙带走表层，才留下近似蜂塔的土黄色轮廓。它们背山面河，与中原帝陵的秩序相连，又保留党项、佛教和西北边地自己的气质。</p>
+              <div class="spot-meta">9.27 上午 · 门票和观光车约 115 元/人</div>
               <div class="spot-detail"><ul>
-                    <li>尽量 <strong>8:30–9:00</strong> 到，留足半天；中午前结束，下午才赶得上往张掖。</li>
-                    <li>动线为游客中心／售票处 → <strong>博物馆</strong> → 乘<strong>观光车</strong>进入陵区看夯土陵台 → 返回，主要点位由观光车串联。</li>
-                    <li>票+车约 115/人、馆多半免费——以现场为准；看完接西夏 → 丹霞（或可选绕沙坡头）。</li>
-                    <li><strong>看什么：</strong>馆内先找西夏文字、印章、佛教造像和陵城复原，再去三号陵看夯土台。先理解“王朝为何在这里”，陵区才不只是几座土丘。</li>
-                    <li><strong>怎么拍：</strong>用中长焦把陵台与贺兰山压在一起；不要翻越围栏追求近景。馆内是否允许拍摄、能否使用补光，以现场标识为准。</li>
+                    <li>9.27 尽量在 8:30–9:00 抵达。先去博物馆看西夏文字、印章、佛教造像和陵园复原，再乘观光车进陵区；带着王朝的线索走到夯土陵台前，眼前就不再只是几座土丘。</li>
+                <li>2026 年新增的实景演艺与战马巡游碰上了可以看看，不必专门等。上午把大部分时间留给博物馆与三号陵，中午前离园，下午还要开往张掖。</li>
+                    <li>票与观光车约 115 元／人，最终以当日公告为准。陵区用中长焦能把陵台与贺兰山放在同一层空间里；拍摄留在围栏外，馆内规则看现场标识。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.98,38.45&name=西夏陵&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航西夏陵</a>
               </div>
@@ -2656,13 +2731,12 @@
             <div class="spot-slide-card">
               <h3>沙坡头</h3>
               <p class="spot-teaser">腾格里沙漠贴着黄河的一角：一边是沙丘，一边是河水拐弯——九月二十七日西夏之后可顺路停 1–2 小时再继续往张掖。</p>
-              <div class="spot-meta">可选路过 · 停 1–2 小时 · 西夏 → 张掖途中</div>
+              <p class="spot-aside">沙坡头最难得的并不是“沙漠项目多”，而是腾格里沙漠在这里抵到黄河岸边。包兰铁路曾要从流动沙丘间穿过，人们用一格格草方格压住风沙，后来形成中国治沙史上极有代表性的景观。站在高处看，河水、绿洲、铁路和沙海挤在同一幅画面里：自然的边界很锋利，人留下的痕迹也很清楚。</p>
+              <div class="spot-meta">9.27 午后若时间够 · 最多停留 1–2 小时</div>
               <div class="spot-detail"><ul>
-                    <li>夹在<strong>西夏 → 张掖</strong>途中：离开西夏陵时再决定是否绕行；若去，停留 1–2 小时，看完黄河与沙漠交汇处便继续赶往张掖。</li>
-                    <li>滑沙、羊皮筏子等项目想玩再买，不玩也能走；时间紧就直接开往张掖市区。</li>
-                    <li>绕行会更晚到店——星空留给 <strong>10.3 青海湖东岸</strong>。</li>
-                    <li><strong>只留一个主题：</strong>时间有限就选黄河区看“大河贴沙漠”，不要沙漠区、水上项目、索道全套通吃；项目排队会把 1–2 小时迅速拖成半天。</li>
-                    <li><strong>吃与带走：</strong>中卫方向常见蒿子面、羊肉与枸杞制品，但当天是赶路日，只安排快速正餐；沙地反光强，墨镜、防晒、密封水杯都要放在随手位置。</li>
+                    <li>它夹在西夏陵与张掖之间，是否绕行要等离开陵区时再决定。若时间宽裕，停一两个小时到黄河区走走，从高处看沙海贴着河湾；若中午已经过了，就直接去张掖。</li>
+                    <li>滑沙、索道、羊皮筏与骆驼分在不同区域，全部串起来需要半天。这次最多选一项最感兴趣的体验，不把短暂停靠扩成项目清单。</li>
+                    <li>中卫的蒿子面、羊肉和枸杞制品可以留给一顿利落的午饭。墨镜、防晒与水放在手边，绕行后的抵达时间也要重新看一眼。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=105.005,37.463&name=沙坡头景区&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航沙坡头</a>
               </div>
@@ -2675,13 +2749,12 @@
             <div class="spot-slide-card">
               <h3>平山湖大峡谷</h3>
               <p class="spot-teaser">张掖东北方向的红色峡谷，不是站在栏杆边看一眼的景点，而是一段真正要走进沟底、再爬回地面的路。上午光线还柔，岩壁的褶皱与阴影会比正午更有层次。</p>
-              <p class="spot-aside">平山湖适合安排在上午，常规游线大约三小时；下午回甘州城里吃饭休息，傍晚再去七彩丹霞。两处都是红色地貌，却一个向峡谷深处延伸，一个在开阔山丘上铺开。</p>
-              <div class="spot-meta">9.28 上午 · 市区往返约 2h · 常规线约 3h</div>
+              <p class="spot-aside">平山湖与傍晚的七彩丹霞都来自红色沉积岩，却给人完全不同的身体感受。流水先沿裂隙切开地表，风与温差再让岩壁剥落，于是平缓台地下面藏出窄谷、石墙和层层回廊。七彩丹霞适合远望，颜色沿山丘铺开；平山湖则要走进沟底，抬头才发现自己已经被红色岩壁包围。</p>
+              <div class="spot-meta">9.28 09:00 从张掖出发 · 约 14:00 回到城里</div>
               <div class="spot-detail"><ul>
-                    <li><strong>怎么走：</strong>09:00 从张掖市区出发，约 10:00 入园。默认选常规游线；若现场有深度线、骆驼或越野项目，不临时叠加，以 13:00 左右出园为目标。</li>
-                    <li><strong>体力点：</strong>沟底台阶、窄道和回升路段比照片看起来费腿；穿防滑鞋，背小包，水按每人至少一瓶准备。恐高或膝盖不适，现场先问清返回方式。</li>
-                    <li><strong>怎么拍：</strong>广角拍峡谷纵深，中长焦压缩岩壁纹理；人物尽量站在亮暗交界处。上午逆光时让岩壁遮住太阳，比正面硬拍更有层次。</li>
-                    <li><strong>别拖：</strong>14:00–14:30 应回到市区吃饭。超过这个时间就缩短逛街，不挤压 17:00 去丹霞的出发节点。</li>
+                <li>09:00 从张掖市区出发，约 10:00 入园，沿景区里常走的路线游览约三小时。沟底台阶、窄道和回升路段比照片里费腿，穿防滑鞋、背个小包，再带上每人一瓶水，比临时增加骆驼或越野项目更实用。</li>
+                    <li>广角能收住峡谷的纵深，中长焦适合看岩壁纹理；人物站在明暗交界处，比例会自然显出峡谷尺度。恐高或膝盖不适时，进园先问清较轻松的返回方式。</li>
+                    <li>目标是 13:00 左右离园，14:00–14:30 回到市区。若出园晚了，缩短城里散步，把 17:00 去丹霞的出发时间保住。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/search?keyword=张掖平山湖大峡谷&src=qinggan-roadbook&callnative=1">导航平山湖</a>
               </div>
@@ -2693,15 +2766,15 @@
             <div class="spot-slide-card">
               <h3>张掖城里</h3>
               <p class="spot-teaser">从峡谷回到市区，先去甘州市场吃牛肉小饭、炒拨拉或搓鱼子，再沿钟鼓楼一带逛街。若午饭结束得早且体力足够，再去大佛寺。</p>
-              <div class="spot-meta">9.28 午后 · 甘州市场／钟鼓楼 · 大佛寺可选</div>
+              <p class="spot-aside">张掖古称甘州，处在河西走廊中部，古丝路几条线路曾在这里交会。今天的钟鼓楼仍压在四条大街中央，市场、商铺和车流从楼下穿过；大佛寺则藏在不远的街巷里，西夏木构、巨型卧佛与后来朝代的建筑叠在一座院落中。上午刚从荒凉峡谷回来，城里的烟火气会显得格外具体。</p>
+              <div class="spot-meta">9.28 14:00 前后回城 · 先吃饭，再逛钟鼓楼一带</div>
               <div class="spot-detail"><ul>
-                    <li><strong>先吃什么：</strong>两个人不要各点一大份，适合共享牛肉小饭、炒拨拉，再选搓鱼子或臊面；想要甜口可找灰豆汤、杏皮茶，看到当地鲜奶冰淇淋也可留作饭后。</li>
-                    <li><strong>怎么选店：</strong>甘州市场适合一次看齐地方小吃；先绕半圈看出餐和本地客流，再落座。菜单写清份量和价格再点，避免为了“打卡”连续吃同类主食。</li>
-                    <li><strong>怎么逛：</strong>饭后从市场向钟鼓楼一带慢走，买水、补给、拍街景。若 15:00 前吃完且体力够，再进大佛寺；只看卧佛与古建，不做完整深度游。</li>
-                    <li><strong>硬截止：</strong>16:30 回酒店／停车点，17:00 前离开市区去七彩丹霞。大佛寺来不及就删，它是备选，不是欠下的任务。</li>
+                    <li>两个人可以共享牛肉小饭、炒拨拉，再从搓鱼子或臊面里选一份；灰豆汤、杏皮茶或鲜奶冰淇淋留作饭后。先在甘州市场绕半圈，看清分量、价格与出餐，再找本地客人多的摊位坐下。</li>
+                <li>吃完沿钟鼓楼一带散步，顺便买水和路上吃的东西。若 15:00 前已经吃完、腿也不累，再进大佛寺看看卧佛与古建；否则就在城里多坐一会儿。</li>
+                    <li>16:30 回到停车点，17:00 前出城去七彩丹霞。大佛寺来不及便留给下一次，不让一个备选地点改变傍晚的光线。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/search?keyword=张掖甘州市场&src=qinggan-roadbook&callnative=1">导航甘州市场</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/search?keyword=张掖大佛寺&src=qinggan-roadbook&callnative=1">可选：大佛寺</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/search?keyword=张掖大佛寺&src=qinggan-roadbook&callnative=1">有余力去大佛寺</a>
               </div>
             </div>
             <span class="visually-hidden">张掖甘州城市街景</span>
@@ -2712,13 +2785,13 @@
               <h3>七彩丹霞</h3>
               <p class="spot-teaser">七彩丹霞在下午到傍晚光线更好，斜阳会让红、黄、白、灰的层理更清楚。当天上午走平山湖，下午回城吃饭逛街，17:00 前再从市区出发去丹霞。</p>
             <p class="spot-aside">张掖临泽的彩色丘陵：白垩纪砂砾岩经风化侵蚀，铁、锰等氧化物染出红黄白灰。正午晒得发白，傍晚光斜进来时，整片山丘才真正像一只调色盘——风里干燥，颜色却很热闹。</p>
-              <div class="spot-meta">票+车约 75/人 · 9.28 下午 · 日落约 19:12</div>
+              <div class="spot-meta">9.28 17:30 前入园 · 门票和观光车约 75 元/人</div>
               <div class="spot-detail"><ul>
                     <li>9.28 上午走平山湖，市区午饭逛街后最迟 17:00 启程；争取 17:30 前入园，把丹霞游览留给傍晚斜光。</li>
-                    <li>园内乘区间环保车往返观景台，根据日落方向挑两三处重点停靠。</li>
+                <li>园内乘观光车往返几处观景台。根据当天的光线挑两三处慢慢看，不必每一站都赶着下车。</li>
+                    <li>景区也有深度游与低空体验，不过它们更适合单独留出半天，并且受入园时间与风力影响。你们约 17:30 才到，普通观光车线最贴合这次行程，不在日落前临时增加项目。</li>
                     <li>日落撤出后直接开往嘉峪关车宿；提前准备车上水和简餐，不再回张掖市区。</li>
-                    <li><strong>看台策略：</strong>先问清当日观光车方向和日落推荐点，安排一处全景台和一处近看纹理的观景台；国庆前后的排队时间也要算进返程。</li>
-                    <li><strong>怎么拍：</strong>偏振镜有助于压反光，但不要把饱和度拉满；雨后颜色通常更浓。人物穿白、黑或低饱和纯色，站在步道允许区域，用长焦压缩彩色层理。</li>
+                    <li>进园先问清当日观光车方向和适合日落的观景台，留一处看全景，再选一处近看纹理。偏振镜可以压住反光，但不必把颜色推得过满；人物站在开放步道内，用长焦把彩色层理拉近。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.12,38.97&name=张掖七彩丹霞&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航丹霞</a>
               </div>
@@ -2732,13 +2805,12 @@
               <h3>莫高窟</h3>
               <p class="spot-teaser">从数字展示中心开始，穿过一段影像与等待，最后走进洞窟。这一程订在九月二十九日下午——洞窟里凉、静，脚步也轻；看完再去沙山赶日落。</p>
             <p class="spot-aside">「莫高」一说为「漠高」，指沙漠高处的佛龛。传说前秦时乐僔和尚见金光如千佛，遂开首窟；其后历代续凿，丝路上的宗教、商旅和日常生活被画进崖壁。洞窟光线很暗，出来以后不妨在窟外停一会儿。</p>
-              <div class="spot-meta">约 238/人 · 提前约 30 天抢 · A 类常规票</div>
+              <div class="spot-meta">9.29 下午 · 常规票约 238 元/人 · 提前约 30 天预约</div>
               <div class="spot-detail"><ul>
-                    <li>导航去<strong>莫高窟数字展示中心</strong>：先看影片，再摆渡进窟区。</li>
-                    <li>目标日期 <strong>2026-09-29</strong>，优先下午场；约提前 30 天在官方渠道抢 A 类常规票。</li>
-                    <li>洞窟里凉、脚步轻；看完出来再开鸣沙山赶日落，中间留足换场时间。</li>
-                    <li><strong>看窟方法：</strong>跟紧讲解员，先看整窟布局，再挑藻井、飞天、供养人或故事画中的一处细节记住；不要忙着在每个洞口查资料，出来后再补读。</li>
-                    <li><strong>文保规则：</strong>窟内通常禁止摄影和补光，手机收好反而看得更完整。购票、证件、检票地点和开放窟数量以敦煌研究院当年公告为准，不购买来路不明的“内部票”。</li>
+                    <li>导航去<strong>莫高窟数字展示中心</strong>，不要直接开往窟区。常规参观从一场数字电影开始，随后坐摆渡车进窟区，由讲解员带看八个开放洞窟。</li>
+                <li>计划预约 <strong>9 月 29 日下午场</strong>。在官方渠道购买常规票，并比预约时间提前 30 分钟抵达数字展示中心。</li>
+                    <li>跟着讲解员先看整窟布局，再从藻井、飞天、供养人或故事画里记住一两个细节。窟内通常禁止摄影和补光，手机收起来，眼睛反而能在昏暗里停得更久。</li>
+                    <li>购票、证件、检票地点和开放窟数量以敦煌研究院当年公告为准。参观结束后直接去鸣沙山，中间要把摆渡车、停车与换场的时间算进去。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.81,40.04&name=莫高窟数字展示中心&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航数字中心</a>
               </div>
@@ -2750,15 +2822,16 @@
           <article class="spot-slide" data-region="dunhuang" data-day="929" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/Mondsichelsee.JPG/1920px-Mondsichelsee.JPG" data-caption="鸣沙山月牙泉">
             <div class="spot-slide-card">
               <h3>鸣沙山月牙泉</h3>
-              <p class="spot-teaser">沙山围着一汪新月形泉水。傍晚沙色偏金，泉水却仍旧冷静——看完主色就撤；夜里去夜市，再回梵尘。</p>
-            <p class="spot-aside">风过沙丘作声，故称鸣沙。月牙泉形如新月，嵌在沙海中间：沙不掩泉、泉不涸竭，是风与地下水长期较劲留下的形状。站在沙脊上看下去，金色与一抹冷蓝并排——像沙漠忽然留了一口气。</p>
-              <div class="spot-meta">约 110/人 · 票常可 3 日用 · 住梵尘很近</div>
+              <p class="spot-teaser">沙山围着一汪新月形泉水。傍晚进入景区后，可以骑骆驼，也可以直接走到月牙泉再爬一段沙脊；选一种走法，日落后去夜市。</p>
+            <p class="spot-aside">鸣沙并不是一句夸张的旧称。干燥的沙粒沿陡坡成片滑动时彼此碰撞、摩擦，沙粒表面的细小孔隙和整座沙丘又会放大共振，于是细响可能汇成低沉的轰鸣。声音受湿度、风力和滑动规模影响，并非每次上山都能听见；即使没有鸣响，踩上沙坡时一步陷下半步的阻力，也会立刻让人意识到这座“山”一直在移动。</p>
+            <p class="spot-aside">月牙泉不是从沙丘里凭空冒出的水。它位于地势低洼处，地下水在这里接近地表，党河水系长期为区域地下水提供补给；环抱泉水的新月形沙丘和局地风向，又让流沙更多沿着坡面和两侧迁移。真正独特的不是沙漠里恰好有一池水，而是流动的沙、低洼的地形和地下水在很小的范围内维持着脆弱平衡。今天看到的泉水也经过持续的人工补水与保护，因此它既是自然奇景，也是需要维护的水文遗产。</p>
+              <div class="spot-meta">9.29 傍晚看日落 · 门票约 110 元/人</div>
               <div class="spot-detail"><ul>
-                    <li>莫高窟出来后，下午晚一些进入鸣沙山；主要看沙山和月牙泉，日落后离园。</li>
-                    <li>骑骆驼、滑沙另收费，想玩再买；票常可多日使用，以现场说明为准。</li>
+                    <li>莫高窟出来后，下午晚一些进入鸣沙山。体力充足可以先骑骆驼穿过沙丘，再走到月牙泉；不想排队则直接步行或坐电瓶车靠近月牙泉，把时间用在爬沙脊和看日落。</li>
+                    <li>滑沙可以在下山时顺路体验。景区还有低空飞行与沙地越野，但从莫高窟赶来以后，傍晚真正稀缺的是光线；骑骆驼、滑沙或其他项目选一项，余下时间留给沙脊和泉水。</li>
+                    <li>日落后回城吃晚饭、逛沙州夜市。若现场恰有星空演出并留下观看，回城时间会相应推迟。</li>
                     <li>住梵尘很近；日落撤出后进城沙州夜市吃晚饭，再回酒店。</li>
-                    <li><strong>路线选择：</strong>时间紧就走月牙泉主景＋一段沙脊；想骑骆驼要额外留出排队和上下驼时间。不要为了更高机位持续翻沙丘，沙地上同样距离会比平路耗时。</li>
-                    <li><strong>拍摄与装备：</strong>镜头／手机准备防沙袋，换镜头尽量在室内；赤脚拍照后及时清理细沙。蓝调时刻可拍泉边灯光，但夜市晚饭不应因此拖到太晚。</li>
+                    <li>时间紧时走月牙泉与一段沙脊已经完整，骑骆驼则要多算排队时间。沙地上同样距离比平路费力，镜头和手机也要防沙；蓝调时泉边会亮灯，看一会儿便回城。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.68,40.09&name=鸣沙山月牙泉&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航鸣沙山</a>
               </div>
@@ -2772,14 +2845,14 @@
               <h3>沙州夜市</h3>
               <p class="spot-teaser">不要把它只当成一条“小吃摊合集”。先吃一顿真正的敦煌晚饭，再拿一杯杏皮水慢慢逛文创与干果街：烤肉香、叫卖声、飞天纹样和夜里的游客，一起构成敦煌最世俗也最热闹的一面。</p>
               <p class="spot-aside">更舒服的逛法是“先正餐、后散步”：驴肉黄面或胡羊焖饼负责吃饱，烤串与酿皮只负责尝味；手里留一杯酸甜的杏皮水，最后去看敦煌书局、印局或文创摊。这样不会一路都在排队，也不会吃到第五样才发现每样都是面。</p>
-              <div class="spot-meta">9.29 夜晚 · 建议 1.5–2h · 阳关东路</div>
+              <div class="spot-meta">9.29 日落以后 · 阳关东路 · 留 1.5–2 小时</div>
               <div class="spot-detail"><ul>
-                    <li><strong>第一圈先看不买：</strong>从牌楼进场，先辨清正餐店、小吃摊、干果和文创的大致分布。人多时不要堵在入口第一家，往里走通常更容易找到座位。</li>
-                    <li><strong>一顿怎么点：</strong>两个人可在<strong>驴肉黄面</strong>与<strong>胡羊焖饼</strong>中选一个当主食，再加烤羊肉／羊排、敦煌酿皮或沙葱。驴肉黄面通常是驴肉与黄面分开吃；胡羊焖饼分量偏大，先问大小份。</li>
-                    <li><strong>饮料与甜口：</strong><strong>杏皮水</strong>酸甜解腻，可以边走边喝；牛奶鸡蛋醪糟和泡儿油糕都偏甜，两个人选一种尝尝。九月底更多见的是杏干、果脯和杏制品，不一定还有新鲜李广杏。</li>
-                    <li><strong>怎么玩：</strong>吃完再逛夜光杯、木刻画、飞天纹样文创；对文创有兴趣可顺路看敦煌书局／印局一类空间。工艺品先比较材质和价格，易碎的夜光杯不建议在旅程前半段冲动购买。</li>
-                    <li><strong>避坑：</strong>烤肉问清“每串”还是“每把”，羊排和干果问清按份还是按斤；菜单没有明码标价就先不点。所谓唯一“网红店”并不可靠，现做、翻台快且本地客人多的店更值得选。</li>
-                    <li><strong>停车安排：</strong>鸣沙山日落后约 20:30–21:00 到，先把车停在外围正规停车场再步行。23:00 左右离开，第二天下午还要走敦煌西线。</li>
+                    <li>从牌楼进场后先走一圈，辨清正餐店、小吃摊、干果和文创的大致分布。人多时不要堵在入口第一家，往里走通常更容易找到座位。</li>
+                    <li>两个人可在<strong>驴肉黄面</strong>与<strong>胡羊焖饼</strong>中选一个当主食，再加烤羊肉／羊排、敦煌酿皮或沙葱。驴肉黄面通常是驴肉与黄面分开吃；胡羊焖饼分量偏大，先问大小份。</li>
+                    <li><strong>杏皮水</strong>酸甜解腻，可以边走边喝；牛奶鸡蛋醪糟和泡儿油糕都偏甜，两个人选一种尝尝。九月底更多见的是杏干、果脯和杏制品，不一定还有新鲜李广杏。</li>
+                    <li>吃完再逛夜光杯、木刻画与飞天纹样文创，对纸品和印刷有兴趣也可顺路看看敦煌书局或印局。易碎的夜光杯要带着走完后半程，不必在第一眼便买下。</li>
+                    <li>烤肉问清按串还是按把，羊排和干果问清按份还是按斤；菜单没有明码标价便换一家。现做、翻台快且本地客人多的店，通常比唯一的所谓热门店可靠。</li>
+                    <li>鸣沙山日落后约 20:30–21:00 抵达，把车停在外围正规停车场再步行。23:00 左右离开，第二天下午还要走敦煌西线。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.14&name=沙州夜市&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航沙州夜市</a>
               </div>
@@ -2792,12 +2865,11 @@
             <div class="spot-slide-card">
               <h3>敦煌博物馆</h3>
               <p class="spot-teaser">9.30 上午若醒得早，可以在去西线以前进馆。展柜把丝路文物与地方史串在一起——刚看过莫高窟，再回到灯下读一遍时代脉络，石窟之外的敦煌会更完整。</p>
-              <div class="spot-meta">9.30 上午可选 · 约 1–1.5h · 凭证件以现场为准</div>
+              <p class="spot-aside">莫高窟像一部留在崖壁上的长卷，博物馆则把长卷拆回具体的生活：关塞、简牍、商旅、器物与一座绿洲城市的日常。前一天在洞窟里容易被色彩与尺度震住，隔一夜再进展厅，才有余裕看见供养人从哪里来、丝路如何穿过敦煌，以及信仰之外的人怎样生活。</p>
+              <div class="spot-meta">9.30 上午若醒得早 · 参观约 1–1.5 小时</div>
               <div class="spot-detail"><ul>
-                    <li>开馆后进馆，重点厅走约 1–1.5h；只在不影响 13:00 西线出发时选择。</li>
-                    <li>约 11:30 前离馆吃午饭，回梵尘取东西，再按计划去玉门关与敦煌雅丹。</li>
-                    <li><strong>看什么：</strong>按“汉简与丝路—石窟艺术—地方生活”抓三条线，重点看能解释莫高窟与商旅往来的展品；已经看过莫高窟后，博物馆适合用来补全时代背景。</li>
-                    <li><strong>实际取舍：</strong>这是雨天、风沙天或放弃水上雅丹时的优质备选，不是必须打卡。预约、闭馆日和入馆证件出发前查官方信息，馆内留一小时也比匆忙扫完更好。</li>
+                    <li>若早上自然醒得早，开馆后进去走一到一个半小时。沿着“关塞与丝路—石窟艺术—地方生活”三条线看，不追求每件展品都读完。</li>
+                    <li>11:30 前离馆吃午饭，回梵尘取东西，13:00 左右去西线。若起得晚或闭馆，便把上午留给城里散步；预约、闭馆日与入馆证件在出发前再查一次。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.15&name=敦煌博物馆&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航博物馆</a>
               </div>
@@ -2810,12 +2882,12 @@
             <div class="spot-slide-card">
               <h3>敦煌市区漫步</h3>
               <p class="spot-teaser">博物馆出来，中午在阳关路／沙州一带慢慢走——书店、小巷、一顿午饭。绿洲城里的白天与昨夜夜市不同：人少一点，光更干净。</p>
-              <div class="spot-meta">9.30 上午轻线 · 中午收束</div>
+              <p class="spot-aside">敦煌并不只存在于石窟和沙山之间。党河把水带进戈壁，街边的树、市场里的瓜果和午后仍在营业的小店，组成了一座真实的绿洲城市。夜市展示的是远道而来的热闹，白天的街巷则更接近日常；在去荒无人烟的西线以前，这段寻常反而值得停一停。</p>
+              <div class="spot-meta">9.30 上午不赶时间 · 吃过午饭再去敦煌西线</div>
               <div class="spot-detail"><ul>
-                    <li>这段以步行和午饭为主，经过感兴趣的书店或街巷再停下来看看。</li>
-                    <li>卡好西线出发：约 12:30 前回梵尘，13:00 左右启程去玉门关与敦煌雅丹。</li>
-                    <li><strong>一条轻线：</strong>敦煌书局／文创空间 → 阳关路街景 → 找一家店吃驴肉黄面或家常敦煌菜 → 回住处取行李，不跨城追店。</li>
-                    <li><strong>买什么：</strong>明信片、壁画纹样纸品比易碎摆件更适合长途自驾；干果先试吃、看产地和单价。若昨晚已逛夜市，白天就把重点放在安静街巷而非重复购物。</li>
+                    <li>从博物馆去阳关路一带走走，遇见书店或安静街巷便进去看一眼，再找一家顺路的店吃驴肉黄面或家常敦煌菜，不跨城追所谓必吃店。</li>
+                    <li>明信片和壁画纹样纸品比易碎摆件更适合后面的长途。昨晚若已经逛过夜市，白天也不必重复购物，把步子放慢一些。</li>
+                    <li>12:30 前回梵尘取东西，13:00 左右启程去玉门关与敦煌雅丹。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.66,40.14&name=沙州夜市&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航阳关路一带</a>
               </div>
@@ -2827,14 +2899,14 @@
           <article class="spot-slide" data-region="dunhuang" data-day="930" data-full="https://upload.wikimedia.org/wikipedia/commons/8/88/Yumen_Pass_in_2004.jpg" data-caption="玉门关">
             <div class="spot-slide-card">
               <h3>玉门关</h3>
-              <p class="spot-teaser">去雅丹路上可短停。夯土关城立在戈壁里，风大、天远——「羌笛何须怨杨柳，春风不度玉门关。」关城不大，却把空旷衬得很清楚。</p>
-            <p class="spot-aside">王之涣《凉州词》：「黄河远上白云间，一片孤城万仞山。羌笛何须怨杨柳，春风不度玉门关。」诗里那座关，便是这一带边塞；下车站一会儿，风声往往比游客声更先到。</p>
-              <div class="spot-meta">9.30 路过短停 · 去雅丹途中</div>
+              <p class="spot-teaser">去雅丹路上可短停。夯土关城立在戈壁里，风大、天远；关城本身不大，却把四周的空旷衬得很清楚。</p>
+            <p class="spot-aside">汉代设关以后，来自西域的玉石、商旅和使者由这一带进入河西，“玉门”也由此成为边塞诗里反复出现的名字。今天最醒目的小方盘城只是遗址的一部分，方形夯土墙在荒野中独立得近乎单薄。王之涣写“春风不度玉门关”，真正站到这里，才会明白诗句说的不只是远，而是关城之外几乎没有遮挡的尺度。</p>
+              <div class="spot-meta">9.30 下午去雅丹途中 · 有时间就停约 40 分钟</div>
               <div class="spot-detail"><ul>
                     <li>9.30 午后出城去雅丹途中短停：关城不大，计划停留约四十分钟，保证日落前进入雅丹。</li>
                     <li>风大沙多，帽子、口罩有用；停稳再下车，注意过路车。</li>
-                    <li><strong>怎么看：</strong>先看小方盘城的夯土轮廓，再读说明理解它与汉代边塞、丝路通道的关系；遗址尺度不大，真正值得看的是它在荒漠中的孤立感。</li>
-                    <li><strong>取舍：</strong>若抵达已晚或雅丹末班车逼近，只在合法区域远观／直接略过。西线补给稀疏，出城前加油、装水、下载离线地图，返程不要靠临时找餐馆。</li>
+                    <li>先看小方盘城的夯土轮廓，再读一遍汉代边塞与丝路通道的说明。遗址尺度不大，四十分钟足以让眼睛从城墙转向它四周的荒漠。</li>
+                    <li>若抵达已晚或雅丹末班车逼近，就直接继续往西。西线补给稀疏，出城前加油、装水并下载离线地图，返程不靠临时找餐馆。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.86,40.35&name=玉门关&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航玉门关</a>
               </div>
@@ -2847,14 +2919,15 @@
             <div class="spot-slide-card">
               <h3>敦煌雅丹</h3>
               <p class="spot-teaser">风蚀留下的土丘站在戈壁里。坐观光车进园，日落时阴影拉长，整片旱地像一座空城慢慢亮起轮廓——看完就回敦煌。</p>
-            <p class="spot-aside">「雅丹」借自维吾尔语，指陡壁小丘。这里是旱地雅丹：风与时间削出城堡状土丘，当地又称魔鬼城——风穿梭其间时，会发出低沉的呜咽。</p>
-              <div class="spot-meta">9.30 下午 · 票+车约 120/人 · 市区约 2–2.5 小时 · 末班常约 18:30</div>
+            <p class="spot-aside">雅丹不是突然从戈壁上长出的石山。敦煌这一带曾经沉积过河流与湖泊带来的砂和泥，软硬不同的层理后来暴露在极干旱的地表。偶发暴雨先把平地切出沟槽，常年的风再沿沟槽反复吹蚀：松软部分被带走，较硬的部分留下，沟槽逐渐加深，最终形成成排的长垄、墙体、柱子和孤立土丘。远看像舰队、城堡或动物，只是人习惯为这些残丘寻找熟悉的名字。</p>
+            <p class="spot-aside">这里最特别的是尺度与秩序。许多雅丹体顺着主风向排列，车进入其中以后，地平线会被一堵堵土墙切开，人和车都显得很小。所谓“魔鬼城”也不全来自传说：大风穿过狭长沟谷时会产生低沉回声，天黑后又没有灯光和参照物，听觉比视觉更先感到这片荒原。敦煌雅丹看到的是风留下的骨架，干、硬、没有水面的缓冲。</p>
+              <div class="spot-meta">9.30 16:30 前后入园 · 门票和观光车约 120 元/人</div>
               <div class="spot-detail"><ul>
-                    <li>9.30 建议 <strong>13:00–14:00</strong> 前出城；途中可短停玉门关，留足赶日落班。博物馆与漫步在次日上午。</li>
+                <li>9.30 在 <strong>13:00–14:00</strong> 前离开敦煌；途中可以在玉门关停一会儿，别耽误雅丹的日落班车。若想去博物馆或逛市区，就放在当天上午。</li>
                     <li>进园坐观光车串土丘；末班常约 18:30，以现场为准——日落时阴影拉长最好看，看完当天回敦煌。</li>
-                    <li>票+车约 120/人；第二天主线换到乌素特水上雅丹，一天一景更从容。</li>
-                    <li><strong>怎么看：</strong>观光车停靠点不要只拍“孔雀”“舰队”等命名造型，转身看土丘之间的风道与长阴影；最后一站把时间留给日落前后的颜色变化。</li>
-                    <li><strong>夜路准备：</strong>看完回敦煌路程长、照明少，出园前上洗手间、确认电量／油量，司机不硬扛疲劳；车内准备水和简餐，返程遇风沙按道路提示降速。</li>
+                <li>门票和观光车约 120 元/人。第二天还会看到水上雅丹，两处各留半天，能看清旱地雅丹与湖上雅丹的差别。</li>
+                    <li>观光车停靠点不只看“孔雀”“舰队”等命名造型，也要转身看看土丘之间的风道与长阴影；最后一站把时间留给日落前后的颜色变化。</li>
+                    <li>回敦煌的路长、照明少，出园前上洗手间并确认油电余量。车里备水和简餐，司机疲劳便停车休息，遇风沙按道路提示降速。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=92.85,40.52&name=敦煌雅丹国家地质公园&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航雅丹</a>
               </div>
@@ -2863,43 +2936,23 @@
             <span class="visually-hidden">敦煌雅丹</span>
           </article>
 
-          <article class="spot-slide" data-region="dunhuang" data-day="1001" data-full="https://images.pexels.com/photos/34266430/pexels-photo-34266430.jpeg?auto=compress&cs=tinysrgb&w=1920" data-caption="胡杨 · 金秋树影（风景参考）">
-            <div class="spot-slide-card">
-              <h3>多坝沟胡杨峡</h3>
-              <p class="spot-teaser">出城往阿克塞，西拐进沟。沙与石先静下来，再看见那些弯着腰的树——十月若赶上叶子转金，整条峡谷会像被风点燃；赶不上满金，水墨山体与沟底的光，也够停稳看一会儿。</p>
-            <p class="spot-aside">多坝沟在冷湖正线西侧，约 67 km、纯开约 1h；进沟约 1.5–2.5h。金秋常偏下旬，十日前后以峡谷层次为主。支线：会占用下午余量；若想加停，宜很早出发，并给水上雅丹留足时间。</p>
-              <div class="spot-meta">10.1 支线 · 约 +1–1.5h · 当天通常不去</div>
-              <div class="spot-detail"><ul>
-                    <li>早点出城；票价与开放情况以现场或携程信息为准。</li>
-                    <li>找安全处停稳再进沟；防晒、防滑鞋底、水要带够。</li>
-                    <li>选了胡杨峡，黑独山与冷湖镇边可车窗带过——正线余量留给水上雅丹倒影。</li>
-                    <li><strong>季节预期：</strong>九月底叶色受当年温度影响，可能尚未全黄；不要为了“金色大片”深入无信号支路。把峡谷、树影和光线当主角，颜色只是附加项。</li>
-                    <li><strong>怎么拍：</strong>早晚侧光拍树干与岩壁，人物不要踩进脆弱植被；风大时用连拍而非强求长曝光。现场若收费、封闭或需换乘，就以管理方指引决定去留。</li>
-                  </ul></div><div class="spot-slide-actions">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.82,39.98&name=多坝沟胡杨峡&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航胡杨峡</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.82,39.98,多坝沟胡杨峡&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 胡杨峡</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.82,39.98,多坝沟胡杨峡&to=93.34,38.75,冷湖镇&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">胡杨峡 → 冷湖</a>
-              </div>
-
-            </div>
-            <span class="visually-hidden">胡杨金秋树影</span>
-          </article>
-
           <article class="spot-slide" data-region="qinghai" data-day="1001" data-full="https://static.bjd.com.cn/dams-res-external/mps/image/202511/15/69183a96d5de5f38d75bc1d7_m.jpg" data-caption="黑独山 · 墨色山脊与浅色盐壳（风景参考）">
             <div class="spot-slide-card">
               <h3>黑独山</h3>
-              <p class="spot-teaser">冷湖镇东北约一刻钟。山体灰黑，像一笔浓墨落在盐壳边上——风过处，连影子都显得干净。常有人写成「像月球」；站在车辙外看一会儿，天地只剩黑、白与很远的天。</p>
-            <p class="spot-aside">黑独山贴在冷湖走廊上，敦煌到冷湖约 3.5–4.5h 之后顺路可停。山下宜 30–60 分钟；末段砂石车辙，L7 跟辙慢开。正线留给水上雅丹；也可只在冷湖镇边望一眼远处黑山。</p>
-              <div class="spot-meta">10.1 支线 · 山下宜 30–60 分钟 · 多无大门票</div>
+              <p class="spot-teaser">冷湖镇东北十余公里，灰黑山体忽然从浅色盐碱地里升起。这里常被形容成月球，但真正罕见的不是“荒凉”，而是黑、灰、白几乎占满整个视野，植被和建筑都没有参与调色。</p>
+            <p class="spot-aside">黑独山的黑色主要来自岩石表面的铁、锰质薄膜，以及长期风化后覆盖坡面的深色碎屑。风、巨大昼夜温差和偶尔的地表径流继续切割山坡，留下细密沟纹与褶皱；周围偏白的盐碱戈壁把这种黑衬得更重。它不像火山口，也不是一整块均匀的黑石，更接近一片被风化反复处理过的单色山地。</p>
+            <p class="spot-aside">站在山前很难判断距离，因为画面里几乎没有树、人或房屋作为尺度。更需要留意的是，这层黑色地表十分脆弱：车辆碾压或踩踏会翻出下面的浅色土层，留下多年难以恢复的白色伤痕。黑独山的“水墨感”正来自完整连续的深色表面，因此远看、沿开放路线行走，本身就是理解它的一部分。</p>
+            <p class="spot-aside">沿线的南八仙也有辽阔雅丹，多坝沟则有荒漠峡谷和胡杨，但它们都没有这种近乎抽去全部色彩的山体。前者可以替代一段荒原风景，后者适合看秋色，都不能替代黑独山本身；这也是本次宁可早出发，仍把真正的黑独山留下来的原因。</p>
+              <div class="spot-meta">10.1 约 10:30 抵达 · 在官方开放区停留 1–1.5 小时</div>
               <div class="spot-detail"><ul>
-                    <li>导航搜「黑独山景区」。开放与管制以现场为准，白天去更稳。</li>
+                    <li>导航搜「黑独山景区」。目前按游览区、缓冲区和禁游区分区管理，门票、区间车与当日开放范围以现场为准。</li>
                     <li>风大、补给少；墨镜、外套和水必备。无人机与禁飞看当天公告。</li>
-                    <li>出山后若进入火星一号，约 90km 非铺装路仍需约 3h；因此黑独山默认删除，不与这段穿越叠加。</li>
-                    <li><strong>边界意识：</strong>只走明确开放道路与现成停车区域，不碾压盐壳、不循车辙深入无人区。黑色山体远看已有层次，没必要把车开到山脚追求“无人感”。</li>
-                    <li><strong>怎么拍：</strong>阴天适合拍水墨层次，晴天用长焦压缩黑山与浅色地表；人物穿浅色会更醒目。风沙可能瞬间变强，停车时车头顺风、开门先扶稳。</li>
+                    <li>离开景区后到冷湖吃饭加油，再沿铺装道路前往水上雅丹。</li>
+                    <li>只走明确开放的道路与停车区域，不碾压盐壳，也不循着车辙深入无人区。黑色山体远看已有层次，没有必要把车开到山脚寻找所谓无人感。</li>
+                    <li>阴天更容易看见水墨层次，晴天可用长焦压缩黑山与浅色地表，浅色衣服也会更醒目。风沙可能突然变强，开车门时先扶稳。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.42,38.84&name=黑独山景区&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航黑独山</a>
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.34,38.75,冷湖镇&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 冷湖</a>
+              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=94.66,40.14,敦煌&to=93.42,38.84,黑独山景区&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 黑独山</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
               </div>
 
@@ -2907,41 +2960,22 @@
             <span class="visually-hidden">黑独山水墨丘陵</span>
           </article>
 
-          <article class="spot-slide" data-region="qinghai" data-day="1001" data-full="https://images.unsplash.com/photo-1724469986740-f969e22f0676?w=1920&q=85" data-caption="火星一号公路一带 · 戈壁公路（风景参考）">
-            <div class="spot-slide-card">
-              <h3>火星一号公路</h3>
-              <p class="spot-teaser">冷湖往水上雅丹的一段无人区公路。路碑一公里一棵，戈壁一直铺到视线尽头，途中几乎没有信号和补给，风景主要在行车过程中看。</p>
-            <p class="spot-aside">这不是必须完成的“打卡公路”，更不能把不明车辙当路线。只在导航、官方通行信息与现场路牌一致时沿明确道路前进；有疑问便回到铺装国道，不为节省时间进入无人区便道。</p>
-              <div class="spot-meta">10.1 条件路线 · 约 90km 非铺装路 · 纯开约 3h</div>
-              <div class="spot-detail"><ul>
-                    <li>右转常为火星一号（有路碑）；直行易入废弃路段，出发前看清导航与路况提示。</li>
-                    <li>无人区信号弱：油、水、干粮提前备好；只在合法停车区停车，不占用路肩。</li>
-                    <li>驶出火星一号后直接前往水上雅丹，途中只在正规停车区短停。</li>
-                    <li><strong>导航原则：</strong>出发前同时下载高德离线地图和关键节点截图，沿主路、路碑与正规指示行驶；导航与路牌冲突时不赌废弃便道，回到有信号处重新确认。</li>
-                    <li><strong>车辆准备：</strong>前一晚把电／油补足，胎压、备胎工具和充气泵检查一遍。风景主要在车窗外展开，只在合法、视野开阔的停车区短停，不占道路拍“公路大片”。</li>
-                  </ul></div><div class="spot-slide-actions">
-              <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
-              </div>
-
-            </div>
-            <span class="visually-hidden">火星一号公路戈壁公路</span>
-          </article>
-
           <article class="spot-slide" data-region="qinghai" data-day="1001" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Wusute_Yardang_on_Water_Geological_Park.jpg/1920px-Wusute_Yardang_on_Water_Geological_Park.jpg" data-caption="乌素特水上雅丹">
             <div class="spot-slide-card">
               <h3>乌素特水上雅丹</h3>
               <p class="spot-teaser">火星公路尽头附近的主要停靠点。雅丹立在浅湖中，无风时倒影很清楚；敦煌看的是旱地雅丹，这里最大的区别是水面和土丘同时入景。</p>
-            <p class="spot-aside">乌素特一带，风蚀土丘立在湖水中，晴天时天空、盐壳和倒影会连成大片蓝色。10.1 下午抵达后游览到日落，当晚住在附近，取消原计划中两个多小时的大柴旦夜路。</p>
-              <div class="spot-meta">10.1 白天收尾 · 停 1–1.5 小时 · 票+车约 120/人</div>
+            <p class="spot-aside">水上雅丹的底子仍然是雅丹：古老的河湖沉积先被风与流水切成土丘，水却是后来才到的。这里原本是一片没有湖水的雅丹群，发源于昆仑山的那棱格勒河在洪水后改道，河水进入低地，原先立在旱地上的风蚀土丘由此被湖面包围。换句话说，它并不是在水下“长成”的，而是一片成熟的荒漠地貌偶然遇见了新的水系。</p>
+            <p class="spot-aside">这也解释了它为什么与敦煌雅丹完全不同。敦煌看到的是沟谷、土墙和风的方向；乌素特则像一支停在水面的舰队，土丘的体量被倒影重新放大。无风时水面接近镜子，天地很难分界；风起以后倒影破碎，盐壳、浅水和土丘的层次才显出来。湖水范围会随来水与季节变化，眼前的蓝并不是永远固定的布景，而是雅丹漫长寿命里相当年轻的一次变化。</p>
+              <div class="spot-meta">10.1 16:30–17:30 抵达 · 游览到日落并住在景区</div>
               <div class="spot-detail"><ul>
-                    <li>进园约 1–1.5 小时，跟着游览线看土丘与倒影；票+车约 120/人，以现场为准。</li>
-                    <li>前面走廊宜留一处；余量留给这里的倒影与天光。</li>
-                    <li>日照强、风干，防晒和水要带够；看完日落就回园区附近住宿，不再夜行去大柴旦。</li>
-                    <li><strong>与敦煌雅丹的区别：</strong>敦煌已经看过旱地雅丹，这里重点观察水面倒影和冷暖色对照。无风时靠近水边看倒影，有风时改拍水纹和开阔尺度。</li>
-                    <li><strong>怎么拍：</strong>广角贴近安全步道边缘收水面，中长焦拍孤立土丘；盐碱地看似坚硬也可能松软，只在景区开放步道活动，不擅自下水或走向无人区。</li>
+                    <li>门票与观光车合计约 100 元／人。下午抵达后先坐车到较深的西海舰队或黄金沙滩，再顺着傍晚的光往回走；望海台、蓬莱仙岛不必每站都停很久。</li>
+                    <li>若入园早、排队也短，可以从快艇与越野车里选一项：前者贴近水面看倒影，后者进入更远的戈壁看雅丹群。骑骆驼、摩托和卡丁车不用全玩，把时间留给日落。</li>
+                    <li>无风时靠近开放步道看完整倒影，风起以后则看水纹怎样改变土丘边缘。广角适合水面与天空，中长焦能隔开一座座孤丘；盐碱地表可能松软，不离开景区步道。</li>
+                    <li>进园前问清酒店晚餐时间，车里留一份简餐。观光车常运营到 21:00，日落后回园区住宿，不再连夜去大柴旦；具体时间以当天公告为准。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.35,37.72&name=乌素特水上雅丹&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航水上雅丹</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.34,38.75,冷湖镇&to=93.35,37.72,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
+              <a class="btn btn-sm" target="_blank" rel="noopener" href="https://www.wusuteyadan.com/list/hotel.html">景区玩法与住宿</a>
               </div>
 
             </div>
@@ -2952,14 +2986,11 @@
             <div class="spot-slide-card">
               <h3>东台吉乃尔湖</h3>
               <p class="spot-teaser">第二天离开水上雅丹后，蓝白盐湖会在 G315 一侧展开。它更适合作为途中一眼，而不是重新拖长行程；只有正式观景区域开放，才短暂停留。</p>
-            <p class="spot-aside">东台吉乃尔是 G315 沿线的开放式盐湖景观，蓝白盐壳紧贴公路。若离开水上雅丹时已经很晚，就不停车；大柴旦翡翠湖安排在第二天下午。</p>
-              <div class="spot-meta">10.2 清晨可选 · 仅在正式开放区域短停</div>
+            <p class="spot-aside">东台吉乃尔是一片浅水盐湖，盐类与矿物悬浮物、光照角度和水深共同改变湖色，因此它有时蓝得近乎透明，有时只剩大片白色盐壳。水量和岸线随季节变化，所谓“马尔代夫蓝”并不是每天固定出现的滤镜；把这种不稳定也看作盐湖的一部分，眼前是什么颜色便看什么颜色。</p>
+              <div class="spot-meta">10.2 离开水上雅丹后顺路经过 · 开放时才短停</div>
               <div class="spot-detail"><ul>
-                    <li>10.2 离开水上雅丹后顺路经过；只有景点正式开放并设有明确入口、停车区时，才短停 15–40 分钟。</li>
-                    <li>水位与蓝白浓淡随季节变化，以现场为准；没有正规停车区便从车窗看过。</li>
-                    <li>当天终点是大柴旦，但下午还要游翡翠湖；额外停留仍应控制在短停范围。</li>
-                    <li><strong>降低预期：</strong>湖色、水位与可达区域变化很大，它只是顺路彩蛋，不值得为了网图效果绕路或踩盐壳。先在导航与现场告示确认是否开放，再决定停车。</li>
-                    <li><strong>补给逻辑：</strong>这一段服务区间隔较长，离开水上雅丹前完成洗手间和饮水补充；太阳落山后不再追加停靠，把安全抵达大柴旦放在照片之前。</li>
+                    <li>10.2 离开水上雅丹后顺路经过。只有正式开放并设有明确入口和停车区时，才停十五到四十分钟；否则从车窗看湖面与盐壳，不在路边临时下车。</li>
+                    <li>这只是上午的一次短停，下午的大柴旦翡翠湖才会留出完整时间。离开水上雅丹前上洗手间、补水，不为了接近湖色踩进盐壳或绕入不明道路。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=93.9,37.5&name=东台吉乃尔湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航东台吉乃尔湖</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.35,37.72,乌素特水上雅丹&to=93.90,37.50,东台吉乃尔湖&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 东台</a>
@@ -2971,14 +3002,13 @@
 
           <article class="spot-slide" data-region="qinghai" data-day="1002" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/%E6%A0%BC%E5%B0%94%E6%9C%A8_%E4%B8%9C%E5%8F%B0%E5%90%89%E4%B9%83%E5%B0%94%E7%9B%90%E6%B9%96%E9%A3%8E%E6%99%AF_12.jpg/1920px-%E6%A0%BC%E5%B0%94%E6%9C%A8_%E4%B8%9C%E5%8F%B0%E5%90%89%E4%B9%83%E5%B0%94%E7%9B%90%E6%B9%96%E9%A3%8E%E6%99%AF_12.jpg" data-caption="U315 / U型公路一带 · 盐湖公路风景">
             <div class="spot-slide-card">
-              <h3>U315公路·U型公路</h3>
+              <h3>G315 上的 U 形弯</h3>
               <p class="spot-teaser">东台附近顺路经过的风景公路，盐壳、天空和弯道从车窗里就能看到。有时间可在正规停车区短停几分钟；天色晚了就直接开往大柴旦。</p>
             <p class="spot-aside">「U315 / U 型公路」多指 G315 东台吉乃尔一带的起伏路段，路旁可见盐湖和戈壁。这里排在东台之后、大柴旦之前；没有时间就直接经过，不专门停车。</p>
-              <div class="spot-meta">10.2 途经 · 车内观景，不在公路停车</div>
+              <div class="spot-meta">10.2 继续沿 G315 向东 · 从车内经过，不在公路停车</div>
               <div class="spot-detail"><ul>
-                    <li><strong>只经过，不打卡：</strong>相关路段车流和重型货车多，按限速正常通行；不要在行车道、应急带或普通路肩停车，不横穿公路，也不站到路中央拍照。</li>
-                    <li><strong>怎么看：</strong>由副驾从车内观察道路起伏；若当地设置正规观景区，再从明确入口进入并停在划定车位。没有正规区域就直接开走。</li>
-                    <li><strong>安全优先：</strong>保持车距，不因拍摄突然降速或掉头；风大、紫外线强，光尽了就直开大柴旦。所谓“同款机位”不值得承担交通风险。</li>
+                    <li>所谓 U 型公路，是 G315 在戈壁上翻过坡脊时形成的视觉起伏，并不是为游客修建的观景台。重型货车与长途车辆仍在正常通行，最好由副驾从车内看道路怎样消失在坡后又重新出现。</li>
+                    <li>若当地设有正规观景区，才从明确入口进入并停在划定车位。没有停车区就按限速继续行驶，不在行车道、应急带或普通路肩停车，也不横穿公路。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=94.1,37.55&name=U型公路&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航 U 型公路一带</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=93.90,37.50,东台吉乃尔湖&to=94.10,37.55,U型公路&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">东台 → U315</a>
@@ -2993,14 +3023,12 @@
             <div class="spot-slide-card">
               <h3>大柴旦翡翠湖</h3>
               <p class="spot-teaser">下午在盐湖边看一层层蓝绿——浅的像冰，深的像玉，斜光一落，颜色便从清冷慢慢转暖。乘小火车深入湖区，再挑两三个颜色不同的站慢慢返回，直到日落。</p>
-            <p class="spot-aside">「翡翠湖」是大柴旦镇旁盐湖群的俗称，因多层蓝绿水色得名。新路线专门在大柴旦住一晚，因此下午可以避开正午硬光，从深处乘小火车逐站返回，慢慢等到盐池被夕阳染暖。</p>
-              <div class="spot-meta">10.2 重点停靠 · 15:30 入园至日落</div>
+            <p class="spot-aside">翡翠湖并不是一整片天然湖面，而是盐业开采留下的采坑与盐池组成的湖群。不同池水的深浅、盐分与矿物浓度不一，阳光和天空倒映进去，才出现蓝、绿、乳白甚至偏黄的差别。规则或不规则的池岸保留着工业痕迹，远山、盐壳与人工切出的水面叠在一起，正是它和茶卡、东台最不同的地方。</p>
+              <div class="spot-meta">10.2 15:30 前后入园 · 一直看到日落</div>
               <div class="spot-detail"><ul>
-                    <li>午饭和入住后约 15:30 进园，建议预留 3～4 小时；乘小火车直达深处，再选两三个湖逐站返回。</li>
+                    <li>午饭和入住后约 15:30 进园，预留三到四小时；乘小火车直达深处，再选两三个颜色与形状差异明显的盐池逐站返回。</li>
                     <li>票+车约 100/人量级，以现场为准；日照强、干燥，防晒和水要带够。</li>
-                    <li>出镇后东行：德令哈补给 → 青海湖东岸过夜。</li>
-                    <li><strong>选湖方法：</strong>先看游客中心地图，选两三个颜色差异明显、步行距离合理的湖面，不追求逐池打卡；清晨低角度光和较少人流比“第几号湖”更重要。</li>
-                    <li><strong>怎么拍：</strong>白色或亮色衣服容易从蓝绿湖面中跳出来，偏振镜旋转过度会让水色失真；盐壳边缘可能湿滑，只走开放步道，镜头与鞋上的盐回车后及时擦净。</li>
+                    <li>不必追问“第几号湖最好看”，先看地图与当时光线，步行距离合适便停下来。偏振镜转得过度会让湖色失真，盐壳边缘也可能湿滑；只走开放步道，回车后把鞋与镜头上的盐及时擦净。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=95.37,37.85&name=大柴旦翡翠湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航翡翠湖</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=95.37,37.85,大柴旦翡翠湖&to=97.37,37.37,德令哈&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">翡翠湖 → 德令哈</a>
@@ -3013,14 +3041,12 @@
           <article class="spot-slide" data-region="qinghai" data-day="1003" data-full="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/%E5%BE%B7%E4%BB%A4%E5%93%88_%E5%B0%95%E6%B5%B7_liuzusai2013-06-05_-_panoramio.jpg/1920px-%E5%BE%B7%E4%BB%A4%E5%93%88_%E5%B0%95%E6%B5%B7_liuzusai2013-06-05_-_panoramio.jpg" data-caption="德令哈 · 尕海一带">
             <div class="spot-slide-card">
               <h3>德令哈</h3>
-              <p class="spot-teaser">德令哈是大柴旦前往青海湖东岸途中的海西州府，加油站、餐馆和超市都比盐湖沿线好找。计划在这里停留约一小时，吃午饭并补齐物资。</p>
-            <p class="spot-aside">德令哈位于大柴旦与青海湖之间，本次只作中途补给。进城加油、吃饭和买水后继续上路，争取傍晚抵达青海湖东岸。</p>
-              <div class="spot-meta">10.3 午间补给 · 加油吃饭约 45–60 分钟</div>
+              <p class="spot-teaser">德令哈是从柴达木腹地回到青海湖途中第一座真正方便补给的城市。盐湖与长路之后，红绿灯、餐馆和超市重新出现，午饭也终于可以坐下来吃。</p>
+            <p class="spot-aside">许多人因为海子的《日记》记住德令哈，把它想成诗里的一夜；真正经过时，它更像柴达木盆地边缘一处安稳的停顿。你们不会在这里寻找景点，只借一小时把油、水、热饭和精神都补回来，再继续去青海湖。</p>
+              <div class="spot-meta">10.3 中午到德令哈 · 吃饭加油约 1 小时</div>
               <div class="spot-detail"><ul>
-                    <li>10.3 从大柴旦出发后进城，优先加油、吃饭、超市补给，约 45–60 分钟，补完继续去青海湖。</li>
-                    <li>出城直开东岸；把余量留给日落与夜里看星。</li>
-                    <li><strong>吃什么：</strong>选择牛羊肉、面片或炕锅类热食，两个人点一份主菜和一份主食；赶路前不吃过辣、过油或陌生凉食。</li>
-                    <li><strong>补什么：</strong>加满油／补电，买水、早餐、热饮和高原夜间需要的零食；检查轮胎与玻璃水。城市本身不安排打卡，补给完成时间比店名更重要。</li>
+                    <li>10.3 午间进城停四十五到六十分钟，先加油，再吃一顿牛羊肉、面片或炕锅类热食。两个人一份主菜配一份主食，赶路前不吃太油太辣。</li>
+                    <li>超市里补水、次日早餐、热饮和夜间零食，顺手检查轮胎与玻璃水。补齐后继续去东岸，傍晚的时间留给青海湖。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=97.37,37.37&name=德令哈&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航德令哈</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 青海湖东岸</a>
@@ -3035,12 +3061,10 @@
               <h3>茶卡盐湖</h3>
               <p class="spot-teaser">往青海湖东岸途中，若时间宽裕可短停「天空之镜」。盐壳反光，远山压在天边——人走在白茫茫的盐上，影子会格外清楚。</p>
             <p class="spot-aside">「茶卡」在藏语里意近盐池。这里是采盐与观景并存的盐湖：清晨的翡翠湖是多层蓝绿，东台是 G315 路边的盐壳，茶卡则以大片反光的「天空之镜」出名。盐壳反光强，墨镜必备。</p>
-              <div class="spot-meta">10.3 通常不进 · 时间充裕再考虑</div>
+              <div class="spot-meta">10.3 这次计划直接经过 · 明显提前才临时停留</div>
               <div class="spot-detail"><ul>
-                    <li>德令哈补给后、若时间宽裕再短停；看完盐壳反光就继续东岸，把余量留给日落与星空。</li>
-                    <li>盐壳反光强，墨镜必备；停车按景区指示找安全处。</li>
-                    <li><strong>是否值得加：</strong>前一天已经完整看过翡翠湖，盐湖体验重复；本版默认不进茶卡，只有路线严重提前、天气通透时才现场重议。</li>
-                    <li><strong>怎么玩：</strong>若进景区，先确认小火车、步行距离和最后离场时间，选择一处倒影区游览。阴天没有倒影就不久等，按计划继续前往青海湖。</li>
+                <li>从德令哈沿高速经过茶卡一带，继续向青海湖东岸行驶。前一天下午已经在翡翠湖看过盐池与日落，今天把时间留给傍晚的青海湖。</li>
+                    <li>若决定入园，选一处倒影区停留，先确认小火车、步行距离和最晚离场时间。阴天没有倒影也不久等；盐壳反光强，墨镜要戴上。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=99.08,36.70&name=茶卡盐湖&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航茶卡</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=99.08,36.70,茶卡盐湖&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">茶卡 → 青海湖东岸</a>
@@ -3054,15 +3078,17 @@
             <div class="spot-slide-card">
               <h3>青海湖东岸</h3>
               <p class="spot-teaser">这一晚住在东岸附近。傍晚看湖，天黑后视云量决定是否拍星空；湖边风大，日落后气温也会很快下降。</p>
-            <p class="spot-aside">青海湖古称西海，藏语「措温布」意近「青色的海」。东岸远离城市灯光，天气晴朗时适合拍星空。湖边风大，夜间气温可能接近 0℃，需要厚外套。</p>
-              <div class="spot-meta">景区票约 100/人量级 · 木慧楠 · 海拔略高</div>
+            <p class="spot-aside">青海湖古称西海，藏语「措温布」意为青色的海。它原本与黄河水系相通，后来周围山地隆起、外泄通道被阻断，才逐渐成为高原上的内陆咸水湖。站在东岸很难一眼看见对岸，湖面因此有海一样的尺度；颜色也不只是蓝，云影、风浪与太阳高度会让它在青灰、深蓝和银白之间不断变化。</p>
+            <p class="spot-aside">十月初已经没有盛夏油菜花的热闹，岸边会更冷、更疏朗。傍晚是低斜的湖光，夜里则可能只剩风声与远处零散灯火。这里放在柴达木长路之后很合适：前几天一直在看荒原如何被风塑形，到了湖边，视线终于能在一整片水面上停下来。</p>
+              <div class="spot-meta">10.3 傍晚抵达 · 10.4 上午离开 · 住木慧楠</div>
               <div class="spot-detail"><ul>
-                    <li>10.3 从大柴旦经德令哈补给，再开到东岸；傍晚先看湖面，天黑以后等星——本趟星空重点在这里。</li>
-                    <li>住木慧楠一带；风大、夜里冷，外套要有。景区票约 100/人量级，以现场为准。</li>
+                    <li>10.3 从大柴旦开到德令哈吃午饭、加满油，再继续去青海湖东岸；傍晚在住宿附近寻找明确开放的岸线看湖，天黑后根据云量决定是否拍星空。</li>
+                    <li>住木慧楠一带；风大、夜里冷，外套要有。不要从私人牧场围栏或没有入口的草地穿到湖边，停车和收费看现场标识。</li>
                     <li>10.4 上午在湖边停留两小时左右，11:00 出发，经西宁前往兰州。</li>
-                    <li><strong>傍晚：</strong>先找正规停车和开放岸线，不穿越围栏进入牧场；用中长焦拍湖面层次，日落后气温会迅速下降，蓝调结束就回住宿点。</li>
-                    <li><strong>星空：</strong>睡前查云量、月相和风力，关掉车灯后给眼睛十几分钟适应；三脚架压稳，不在公路边架机位。若云厚就不熬夜，次日清晨仍有湖边光线。</li>
-                    <li><strong>高原状态：</strong>慢走、少酒、多喝水，出现持续头痛、胸闷或明显不适就停止拍摄并下降／求助；夜间不要为了所谓私家机位离开有信号与照明的区域。</li>
+                    <li>若临时想坐船，可以改去二郎剑景区，但完整游览至少会多占两三个小时，也意味着 10.4 更晚到兰州。这次住在东岸，在住处附近找一段开放岸线看湖会更舒服。</li>
+                    <li>先找正规停车与开放入口，不穿过私人牧场围栏。傍晚用中长焦看湖面被风分成深浅不同的层次，蓝调结束便回住宿点添衣服。</li>
+                    <li>睡前查云量、月相和风力；晴朗时关掉车灯，让眼睛适应黑暗后再架三脚架，位置远离公路。云厚便早点休息，第二天早晨还会再看一次湖。</li>
+                    <li>在高原慢走、少酒、多喝水。持续头痛、胸闷或明显不适时立刻停止拍摄并求助，不为寻找僻静机位离开有信号与照明的区域。</li>
                   </ul></div><div class="spot-slide-actions">
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/marker?position=100.74,36.72&name=青海湖东岸&src=qinggan-roadbook&coordinate=gaode&callnative=1">导航东岸</a>
               <a class="btn btn-map btn-sm" target="_blank" rel="noopener" href="https://uri.amap.com/navigation?from=97.37,37.37,德令哈&to=100.74,36.72,青海湖东岸&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">德令哈 → 东岸</a>
@@ -3102,16 +3128,16 @@
 
         <div class="extra-panel" data-panel="sunset" hidden>
           <div class="layer">
-            <h3>每天日落大概几点</h3>
+            <h3>十二天的落日</h3>
             <p style="font-size:13px;color:var(--ink-soft);margin:0 0 10px">按 2026 行程日估算（北京时间）；以当天天气与现场公告为准，赶日落宜提前半小时到位。</p>
             <div class="sunset-grid">
               <div><b>9.24</b> 夜行赶路<span class="sun-note">当天不安排日落观景，21:00 从成都出发。</span></div>
-              <div><b>9.25–9.26</b> 银川 · 约 <b>19:10</b> 前后<span class="sun-note">宿集／漫葡吃侧光；纪念日与夜游都适合落在暮色里。</span></div>
+              <div><b>9.25–9.26</b> 银川 · 约 <b>19:10</b> 前后<span class="sun-note">宿集适合在傍晚看山，漫葡的灯火也从暮色里开始。</span></div>
               <div><b>9.27</b> 西夏 → 张掖市区 · 约 <b>19:13</b><span class="sun-note">傍晚进城住下；日落留给明天丹霞。</span></div>
               <div><b>9.28</b> 张掖丹霞 · 约 <b>19:12</b><span class="sun-note">下午进园，日落前留在观景台；撤出后开嘉峪关车宿。</span></div>
               <div><b>9.29</b> 鸣沙山 · 约 <b>19:32</b><span class="sun-note">莫高出来抓紧换场；沙色偏金时最好看，看完进城夜市。</span></div>
               <div><b>9.30</b> 敦煌雅丹 · 约 <b>19:30</b><span class="sun-note">可睡懒觉；末班观光车常见约 18:30——提前入园等斜光，日落后回梵尘。</span></div>
-              <div><b>10.1</b> 水上雅丹 · 约 <b>19:34</b><span class="sun-note">清晨离开敦煌，下午进园；住在附近后，可以安心把最后一束光留给水面。</span></div>
+              <div><b>10.1</b> 水上雅丹 · 约 <b>19:34</b><span class="sun-note">06:30–07:00 离开敦煌，中午看黑独山，傍晚进园；日落后直接回景区住宿。</span></div>
               <div><b>10.2</b> 大柴旦翡翠湖 · 约 <b>19:25</b><span class="sun-note">下午进园，乘小火车由深处逐站返回；把斜光和日落留给盐湖。</span></div>
               <div><b>10.3</b> 青海湖东岸 · 约 <b>19:06</b><span class="sun-note">经德令哈转场，傍晚抵达；天气晴朗时，夜里可以拍星空。</span></div>
               <div><b>10.4</b> 青海湖上午 · 兰州傍晚约 <b>19:03</b><span class="sun-note">上午留湖边，下午经西宁去兰州。</span></div>
@@ -3122,7 +3148,7 @@
 
         <div class="extra-panel" data-panel="wear" hidden>
           <div class="layer">
-            <h3>九月末怎么穿</h3>
+            <h3>从山脚薄衫，到湖边羽绒</h3>
             <p style="font-size:13px;color:var(--ink-soft);margin:0 0 12px">本趟是 <b>9.24–10.5</b>：西北秋高气爽、日照硬、风干，昼夜温差常到十五度上下。下面是常年体感，出发前仍要查看当地天气预报。</p>
             <div class="sunset-grid" style="margin-bottom:14px">
               <div><b>银川</b>白天约 <b>18–25℃</b><span class="sun-note">夜里约 8–13℃。9.25 与漫葡夜游偏凉，薄外套要有。</span></div>
@@ -3131,7 +3157,7 @@
               <div><b>青海湖东岸</b>白天约 <b>8–16℃</b><span class="sun-note">夜里常接近 0–5℃，需要防风厚外套或薄羽绒。</span></div>
             </div>
             <ul class="food-list">
-              <li><b>怎么穿</b>：洋葱式——贴身薄长袖／短袖 + 卫衣或薄抓绒 + 防风外套（冲锋衣／薄羽绒）。白天热了脱外层，早晚与等日落再穿上；下装长裤比短裤稳，沙地可备旧鞋或鞋套。</li>
+              <li><b>三层衣物</b>：贴身薄长袖／短袖 + 卫衣或薄抓绒 + 防风外套（冲锋衣／薄羽绒）。白天热时脱外层，早晚和等日落时再穿上；下装以长裤为主，沙地可备旧鞋或鞋套。</li>
               <li><b>防晒</b>：戈壁与盐湖紫外线比体感强。高倍防晒霜（脸＋颈＋手背）、宽檐帽或棒球帽、墨镜；盐壳反光刺眼，东台／U315／翡翠湖更要戴好。隔两三小时补一次；唇也要涂。</li>
               <li><b>保湿</b>：空气极干，水和润肤都要有。面霜／身体乳、润唇膏（备一支车上）、喷雾可选；车上开暖风更干，睡前厚涂一层。鼻腔干可备海盐水喷雾或清凉油。</li>
               <li><b>分段提示</b>：银川夜晚与漫葡夜游加外套；鸣沙／雅丹日落备一件外套；柴达木走廊风沙口罩或纱巾有用；青海湖看星按「冬天出门」备一层，手套可选。</li>
@@ -3141,12 +3167,12 @@
 
         <div class="extra-panel" data-panel="food" hidden>
           <div class="layer">
-            <h3>吃啥</h3>
+            <h3>一路吃到西北去</h3>
             <p>口径：中午和晚上两顿，两人合计约 300 元／天；9.25 望川晚餐另计，零食和饮用水另备 150–300 元。</p>
             <ul class="food-list">
               <li><b>银川</b>：手抓、羊杂、凉皮都可以安排；9.25 晚饭在<strong>望川</strong>。逛漫葡夜场当天，晚饭直接在小镇解决。</li>
               <li><b>张掖市区</b>：9.27 晚饭和 9.28 午饭都放在钟鼓楼／大佛寺一带；去丹霞前吃饱，日落后直接开嘉峪关。</li>
-              <li><b>嘉峪关车宿夜</b>：进城随便吃一顿再回南湖停车场；备点干粮与水过夜。</li>
+              <li><b>嘉峪关车宿夜</b>：进城找一顿出餐快的热饭，再回南湖停车场；车里另备干粮与水过夜。</li>
               <li><b>敦煌夜市</b>：黄面、杏皮茶、烤肉；沙州夜市吃饱，开车约 15 分钟回梵尘。</li>
               <li><b>大柴旦</b>：镇上选择不多，桔子附近找热乎饭；翡翠湖以园外补给为主。</li>
               <li><b>德令哈补给</b>：10.3 中途加油＋一顿正经午饭／超市补给的好窗口。</li>
@@ -3170,36 +3196,34 @@
 
         <div class="extra-panel" data-panel="wake" hidden>
           <div class="layer">
-            <h3>最晚起几点</h3>
+            <h3>那些需要早起的日子</h3>
             <ul class="food-list">
               <li>9.27 去西夏：最好 <b>7:30</b> 起来；中午前离开西夏；沙坡头为途中可选</li>
               <li>9.30 雅丹日落：可睡懒觉；<b>一两点前</b>出城更稳</li>
-              <li>10.1 去水上雅丹：约 <b>05:00</b> 起床，<b>05:30–06:00</b> 离开敦煌</li>
+              <li>10.1 黑独山与水上雅丹：约 <b>05:45–06:15</b> 起床，<b>06:30–07:00</b> 离开敦煌</li>
               <li>10.5 回家：<b>七八点</b>上路</li>
-              <li>别的日子：睡到九点半、十点半也行</li>
+              <li>其余日子没有统一闹钟，按当日第一段车程和预约时间倒推</li>
             </ul>
           </div>
         </div>
 
         <div class="extra-panel" data-panel="photo" hidden>
           <div class="layer">
-            <h3>这一路怎么拍</h3>
+            <h3>把沿途的光带回来</h3>
             <ul class="food-list">
               <li><b>总原则</b>：西北光硬、风大；黄金时段多在日出后一小时、日落前一小时。浅色或朱红衣更好出片；墨镜、镜头布常备。</li>
               <li><b>银川／贺兰</b>：宿集与漫葡宜早晚侧光；山脊轮廓清，中午少拍大景。</li>
               <li><b>张掖丹霞</b>：下午到傍晚层理更清楚。选择一两个重点观景台，其他站点随观光车经过。</li>
               <li><b>莫高窟</b>：洞内不摄影；外面崖壁、数字中心可拍。出来再赶鸣沙。</li>
-              <li><b>鸣沙山</b>：傍晚沙色偏金；人少处走远一点，沙脊线条干净。滑沙扬尘，镜头及时擦。</li>
+              <li><b>鸣沙山</b>：傍晚沙色偏金，在开放步道附近找干净的沙脊线条。滑沙扬尘，镜头及时擦。</li>
               <li><b>敦煌雅丹</b>：日落前后阴影较长，土丘轮廓更清楚。按观光车路线游览，最后选一处观景点等日落。</li>
-              <li><b>胡杨峡</b>：进沟看层次；十月初叶子未必满金，山体水墨与沟底反光仍好拍。逆光易糊，略补曝光。</li>
-              <li><b>黑独山</b>：黑白灰为主，穿亮色或正红更跳。上午 9–11 点层次清楚；跟车辙停，少踩无人区。</li>
-              <li><b>火星一号公路</b>：只走明确开放、导航与路牌一致的道路；不进不明车辙，也不在公路或路肩停车拍照。</li>
+              <li><b>黑独山</b>：黑白灰为主，浅色衣服更醒目。只在明确开放道路和停车区域活动，不跟车辙深入无人区。</li>
               <li><b>水上雅丹</b>：晴天倒影最好；风一大水面碎。广角收「岛」与天，也留一点近处盐壳。</li>
               <li><b>东台／U315</b>：路边盐壳反光刺眼，墨镜要有；只在正规停车区短停，车流中不要临时减速拍照。</li>
-              <li><b>翡翠湖</b>：清晨颜色稳；1～3 号湖转一转。盐渍伤鞋与机身，脚套／湿巾有用。</li>
+              <li><b>翡翠湖</b>：本次看下午斜光，选两三处颜色差异明显的盐池。盐渍会留在鞋与机身上，脚套和湿巾有用。</li>
                             <li><b>青海湖星空</b>：带三脚架，手机屏幕调暗；月亮太亮时银河会淡，可改拍湖面和远山剪影。</li>
               <li><b>梵尘</b>：白天泳池沙池；夜里回店若想拍星，比湖边方便，但光害略多。</li>
-              <li><b>无人机</b>：盐湖、雅丹、黑独山等以现场公告为准；禁飞区以现场公告为准。风大电池掉得快。</li>
+              <li><b>无人机</b>：盐湖、雅丹与黑独山的飞行规则看现场公告。风大时续航下降明显，不在管制区域起飞。</li>
             </ul>
           </div>
         </div>
@@ -3239,11 +3263,12 @@
           <div class="route-node" data-n="3"><strong>张掖</strong><span>丹霞</span></div><div class="arrow">→</div>
           <div class="route-node" data-n="4"><strong>嘉峪关</strong><span>车宿</span></div><div class="arrow">→</div>
           <div class="route-node" data-n="5"><strong>敦煌</strong><span>2 晚梵尘</span></div><div class="arrow">→</div>
-          <div class="route-node" data-n="6"><strong>水上雅丹</strong><span>10.1 住一晚</span></div><div class="arrow">→</div>
-          <div class="route-node" data-n="7"><strong>大柴旦</strong><span>10.2 翡翠湖</span></div><div class="arrow">→</div>
-          <div class="route-node" data-n="8"><strong>青海湖</strong><span>10.3 住湖边</span></div><div class="arrow">→</div>
-          <div class="route-node" data-n="9"><strong>兰州</strong><span>10.4 住一晚</span></div><div class="arrow">→</div>
-          <div class="route-node" data-n="10"><strong>成都</strong><span>10.5 到家</span></div>
+          <div class="route-node" data-n="6"><strong>黑独山</strong><span>10.1 停留</span></div><div class="arrow">→</div>
+          <div class="route-node" data-n="7"><strong>水上雅丹</strong><span>10.1 住一晚</span></div><div class="arrow">→</div>
+          <div class="route-node" data-n="8"><strong>大柴旦</strong><span>10.2 翡翠湖</span></div><div class="arrow">→</div>
+          <div class="route-node" data-n="9"><strong>青海湖</strong><span>10.3 住湖边</span></div><div class="arrow">→</div>
+          <div class="route-node" data-n="10"><strong>兰州</strong><span>10.4 住一晚</span></div><div class="arrow">→</div>
+          <div class="route-node" data-n="11"><strong>成都</strong><span>10.5 到家</span></div>
         </div>
 
         <div class="map-panel" aria-label="主路段导航">
@@ -3255,7 +3280,7 @@
           </div>
           <div class="route-fullmap">
             <a class="route-fullmap-link" target="_blank" rel="noopener"
-              href="https://uri.amap.com/marker?markers=104.066301,30.572961,成都|106.278179,38.466370,银川|100.449818,38.925823,张掖丹霞|98.289152,39.773250,嘉峪关|94.661881,40.142128,敦煌|93.350000,37.720000,水上雅丹|95.367500,37.852800,大柴旦|100.735000,36.720000,青海湖|103.834170,36.061380,兰州|104.066301,30.572961,成都&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+              href="https://uri.amap.com/marker?markers=104.066301,30.572961,成都|106.278179,38.466370,银川|100.449818,38.925823,张掖丹霞|98.289152,39.773250,嘉峪关|94.661881,40.142128,敦煌|93.420000,38.840000,黑独山|93.350000,37.720000,水上雅丹|95.367500,37.852800,大柴旦|100.735000,36.720000,青海湖|103.834170,36.061380,兰州|104.066301,30.572961,成都&src=qinggan-roadbook&coordinate=gaode&callnative=1"
               aria-label="在高德地图查看完整路线节点">
               <svg class="route-fullmap-svg" viewBox="0 0 360 220" role="img" aria-label="行程路线示意：成都经银川、河西、敦煌、柴达木、青海湖、兰州再回成都">
                 <defs>
@@ -3267,7 +3292,7 @@
                 </defs>
                 <!-- 粗略地理比例：西←→东 / 北↑南↓ -->
                 <ellipse cx="198" cy="96" rx="34" ry="18" fill="rgba(42,111,127,0.22)" stroke="rgba(42,111,127,0.35)" stroke-width="1"/>
-                <polyline points="266,191 313,60 190,52 144,39 67,33 58,74 82,70 196,89 261,100 266,191"
+                <polyline points="266,191 313,60 190,52 144,39 67,33 54,54 58,74 82,70 196,89 261,100 266,191"
                   fill="none" stroke="url(#routeLineGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
                 <g fill="#1a1410">
                   <circle cx="266" cy="191" r="4.2"/><text x="266" y="208" text-anchor="middle" font-size="10" fill="#3d342c">成都</text>
@@ -3275,6 +3300,7 @@
                   <circle cx="190" cy="52" r="4"/><text x="190" y="42" text-anchor="middle" font-size="10" fill="#3d342c">张掖</text>
                   <circle cx="144" cy="39" r="4"/><text x="144" y="29" text-anchor="middle" font-size="10" fill="#3d342c">嘉峪关</text>
                   <circle cx="67" cy="33" r="4.2"/><text x="67" y="23" text-anchor="middle" font-size="10" fill="#3d342c">敦煌</text>
+                  <circle cx="54" cy="54" r="4"/><text x="45" y="57" text-anchor="end" font-size="9" fill="#3d342c">黑独山</text>
                   <circle cx="58" cy="74" r="4"/><text x="51" y="91" text-anchor="middle" font-size="9" fill="#3d342c">水上雅丹</text>
                   <circle cx="82" cy="70" r="4"/><text x="98" y="78" text-anchor="start" font-size="10" fill="#3d342c">大柴旦</text>
                   <circle cx="196" cy="89" r="4.2"/><text x="196" y="108" text-anchor="middle" font-size="10" fill="#3d342c">青海湖</text>
@@ -3296,9 +3322,9 @@
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
               href="https://uri.amap.com/navigation?from=98.289152,39.773250,嘉峪关&to=94.661881,40.142128,敦煌&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">嘉峪关 → 敦煌</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.340000,38.750000,冷湖镇&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 冷湖</a>
+              href="https://uri.amap.com/navigation?from=94.661881,40.142128,敦煌&to=93.420000,38.840000,黑独山景区&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">敦煌 → 黑独山</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
-              href="https://uri.amap.com/navigation?from=93.340000,38.750000,冷湖镇&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">冷湖 → 水上雅丹</a>
+              href="https://uri.amap.com/navigation?from=93.420000,38.840000,黑独山景区&to=93.350000,37.720000,乌素特水上雅丹&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">黑独山 → 水上雅丹（选铺装路）</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
               href="https://uri.amap.com/navigation?from=93.350000,37.720000,乌素特水上雅丹&to=95.367500,37.852800,大柴旦&mode=car&policy=1&src=qinggan-roadbook&coordinate=gaode&callnative=1">水上雅丹 → 大柴旦</a>
             <a class="btn btn-map btn-sm" target="_blank" rel="noopener"
@@ -3320,16 +3346,15 @@
             <tbody>
               <tr><td>成都 → 银川</td><td>13h</td></tr>
               <tr><td>银川 → 张掖市区</td><td>西夏陵后约 6h；傍晚入住甘州区</td></tr>
-              <tr><td>张掖市区 → 平山湖 → 张掖市区</td><td>09:00 出发；单程约 1h，常规线约 3h，14:00–14:30 回城</td></tr>
+                <tr><td>张掖市区 → 平山湖 → 张掖市区</td><td>09:00 出发；单程约 1h，景区游览约 3h，14:00–14:30 回城</td></tr>
               <tr><td>张掖市区 → 七彩丹霞</td><td>约 40–60min；最迟 17:00 离开市区，避免错过 18:00 入园节点</td></tr>
-              <tr><td>西夏 → 沙坡头 → 丹霞（可选）</td><td>比直达多约 1–2h</td></tr>
+              <tr><td>西夏陵 → 沙坡头 → 张掖市区（可选）</td><td>比直达多约 1–2h</td></tr>
               <tr><td>丹霞 → 嘉峪关</td><td>2.5–3.5h</td></tr>
               <tr><td>嘉峪关 → 敦煌</td><td>4–5h</td></tr>
-              <tr><td>10.1 敦煌 → 冷湖 → 水上雅丹住宿</td><td>05:30–06:00 出发；全天约 7–9h 行车，下午游园并看日落</td></tr>
+              <tr><td>10.1 敦煌 → 黑独山 → 水上雅丹住宿</td><td>06:30–07:00 出发；铺装路线纯驾驶约 8–9h，连同黑独山与补给按 10–11h，约 16:30–17:30 入园</td></tr>
               <tr><td>敦煌 → 冷湖</td><td>约 250km／3.5–4.5h</td></tr>
-              <tr><td>胡杨峡（支线）</td><td>支线约 +1–1.5h；进沟约 1.5–2.5h；正线余量留给水上雅丹</td></tr>
-              <tr><td>黑独山（支线）</td><td>冷湖再北约一刻钟；山下宜 30–60 分钟</td></tr>
-              <tr><td>冷湖 → 水上雅丹（火星一号公路）</td><td>约 90km 非铺装路，纯开约 3h；仅在确认通行、无雨且车辆状态合适时采用</td></tr>
+              <tr><td>黑独山</td><td>冷湖东北十余公里；官方游览区约 1–1.5h，国庆排队另留余量</td></tr>
+              <tr><td>冷湖 → 水上雅丹（铺装路线）</td><td>约 300–320km／4–5h</td></tr>
               <tr><td>10.2 水上雅丹 → G315 → 大柴旦</td><td>约 240km／3–4h；东台与 U315 顺路，下午完整游翡翠湖</td></tr>
               <tr><td>10.3 大柴旦 → 德令哈 → 青海湖东岸</td><td>约 6–8h；德令哈午饭补给，傍晚到湖边</td></tr>
               <tr><td>青海湖 → 兰州</td><td>5–7h</td></tr>
@@ -3343,8 +3368,7 @@
       <div class="wrap">
         <div class="section-label">花销</div>
         <h2>这一路大概要花</h2>
-        <p class="section-desc">数字只负责托住旅程，不替路上的选择做决定。</p>
-        <p class="section-desc">以下为两人合计的粗略预算。房价按现有订单或查询结果计算，门票、油费和充电费保留一定浮动。</p>
+        <p class="section-desc">以下为两人合计的粗略预算：已订住宿按订单金额，未订房晚与门票保留浮动，油电和高速按全程里程估算。</p>
 
         <div class="budget-list">
           <details class="budget-fold">
@@ -3362,20 +3386,13 @@
                 <li>10.4 亚朵·兰州 <b>约 600</b></li>
                 <li>10.5 开回家 <b>0</b></li>
               </ul>
-              <p style="margin:10px 0 0">细则与订房链接见下方「落脚何处」。不含 9.25 的特别安排。</p>
+              <p style="margin:10px 0 0">细则与订房链接见下方「落脚何处」。9.25 的晚餐另列。</p>
             </div>
           </details>
           <details class="budget-fold">
-            <summary><span class="budget-cat">9.25 特别安排</span><div class="bar-track"><div class="bar-fill" style="width:32%"></div></div><span class="money">~2100</span></summary>
+            <summary><span class="budget-cat">9.25 纪念日晚餐</span><div class="bar-track"><div class="bar-fill" style="width:12%"></div></div><span class="money">600–800</span></summary>
             <div class="budget-body">
-              <p>房费 2500 已算进「住宿」；这里只计当晚的特别安排，约 <b>2000–2200</b>：</p>
-              <ul>
-                <li>小蛋糕 <b>300</b></li>
-                <li>鲜花 <b>约 600</b></li>
-                <li>跟拍 <b>约 500</b></li>
-                <li>望川晚餐 <b>约 600–800</b>（另付，不含在宿集房费内）</li>
-              </ul>
-              <p style="margin:10px 0 0">若把房+附加一起看，当晚约 4500–4700。</p>
+              <p>宿集房费 2500 已算进住宿；当晚望川晚餐另按 <b>600–800</b> 预留。其余私人安排不在公开路书里展开。</p>
             </div>
           </details>
           <details class="budget-fold">
@@ -3389,10 +3406,10 @@
                 <li>平山湖大峡谷暂留 <b>400–600</b>（两人，票价与项目出发前核）</li>
                 <li>七彩丹霞约 <b>150</b> · 大佛寺可选、现场核价 · 莫高 A <b>476</b> · 鸣沙 <b>220</b></li>
                 <li>雅丹约 <b>240</b> · 玉门关约 <b>80–120</b>（顺路短停）</li>
-                <li>水上雅丹约 <b>240</b> · 翡翠湖约 <b>200</b> · 青海湖约 <b>200</b></li>
+                <li>水上雅丹基础票车 <b>200</b> · 翡翠湖约 <b>200</b> · 青海湖约 <b>200</b></li>
                 <li>敦煌博物馆 <b>0–60</b></li>
               </ul>
-              <p style="margin:10px 0 0">《贺兰山盛典》可选，想看再加进预算。</p>
+              <p style="margin:10px 0 0">水上雅丹的快艇两人约 320，越野车约 600／车；鸣沙山骆驼、七彩丹霞低空项目也未算入基础门票，现场选一项再单独付款。</p>
             </div>
           </details>
           <details class="budget-fold">
@@ -3414,7 +3431,7 @@
                 <li>标准：中午 + 晚上两顿，两人合计约 <b>300 元/天</b></li>
                 <li>日常餐食按 <b>10 天</b>计算（9.26–10.5）；9.25 晚餐另计</li>
                 <li>小计约 <b>3000</b></li>
-                <li>例外：9.25 望川晚餐另计（已放进「9.25 特别安排」）</li>
+                <li>例外：9.25 望川晚餐另计（已放进「9.25 纪念日晚餐」）</li>
                 <li>零食／水另备约 <b>150–300</b>（可选）</li>
               </ul>
             </div>
@@ -3422,8 +3439,8 @@
         </div>
         <div class="total-box">
           <div style="opacity:.85;font-size:13px;margin-bottom:4px">两人加起来大概</div>
-          <strong>1.80 万 – 2.10 万</strong>
-          <p style="margin:8px 0 0;font-size:13px;opacity:.85">餐食按十天、每天两顿估算。9.25 晚餐已放进当日的特别安排里。</p>
+          <strong>1.80 万 – 2.15 万</strong>
+          <p style="margin:8px 0 0;font-size:13px;opacity:.85">餐食按十天、每天两顿估算。9.25 望川晚餐另列，未写入其他私人安排。</p>
         </div>
 
         <h3 class="stay-heading">落脚何处</h3>
@@ -3441,7 +3458,7 @@
           <details class="stay-fold">
             <summary><span class="stay-date">9.26</span><span class="stay-name">漫葡天沐</span><span class="money">668</span></summary>
             <div class="stay-body">
-              <p><b>房型</b>：党项·豪华大床（不选裙楼）</p>
+              <p><b>房型</b>：豪华大床（不选裙楼）</p>
               <p><b>到店前</b>：可免费取消优先 · 住客赠「看见贺兰」夜场票（核双人／当晚）· 温泉／含早 · 充电桩</p>
               <p>影视城对面；下午影城或岩画二选一，夜里留小镇灯火。</p>
               <p><a class="stay-link" href="https://hotels.ctrip.com/hotels/2382655.html" target="_blank" rel="noopener">携程订房 →</a></p>
@@ -3523,7 +3540,7 @@
 <section id="todo">
       <div class="wrap">
         <div class="section-label">动身前</div>
-        <h2>慢慢勾上</h2>
+        <h2>出发以前</h2>
         <p class="section-desc">先订必须预订的项目，出发前再逐项确认行李、车辆和证件。</p>
         <p class="section-desc">住宿、门票、出行、用品。勾选会留在这台设备上。</p>
         <div class="check-head"><span>进度</span><strong id="checkCount">0/0</strong></div>
@@ -3563,9 +3580,10 @@
           <label><input type="checkbox" data-k="t_yardang" /> 敦煌雅丹国家地质公园门票 ×2 · 现场或携程</label>
           <label><input type="checkbox" data-k="t_shui" /> 乌素特水上雅丹门票 ×2 · 现场购票</label>
           <label><input type="checkbox" data-k="t_feicui" /> 大柴旦翡翠湖门票 ×2 · 现场购票</label>
-          <label><input type="checkbox" data-k="t_museum" /> 敦煌博物馆 · 本次主线已无合适时段，仅作天气异常时替代</label>
-          <label><input type="checkbox" data-k="t_opt" /> 可选票：玉门关（9.30 顺路）/ 多坝沟胡杨峡（10.1 支线）</label>
-          <span class="check-note">10.1 主线是水上雅丹；胡杨峡／黑独山为走廊支线。黑独山多为开放荒野，政策以现场为准。</span>
+          <label><input type="checkbox" data-k="t_museum" /> 敦煌博物馆 · 9.30 上午可选，提前确认开放与预约</label>
+          <label><input type="checkbox" data-k="t_heishan" /> 黑独山景区 ×2 · 出发前确认开放范围、票务与区间车</label>
+          <label><input type="checkbox" data-k="t_opt" /> 可选票：玉门关（9.30 顺路）</label>
+          <span class="check-note">10.1 从敦煌出发，经黑独山和冷湖前往水上雅丹，当晚住在景区。</span>
           <span class="check-note">青海湖东岸散步观景一般不强绑门票；以现场与导航目的地为准。</span>
 
           </div></details>
@@ -3591,7 +3609,7 @@
           <label><input type="checkbox" data-k="p_med" /> 常用药：感冒、肠胃、创可贴、防晕车、高原反应相关（若需要）</label>
           <label><input type="checkbox" data-k="p_power" /> 车充、充电宝、充电线；手机支架</label>
           <label><input type="checkbox" data-k="p_photo" /> 相机或手机；三脚架（青海湖拍星）；洞内不摄影，莫高只拍外面</label>
-          <label><input type="checkbox" data-k="p_birth" /> 9.25 私人安排（提前准备）</label>
+          <label><input type="checkbox" data-k="p_925" /> 9.25 私人安排（提前准备）</label>
           <label><input type="checkbox" data-k="p_misc" /> 湿巾、垃圾袋、纸巾、保温杯；墨镜备用；少量口罩（风沙天）</label>
           </div></details>
         </div>
@@ -3628,9 +3646,7 @@
         <a href="https://commons.wikimedia.org/wiki/File:%E6%A0%BC%E5%B0%94%E6%9C%A8_%E4%B8%9C%E5%8F%B0%E5%90%89%E4%B9%83%E5%B0%94%E7%9B%90%E6%B9%96%E9%A3%8E%E6%99%AF_12.jpg" target="_blank" rel="noopener">U315 一带盐湖风景</a>、
         <a href="https://commons.wikimedia.org/wiki/File:%E5%BE%B7%E4%BB%A4%E5%93%88_%E5%B0%95%E6%B5%B7_liuzusai2013-06-05_-_panoramio.jpg" target="_blank" rel="noopener">德令哈尕海一带</a>：Wikimedia Commons；
         <a href="https://www.pexels.com/photo/white-clouds-over-the-chaka-salt-lake-8739403/" target="_blank" rel="noopener">茶卡盐湖</a>、
-        <a href="https://www.pexels.com/photo/golden-autumn-trees-in-desert-landscape-34266430/" target="_blank" rel="noopener">胡杨金秋</a>：Pexels（胡杨峡氛围参考，热链）；
         <a href="https://www.bjd.com.cn/" target="_blank" rel="noopener">黑独山</a>：北京日报客户端公开配图（热链）；
-        <a href="https://unsplash.com/photos/an-empty-road-in-the-middle-of-the-desert-ClO174lRM0g" target="_blank" rel="noopener">戈壁公路</a>：Unsplash（火星一号公路氛围参考，热链）；
         <a href="https://commons.wikimedia.org/wiki/File:Qinghai_Lake.jpg" target="_blank" rel="noopener">青海湖</a>：Wikimedia（热链）。
 </p>
     </details>
@@ -3668,19 +3684,12 @@
       document.querySelectorAll("#spots .spot-detail ul").forEach((list) => {
         const prose = document.createElement("div");
         prose.className = "spot-prose";
-        const items = [...list.children];
-        const groupSize = Math.ceil(items.length / 2);
-        let paragraph = null;
-        items.forEach((item, index) => {
+        [...list.children].forEach((item) => {
+          const paragraph = document.createElement("p");
           const heading = item.querySelector(":scope > strong:first-child");
           if (heading && /：$/.test(heading.textContent.trim())) heading.remove();
-          if (index % groupSize === 0) {
-            paragraph = document.createElement("p");
-            prose.appendChild(paragraph);
-          } else {
-            paragraph.appendChild(document.createTextNode(" "));
-          }
           while (item.firstChild) paragraph.appendChild(item.firstChild);
+          prose.appendChild(paragraph);
         });
         list.replaceWith(prose);
       });
@@ -4291,7 +4300,7 @@
             if (i === 0) {
               a.classList.add("spot-nav-link");
               a.classList.remove("btn", "btn-map", "btn-sm");
-              a.textContent = "·导航";
+              a.textContent = "导航";
               if (!a.getAttribute("aria-label")) {
                 a.setAttribute("aria-label", "导航到此处");
               }
@@ -4304,7 +4313,7 @@
             const imageButton = document.createElement("button");
             imageButton.type = "button";
             imageButton.className = "spot-image-link no-print";
-            imageButton.textContent = "·看图";
+            imageButton.textContent = "看大图";
             imageButton.setAttribute("aria-label", "查看此处大图");
             imageButton.addEventListener("click", () => {
               if (typeof window.openLightbox === "function") {
@@ -4343,6 +4352,72 @@
           },
           { passive: true }
         );
+
+        /* 手机与 iPad：纵向仍交给页面滚动，明确横滑后才接管并吸附一页。 */
+        let spotDrag = null;
+        const endSpotDrag = (event, cancelled = false) => {
+          if (!spotDrag || (event && event.pointerId !== spotDrag.pointerId)) return;
+          const drag = spotDrag;
+          spotDrag = null;
+          spotCarousel.classList.remove("is-dragging");
+          if (spotCarousel.hasPointerCapture && spotCarousel.hasPointerCapture(drag.pointerId)) {
+            try { spotCarousel.releasePointerCapture(drag.pointerId); } catch (e) { /* ignore */ }
+          }
+          if (drag.axis !== "x") return;
+          const list = visibleSpotSlides();
+          if (!list.length) return;
+          const dx = (event ? event.clientX : drag.lastX) - drag.startX;
+          const elapsed = Math.max(1, performance.now() - drag.startedAt);
+          const velocity = Math.abs(dx) / elapsed;
+          const threshold = Math.min(72, Math.max(42, spotCarousel.clientWidth * 0.11));
+          let nextIndex = drag.startIndex;
+          if (!cancelled && (Math.abs(dx) >= threshold || (Math.abs(dx) >= 18 && velocity > 0.45))) {
+            nextIndex += dx < 0 ? 1 : -1;
+          }
+          nextIndex = Math.max(0, Math.min(list.length - 1, nextIndex));
+          goSpot(list[nextIndex] || list[drag.startIndex] || list[0]);
+        };
+
+        spotCarousel.addEventListener("pointerdown", (event) => {
+          if (event.pointerType === "mouse" || event.button !== 0) return;
+          if (event.target.closest("a, button, input, select, textarea, summary")) return;
+          const list = visibleSpotSlides();
+          const current = nearestSpotSlide();
+          const startIndex = Math.max(0, list.indexOf(current));
+          spotDrag = {
+            pointerId: event.pointerId,
+            startX: event.clientX,
+            startY: event.clientY,
+            lastX: event.clientX,
+            startScrollLeft: spotCarousel.scrollLeft,
+            startIndex,
+            axis: null,
+            startedAt: performance.now()
+          };
+        });
+
+        spotCarousel.addEventListener("pointermove", (event) => {
+          if (!spotDrag || event.pointerId !== spotDrag.pointerId) return;
+          const dx = event.clientX - spotDrag.startX;
+          const dy = event.clientY - spotDrag.startY;
+          spotDrag.lastX = event.clientX;
+          if (!spotDrag.axis) {
+            if (Math.max(Math.abs(dx), Math.abs(dy)) < 8) return;
+            spotDrag.axis = Math.abs(dx) > Math.abs(dy) * 1.15 ? "x" : "y";
+            if (spotDrag.axis === "y") {
+              spotDrag = null;
+              return;
+            }
+            spotCarousel.classList.add("is-dragging");
+            try { spotCarousel.setPointerCapture(event.pointerId); } catch (e) { /* ignore */ }
+          }
+          if (spotDrag.axis !== "x") return;
+          event.preventDefault();
+          spotCarousel.scrollLeft = spotDrag.startScrollLeft - dx;
+        }, { passive: false });
+
+        spotCarousel.addEventListener("pointerup", (event) => endSpotDrag(event));
+        spotCarousel.addEventListener("pointercancel", (event) => endSpotDrag(event, true));
 
         spotCarousel.addEventListener("keydown", (e) => {
           const list = visibleSpotSlides();
@@ -4425,6 +4500,7 @@
         ] },
         { id: "1001", label: "10.1", points: [
           { name: "梵尘别院", lng: 94.67, lat: 40.10, type: "hotel" },
+          { name: "黑独山景区", lng: 93.42, lat: 38.84 },
           { name: "冷湖镇补给", lng: 93.34, lat: 38.75 },
           { name: "乌素特水上雅丹住宿", lng: 93.35, lat: 37.72, type: "hotel" }
         ] },
