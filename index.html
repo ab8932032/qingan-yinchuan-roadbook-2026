@@ -744,6 +744,38 @@
       color: #fffaf3;
       border-bottom-color: rgba(255, 250, 243, 0.85);
     }
+    .spot-location {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 12px;
+      margin: 0 0 12px;
+    }
+    .spot-location button,
+    #spots.spot-stage .spot-copy-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 7px 13px;
+      border: 1px solid rgba(255, 250, 243, 0.4);
+      border-radius: 999px;
+      background: rgba(255, 250, 243, 0.12);
+      color: #fffaf3;
+      font: inherit;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+    .spot-location button:disabled { opacity: 0.58; cursor: wait; }
+    .spot-location-status {
+      flex: 1 1 230px;
+      margin: 0;
+      color: rgba(255, 250, 243, 0.72);
+      font-size: 12px;
+      line-height: 1.55;
+    }
     .spot-pager {
       display: grid;
       grid-template-columns: 44px 1fr 44px;
@@ -2790,6 +2822,11 @@
           <button type="button" class="spot-region" data-f="dunhuang" aria-selected="false">敦煌</button>
           <button type="button" class="spot-region" data-f="qinghai" aria-selected="false">青海</button>
         </div>
+        <div class="spot-location no-print">
+          <button type="button" id="spotLocate">定位当前站</button>
+          <p class="spot-location-status" id="spotLocateStatus" role="status" aria-live="polite">点击定位，自动打开离你最近的风里的站。</p>
+          <span class="visually-hidden" id="spotCopyStatus" aria-live="polite"></span>
+        </div>
         <div class="spot-pager no-print" aria-label="停靠点切换">
           <button type="button" class="spot-pager-btn" id="spotPrev" aria-label="上一处">‹</button>
           <div class="spot-dots" id="spotDots" role="tablist" aria-label="停靠点位置"></div>
@@ -4265,6 +4302,9 @@
       const spotTotalEl = document.getElementById("spotTotal");
       const spotPrev = document.getElementById("spotPrev");
       const spotNext = document.getElementById("spotNext");
+      const spotLocate = document.getElementById("spotLocate");
+      const spotLocateStatus = document.getElementById("spotLocateStatus");
+      const spotCopyStatus = document.getElementById("spotCopyStatus");
       const spotBgA = document.getElementById("spotBgA");
       const spotBgB = document.getElementById("spotBgB");
       const spotBgWrap = spotBgA && spotBgA.parentElement;
@@ -4422,6 +4462,109 @@
         }, 300);
       };
 
+      const locationMath = (() => {
+        const earthRadiusKm = 6371;
+        const radians = (degrees) => degrees * Math.PI / 180;
+        const geoDistanceKm = (latitudeA, longitudeA, latitudeB, longitudeB) => {
+          const latitudeDelta = radians(latitudeB - latitudeA);
+          const longitudeDelta = radians(longitudeB - longitudeA);
+          const haversine =
+            Math.sin(latitudeDelta / 2) ** 2 +
+            Math.cos(radians(latitudeA)) * Math.cos(radians(latitudeB)) *
+              Math.sin(longitudeDelta / 2) ** 2;
+          return earthRadiusKm * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+        };
+        const nearestSpotByCoordinates = (spots, latitude, longitude) => {
+          if (!Array.isArray(spots) || !Number.isFinite(latitude) || !Number.isFinite(longitude)) return null;
+          let nearest = null;
+          spots.forEach((spot) => {
+            if (!Number.isFinite(spot?.lat) || !Number.isFinite(spot?.lng)) return;
+            const distanceKm = geoDistanceKm(latitude, longitude, spot.lat, spot.lng);
+            if (!nearest || distanceKm < nearest.distanceKm) nearest = { spot, distanceKm };
+          });
+          return nearest;
+        };
+        return { nearestSpotByCoordinates };
+      })();
+
+      const spotKnownCoordinates = {
+        "平山湖大峡谷": { lng: 100.830488, lat: 39.165658 },
+        "张掖城里": { lng: 100.45, lat: 38.93 }
+      };
+      const amapMarkerCoordinates = (link) => {
+        if (!link) return null;
+        try {
+          const position = new URL(link.href).searchParams.get("position");
+          const [lng, lat] = (position || "").split(",").map(Number);
+          return Number.isFinite(lng) && Number.isFinite(lat) ? { lng, lat } : null;
+        } catch (_) {
+          return null;
+        }
+      };
+      const spotLocationCandidates = () => !spotCarousel ? [] :
+        [...spotCarousel.querySelectorAll(".spot-slide")].map((slide, index) => {
+          const title = slide.querySelector("h3")?.textContent.trim() || "风里的站";
+          const linkedCoordinates = amapMarkerCoordinates(slide.querySelector('a[href*="uri.amap.com"]'));
+          const coordinates = linkedCoordinates || spotKnownCoordinates[title];
+          return coordinates ? { id: slide.id || String(index), title, slide, ...coordinates } : null;
+        }).filter(Boolean);
+      const setSpotLocateStatus = (message) => {
+        if (spotLocateStatus) spotLocateStatus.textContent = message;
+      };
+      const formatSpotDistance = (distanceKm) => distanceKm < 1
+        ? Math.max(1, Math.round(distanceKm * 1000)) + " 米"
+        : distanceKm.toFixed(distanceKm < 10 ? 1 : 0) + " 公里";
+
+      const stationBodyTextFromParts = (parts) => {
+        const sentence = (value) => {
+          const text = String(value || "").replace(/\s+/g, " ").trim();
+          return text && /[。！？…]$/.test(text) ? text : text ? text + "。" : "";
+        };
+        return [parts.detail]
+          .map(sentence)
+          .filter(Boolean)
+          .join("");
+      };
+      const spotBodyText = (slide) => stationBodyTextFromParts({
+        detail: slide?.querySelector(".spot-prose, .spot-detail")?.textContent
+      });
+      const setSpotCopyStatus = (message) => {
+        if (spotCopyStatus) spotCopyStatus.textContent = message;
+      };
+      const copyStationText = async (text) => {
+        if (navigator.clipboard?.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch (_) {}
+        }
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.setAttribute("readonly", "");
+        textarea.style.cssText = "position:fixed;left:-9999px;top:0;opacity:0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        const copied = document.execCommand("copy");
+        textarea.remove();
+        return copied;
+      };
+      const copySpotBody = async (slide, button) => {
+        const text = spotBodyText(slide);
+        if (!text) {
+          setSpotCopyStatus("这一站暂时没有可复制的正文。");
+          return;
+        }
+        button.disabled = true;
+        button.textContent = "正在复制…";
+        const copied = await copyStationText(text);
+        button.disabled = false;
+        button.textContent = "复制正文";
+        setSpotCopyStatus(copied
+          ? "正文已复制，可到豆包粘贴朗读。"
+          : "复制没有完成，请长按正文手动复制。"
+        );
+      };
+
       const spotSlideLeft = (slide) => {
         if (!slide || !spotCarousel) return 0;
         const carouselRect = spotCarousel.getBoundingClientRect();
@@ -4562,7 +4705,7 @@
             }
           });
           const slide = actions.closest(".spot-slide");
-          if (slide && slide.dataset.media !== "video" && slide.dataset.media !== "live" && slide.dataset.full) {
+            if (slide && slide.dataset.media !== "video" && slide.dataset.media !== "live" && slide.dataset.full) {
             const imageButton = document.createElement("button");
             imageButton.type = "button";
             imageButton.className = "spot-image-link no-print";
@@ -4572,10 +4715,18 @@
               if (typeof window.openLightbox === "function") {
                 window.openLightbox(slide.dataset.full, slide.dataset.caption || "");
               }
-            });
-            actions.appendChild(imageButton);
-          }
-        });
+              });
+              actions.appendChild(imageButton);
+            }
+            if (slide) {
+              const copyButton = document.createElement("button");
+              copyButton.type = "button";
+              copyButton.className = "spot-copy-btn no-print";
+              copyButton.textContent = "复制正文";
+              copyButton.addEventListener("click", () => copySpotBody(slide, copyButton));
+              actions.appendChild(copyButton);
+            }
+          });
 
         rebuildSpotDots();
         const boot = visibleSpotSlides()[0];
@@ -4655,6 +4806,57 @@
             b.setAttribute("aria-selected", on ? "true" : "false");
           });
           applySpotFilter(btn.dataset.f || "all");
+        });
+      }
+
+      if (spotLocate) {
+        spotLocate.addEventListener("click", () => {
+          if (!("geolocation" in navigator)) {
+            setSpotLocateStatus("当前浏览器不支持定位；可直接左右滑动选择风里的站。");
+            return;
+          }
+          spotLocate.disabled = true;
+          spotLocate.textContent = "正在定位…";
+          setSpotLocateStatus("正在获取当前位置，请在浏览器中允许定位。");
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              spotLocate.disabled = false;
+              spotLocate.textContent = "重新定位";
+              const nearest = locationMath.nearestSpotByCoordinates(
+                spotLocationCandidates(), position.coords.latitude, position.coords.longitude
+              );
+              if (!nearest) {
+                setSpotLocateStatus("路书中暂时没有可匹配坐标的风里的站。");
+                return;
+              }
+              if (spotFilter) {
+                spotFilter.querySelectorAll(".spot-region").forEach((button) => {
+                  const isAll = button.dataset.f === "all";
+                  button.classList.toggle("on", isAll);
+                  button.setAttribute("aria-selected", isAll ? "true" : "false");
+                });
+              }
+              applySpotFilter("all");
+              goSpot(nearest.spot.slide, "smooth");
+              document.getElementById("spots")?.scrollIntoView({ behavior: "smooth", block: "start" });
+              const distance = formatSpotDistance(nearest.distanceKm);
+              setSpotLocateStatus(nearest.distanceKm < 1.5
+                ? "你在“" + nearest.spot.title + "”附近，约 " + distance + "。已自动切换。"
+                : "离你最近的是“" + nearest.spot.title + "”，约 " + distance + "。已自动切换。"
+              );
+            },
+            (error) => {
+              spotLocate.disabled = false;
+              spotLocate.textContent = "定位当前站";
+              const messages = {
+                1: "定位权限未开启。请在浏览器地址栏允许位置权限后重试。",
+                2: "暂时无法取得位置，请确认定位服务和网络后重试。",
+                3: "定位超时，请到开阔处或稍后重试。"
+              };
+              setSpotLocateStatus(messages[error?.code] || "定位没有完成，请稍后重试。");
+            },
+            { enableHighAccuracy: true, timeout: 12000, maximumAge: 300000 }
+          );
         });
       }
 

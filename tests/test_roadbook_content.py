@@ -79,6 +79,57 @@ process.stdout.write(JSON.stringify({
     return json.loads(result.stdout)
 
 
+def run_nearest_station_matcher(
+    spots: list[dict[str, float | str]],
+    *,
+    latitude: float,
+    longitude: float,
+    source: str = INDEX_SOURCE,
+) -> dict[str, object] | None:
+    try:
+        start = source.index("      const locationMath = (() => {")
+        end = source.index("      const spotKnownCoordinates =", start)
+    except ValueError:
+        return None
+
+    harness = source[start:end] + """
+const result = locationMath.nearestSpotByCoordinates(
+  JSON.parse(process.argv[1]),
+  Number(process.argv[2]),
+  Number(process.argv[3])
+);
+process.stdout.write(JSON.stringify(result));
+"""
+    result = subprocess.run(
+        ["node", "-e", harness, json.dumps(spots), str(latitude), str(longitude)],
+        check=True,
+        capture_output=True,
+        encoding="utf-8",
+    )
+    return json.loads(result.stdout)
+
+
+def run_station_copy_text(
+    parts: dict[str, str], source: str = INDEX_SOURCE
+) -> str | None:
+    try:
+        start = source.index("      const stationBodyTextFromParts =")
+        end = source.index("      const spotBodyText =", start)
+    except ValueError:
+        return None
+
+    harness = source[start:end] + """
+process.stdout.write(stationBodyTextFromParts(JSON.parse(process.argv[1])));
+"""
+    result = subprocess.run(
+        ["node", "-e", harness, json.dumps(parts, ensure_ascii=False)],
+        check=True,
+        capture_output=True,
+        encoding="utf-8",
+    )
+    return result.stdout
+
+
 class NearbyStructure(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -107,6 +158,37 @@ class NearbyStructure(HTMLParser):
 
 
 class RoadbookContentTests(unittest.TestCase):
+    def test_nearest_station_matcher_prefers_geographically_closest_station(self) -> None:
+        result = run_nearest_station_matcher(
+            [
+                {"id": "helan", "title": "贺兰山", "lat": 38.727, "lng": 105.997},
+                {"id": "danxia", "title": "七彩丹霞", "lat": 38.970, "lng": 100.120},
+            ],
+            latitude=38.972,
+            longitude=100.062,
+        )
+
+        self.assertIsNotNone(result)
+        self.assertEqual(result["spot"]["id"], "danxia")
+        self.assertLess(result["distanceKm"], 6)
+        self.assertIsNone(run_nearest_station_matcher([], latitude=38.972, longitude=100.062))
+
+    def test_station_copy_text_reads_only_the_station_body(self) -> None:
+        result = run_station_copy_text(
+            {
+                "title": "七彩丹霞",
+                "meta": "9.28 傍晚",
+                "teaser": "等斜光。",
+                "aside": "岩层显出颜色",
+                "detail": "沿观景台慢慢走。",
+            }
+        )
+
+        self.assertEqual(
+            result,
+            "沿观景台慢慢走。",
+        )
+
     def test_exact_names_and_marked_quotation_are_visible(self) -> None:
         self.assertIn("瓜州大地之子与无界", VISIBLE_TEXT)
         self.assertIn("梵尘别院", VISIBLE_TEXT)
