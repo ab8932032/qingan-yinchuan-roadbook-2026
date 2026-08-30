@@ -158,6 +158,37 @@ class NearbyStructure(HTMLParser):
 
 
 class RoadbookContentTests(unittest.TestCase):
+    def test_929_mogao_purchase_and_hard_times_are_consistent(self) -> None:
+        for expected_copy in (
+            "常规 A 类票已购 · 两人 476",
+            "莫高窟 9.29 14:00 常规 A 类票 ×2 · 已购 476",
+        ):
+            self.assertIn(expected_copy, VISIBLE_TEXT)
+        for expected_markup in (
+            "<b>08:00</b> 南湖出发",
+            "<b>13:15前</b> 停好车",
+            "<b>13:30前</b> 到数字中心",
+            "<b>14:00</b> 莫高入场",
+        ):
+            self.assertIn(expected_markup, INDEX_SOURCE)
+        self.assertNotIn("计划预约 9 月 29 日下午场", VISIBLE_TEXT)
+
+    def test_nearby_options_never_reuse_the_day_cover_as_a_fallback(self) -> None:
+        self.assertIn("const nearbyImageByTitle = {", INDEX_SOURCE)
+        self.assertNotIn("const fallbackImage = dayCover", INDEX_SOURCE)
+        self.assertNotIn('generatedSpot.dataset.full = fallbackImage', INDEX_SOURCE)
+        self.assertIn('const imageUrl = spot?.dataset.full || dedicatedImage;', INDEX_SOURCE)
+
+        mapping_start = INDEX_SOURCE.index("const nearbyImageByTitle = {")
+        mapping_end = INDEX_SOURCE.index("      };", mapping_start)
+        mapping_source = INDEX_SOURCE[mapping_start:mapping_end]
+        image_urls = [
+            line.split('"')[3]
+            for line in mapping_source.splitlines()
+            if line.strip().startswith('"') and line.count('"') >= 4
+        ]
+        self.assertEqual(len(image_urls), len(set(image_urls)))
+
     def test_nearest_station_matcher_prefers_geographically_closest_station(self) -> None:
         result = run_nearest_station_matcher(
             [
