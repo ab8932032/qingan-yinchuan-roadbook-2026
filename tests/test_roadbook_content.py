@@ -11,6 +11,8 @@ import check_positive_copy as checker
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX_SOURCE = ROOT.joinpath("index.html").read_text(encoding="utf-8")
+MANIFEST = json.loads(ROOT.joinpath("manifest.webmanifest").read_text(encoding="utf-8"))
+SERVICE_WORKER_SOURCE = ROOT.joinpath("service-worker.js").read_text(encoding="utf-8")
 
 
 def extracted_visible_items() -> list[tuple[int, str]]:
@@ -158,6 +160,22 @@ class NearbyStructure(HTMLParser):
 
 
 class RoadbookContentTests(unittest.TestCase):
+    def test_pwa_manifest_and_ios_icon_are_wired(self) -> None:
+        self.assertIn('<link rel="manifest" href="manifest.webmanifest" />', INDEX_SOURCE)
+        self.assertIn('<link rel="apple-touch-icon" href="assets/app-icon-180.png" />', INDEX_SOURCE)
+        self.assertEqual(MANIFEST["display"], "standalone")
+        self.assertEqual(MANIFEST["start_url"], "./")
+        self.assertEqual({icon["sizes"] for icon in MANIFEST["icons"]}, {"192x192", "512x512"})
+        for size in (180, 192, 512):
+            self.assertTrue(ROOT.joinpath(f"assets/app-icon-{size}.png").exists())
+
+    def test_service_worker_precaches_the_offline_shell(self) -> None:
+        self.assertIn('navigator.serviceWorker.register("./service-worker.js"', INDEX_SOURCE)
+        for asset in ("./index.html", "./manifest.webmanifest", "./scripts/amap-config.js"):
+            self.assertIn(f'"{asset}"', SERVICE_WORKER_SOURCE)
+        self.assertIn('request.mode === "navigate"', SERVICE_WORKER_SOURCE)
+        self.assertIn('await caches.match("./index.html")', SERVICE_WORKER_SOURCE)
+
     def test_929_mogao_purchase_and_hard_times_are_consistent(self) -> None:
         for expected_copy in (
             "常规 A 类票已购 · 两人 476",

@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="referrer" content="no-referrer" />
   <meta name="theme-color" content="#1a1410" />
+  <meta name="application-name" content="青甘路书" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="青甘路书" />
   <meta name="description" content="2026 成都往返 · 银川—河西—敦煌—青海自驾路书。9.25 留给贺兰山，一路向西到青海湖看星。" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="青甘银川 · 2026 自驾路书" />
@@ -18,6 +21,9 @@
   <meta name="twitter:description" content="9.25 留给贺兰山，穿过河西与敦煌，在青海湖等一晚星光。" />
   <meta name="twitter:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c0/Qinghai_Lake.jpg/1280px-Qinghai_Lake.jpg" />
   <title>青甘银川 · 2026 自驾路书</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/app-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="assets/app-icon-180.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=ZCOOL+XiaoWei&display=swap" rel="stylesheet" />
@@ -2399,6 +2405,27 @@
     .media-remove { position: absolute; top: 4px; right: 4px; width: 22px; height: 22px; padding: 0; color: #fff; background: rgba(26,20,16,.68); border: 0; border-radius: 50%; font-size: 14px; line-height: 22px; cursor: pointer; }
     .media-empty { grid-column: 1 / -1; padding: 8px 0 2px; color: rgba(61,52,44,.42); font-size: 10px; }
     .media-error { color: var(--warn); font-size: 10px; margin-top: 6px; }
+    .offline-status {
+      position: fixed;
+      z-index: 75;
+      left: 50%;
+      bottom: calc(var(--nav-h) + var(--safe-b) + 12px);
+      max-width: calc(100vw - 32px);
+      padding: 8px 13px;
+      color: #fff;
+      background: rgba(30, 36, 56, .94);
+      border: 1px solid rgba(232, 213, 181, .3);
+      border-radius: 999px;
+      box-shadow: 0 8px 26px rgba(26, 20, 16, .24);
+      font-size: 11px;
+      line-height: 1.35;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 8px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .offline-status.is-visible { opacity: 1; transform: translate(-50%, 0); }
     @media (min-width: 680px) {
       .field-notes-grid { grid-template-columns: repeat(3, 1fr); }
     }
@@ -2421,7 +2448,7 @@
     details.day summary::-webkit-details-marker { display: none; }
 
     @media print {
-      .bottom-nav, .btn-row, .no-print, .progress-bar, .fab-top, .toc, .filter-row, .lightbox { display: none !important; }
+      .bottom-nav, .btn-row, .no-print, .progress-bar, .fab-top, .toc, .filter-row, .lightbox, .offline-status { display: none !important; }
       body { padding: 0; background: #fff; background-image: none; }
       body::before, body::after { display: none !important; }
       #overview, #days, #route, #budget, #todo, #spots, #extras { background: none; }
@@ -2432,6 +2459,7 @@
 </head>
 <body>
   <div class="progress-bar" id="progress" aria-hidden="true"></div>
+  <div class="offline-status" id="offlineStatus" role="status" aria-live="polite" aria-atomic="true"></div>
   <header class="hero" id="top">
     <img class="hero-bg" data-media="photo" src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1920&q=85" alt="" fetchpriority="high" decoding="async" />
     <div class="hero-kicker">2026 · 九月二十四日—十月五日</div>
@@ -5456,6 +5484,45 @@
       });
       document.addEventListener("keydown", (event) => {
         if (event.key === "Escape") closeLightbox();
+      });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      const status = document.getElementById("offlineStatus");
+      let statusTimer = 0;
+      const showStatus = (message, persist) => {
+        if (!status) return;
+        window.clearTimeout(statusTimer);
+        status.textContent = message;
+        status.classList.add("is-visible");
+        if (!persist) statusTimer = window.setTimeout(() => status.classList.remove("is-visible"), 4200);
+      };
+      const syncConnectionStatus = () => {
+        if (!navigator.onLine) showStatus("离线模式 · 路书正文与已缓存图片仍可查看", true);
+        else if (status?.classList.contains("is-visible")) showStatus("网络已恢复", false);
+      };
+      window.addEventListener("offline", syncConnectionStatus);
+      window.addEventListener("online", syncConnectionStatus);
+      if (!navigator.onLine) syncConnectionStatus();
+
+      const canRegister = "serviceWorker" in navigator &&
+        (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1");
+      if (!canRegister) return;
+      window.addEventListener("load", async () => {
+        try {
+          const firstInstall = !navigator.serviceWorker.controller;
+          const registration = await navigator.serviceWorker.register("./service-worker.js", {
+            scope: "./",
+            updateViaCache: "none"
+          });
+          await navigator.serviceWorker.ready;
+          if (firstInstall && navigator.onLine) showStatus("离线路书已保存到本机", false);
+          registration.update().catch(() => {});
+        } catch (error) {
+          console.warn("离线路书初始化失败", error);
+        }
       });
     })();
   </script>

@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "青甘银川 · 2026 自驾路书",
+  "short_name": "青甘路书",
+  "description": "成都往返银川、河西、敦煌与青海湖的 2026 自驾路书。",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3efe6",
+  "theme_color": "#1a1410",
+  "icons": [
+    {
+      "src": "assets/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
