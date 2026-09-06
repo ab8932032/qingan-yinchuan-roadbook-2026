@@ -300,9 +300,17 @@ class RoadbookContentTests(unittest.TestCase):
         )
 
     def test_generated_stop_guidance_respects_immediate_and_deferred_tiers(self) -> None:
-        self.assertIn("按上方时间成本与执行条件加入本次行程", VISIBLE_TEXT)
-        self.assertIn("按上方绕行成本加入本次行程", VISIBLE_TEXT)
-        self.assertIn("单独安排；本次行程继续遵循当天主路线", VISIBLE_TEXT)
+        # Generated stories retain the actual day's instructions, including
+        # deferred stops, separately from the opening of the narration.
+        self.assertIn('aside.textContent = teaser.textContent;', INDEX_SOURCE)
+        self.assertIn('aside.className = "spot-detail spot-prose";', INDEX_SOURCE)
+        self.assertIn('if (opening) teaser.textContent = opening.textContent;', INDEX_SOURCE)
+        self.assertLess(
+            INDEX_SOURCE.index('aside.textContent = teaser.textContent;'),
+            INDEX_SOURCE.index('if (opening) teaser.textContent = opening.textContent;'),
+        )
+        self.assertIn("关城留待下次", VISIBLE_TEXT)
+        self.assertIn("榆林窟与锁阳城放进下一次瓜州专程", VISIBLE_TEXT)
         self.assertNotIn("这处停靠适合在时间、天气与精神都宽裕时加入", VISIBLE_TEXT)
 
     def test_chaka_and_u315_decisions_are_explicit(self) -> None:

@@ -1,0 +1,411 @@
+{
+  "description": "编写故事时核对的资料，作为编辑档案保留；页面的折叠区呈现诗文和补记，不显示链接。",
+  "sources": {
+    "贺兰山": [
+      {
+        "title": "宁夏自治区政府｜远古岩画",
+        "url": "https://www.nx.gov.cn/ssjn/esyj/202303/t20230327_4010465.html"
+      },
+      {
+        "title": "宁夏文旅厅｜贺兰山岩画图像介绍",
+        "url": "https://whhlyt.nx.gov.cn/jqjd/ycs_66553/hlsyh/"
+      }
+    ],
+    "镇北堡西部影城": [
+      {
+        "title": "中国新闻网｜张贤亮与镇北堡的往事",
+        "url": "https://www.chinanews.com.cn/cul/news/2007/04-29/926761.shtml"
+      },
+      {
+        "title": "宁夏文旅厅｜镇北堡西部影城",
+        "url": "https://whhlyt.nx.gov.cn/jqjd/ycs_66553/zbbxbyc/"
+      },
+      {
+        "title": "作品参照｜电影《牧马人》（谢晋，1982）与《大话西游之大圣娶亲》（刘镇伟，1995）；张贤亮与取景往事",
+        "url": "https://www.chinanews.com.cn/cul/news/2007/04-29/926761.shtml"
+      },
+      {
+        "title": "中新网采访朱时茂｜“你要老婆不要？”与《牧马人》再度走红",
+        "url": "https://www.chinanews.com/yl/2020/01-17/9062127.shtml"
+      }
+    ],
+    "漫葡 · 看见贺兰": [
+      {
+        "title": "宁夏农业农村厅｜玉泉营葡萄酒厂沿革",
+        "url": "https://12316.nynct.nx.gov.cn/ptcy/9159.jhtml"
+      },
+      {
+        "title": "银川市政府｜漫葡小镇",
+        "url": "https://www.yinchuan.gov.cn/sshc/lyjd/zdlyjq/4ajjq/202409/t20240919_4664929.html"
+      }
+    ],
+    "西夏陵 + 博物馆": [
+      {
+        "title": "联合国教科文组织｜西夏陵世界遗产说明与列入年份",
+        "url": "https://whc.unesco.org/en/list/1736"
+      },
+      {
+        "title": "张掖市史志办｜丝路名刹大佛寺",
+        "url": "https://www.zhangye.gov.cn/szb/dzdt/gjzy/202305/t20230505_1036668.html"
+      },
+      {
+        "title": "宁夏文物考古研究所｜西夏陵屋顶装饰构件与妙音鸟",
+        "url": "https://www.nxkg.org.cn/xueshuyanjiu/539.html"
+      }
+    ],
+    "沙坡头": [
+      {
+        "title": "中国科学院｜治沙“中国方案”，从沙坡头出发",
+        "url": "https://www.cas.cn/zt/sszt/75yq/zlzq/202409/t20240913_5031725.shtml"
+      }
+    ],
+    "平山湖大峡谷": [
+      {
+        "title": "张掖市林草局｜平山湖地质公园遗迹名录",
+        "url": "https://www.zhangye.gov.cn/lyj/dzdt/tzgg/202503/P020250303588617113171.pdf"
+      }
+    ],
+    "张掖城里": [
+      {
+        "title": "张掖市史志办｜丝路名刹大佛寺",
+        "url": "https://www.zhangye.gov.cn/szb/dzdt/gjzy/202305/t20230505_1036668.html"
+      },
+      {
+        "title": "张掖市政府｜大佛寺景区与馆藏",
+        "url": "https://www.zhangye.gov.cn/chzy/zyly/ajjq/202303/t20230318_1007459.html"
+      },
+      {
+        "title": "山西大学收录论文｜张掖大佛寺卧佛结构与装藏文物",
+        "url": "https://ygx.sxu.edu.cn/db/%E6%9C%9F%E5%88%8A/wwjdyjs/wwjd2020/2022pdf/202203.pdf"
+      },
+      {
+        "title": "张掖市商务局｜牛肉小饭",
+        "url": "https://www.zhangye.gov.cn/chzy/zyly/mstc/xbzyms/202606/t20260604_1550222.html"
+      },
+      {
+        "title": "张掖市商务局｜搓鱼子",
+        "url": "https://www.zhangye.gov.cn/chzy/zyly/mstc/xbzyms/202608/t20260824_1577737_ghb.html"
+      }
+    ],
+    "七彩丹霞": [
+      {
+        "title": "联合国教科文组织｜张掖彩色丘陵预备名单说明",
+        "url": "https://whc.unesco.org/en/tentativelists/6841/"
+      },
+      {
+        "title": "联合国教科文组织｜张掖世界地质公园",
+        "url": "https://www.unesco.org/en/iggp/zhangye-unesco-global-geopark"
+      }
+    ],
+    "莫高窟": [
+      {
+        "title": "敦煌研究院｜莫高窟",
+        "url": "https://www.dha.ac.cn/info/1140/1959.htm"
+      },
+      {
+        "title": "敦煌研究院｜藏经洞发现与保护往事",
+        "url": "https://www.dha.ac.cn/info/1159/2519.htm"
+      },
+      {
+        "title": "敦煌研究院｜文物保护与数字藏经洞",
+        "url": "https://www.dha.ac.cn/info/1019/7853.htm"
+      },
+      {
+        "title": "数字敦煌｜第257窟与鹿王本生",
+        "url": "https://www.e-dunhuang.com/cave/10.0001/0001.0001.0257"
+      },
+      {
+        "title": "敦煌研究院｜第112窟反弹琵琶",
+        "url": "https://www.dha.ac.cn/info/1159/2723.htm"
+      }
+    ],
+    "鸣沙山月牙泉": [
+      {
+        "title": "新华社｜一泓清泉漾大漠——敦煌月牙泉生态嬗变记",
+        "url": "https://www.news.cn/politics/2023-08/13/c_1129801067.htm"
+      },
+      {
+        "title": "新华社｜月牙泉补水记",
+        "url": "https://www.xinhuanet.com/2021-07/13/c_1127651825.htm"
+      },
+      {
+        "title": "新华社｜多地大堵车，这里“堵骆驼”",
+        "url": "https://www.news.cn/local/2023-05/02/c_1129585808.htm"
+      },
+      {
+        "title": "新华社2026年7月｜鸣沙山骆驼红绿灯与智慧调度",
+        "url": "https://www.news.cn/photo/20260727/e32356a0459143618aa2f78ab96a25c0/c.html"
+      }
+    ],
+    "沙州夜市": [
+      {
+        "title": "央视网｜敦煌夜市：文化入味，烟火升腾",
+        "url": "https://news.cctv.com/2025/09/20/ARTI5xEOkjBJrzlhKn3Z40Qc250920.shtml"
+      }
+    ],
+    "敦煌博物馆": [
+      {
+        "title": "兰州大学敦煌学研究所收录论文｜敦煌市博物馆藏汉晋简牍解要",
+        "url": "https://dhxyjs.lzu.edu.cn/userfiles/files/20201109/6374052014109226241700372.pdf"
+      }
+    ],
+    "敦煌市区漫步": [
+      {
+        "title": "新华社｜大漠碧波何处来",
+        "url": "https://www.xinhuanet.com/politics/2017-05/09/c_129595561.htm"
+      }
+    ],
+    "玉门关": [
+      {
+        "title": "原典｜王之涣《凉州词二首·其一》；文史广东｜玉门关的千年变迁",
+        "url": "https://www.gdwsw.gov.cn/wsbl/content/post_38154.html"
+      },
+      {
+        "title": "敦煌阳关玉门关旅游区｜遗址群介绍",
+        "url": "https://www.dhymg.com/"
+      }
+    ],
+    "敦煌雅丹": [
+      {
+        "title": "西藏自治区自然资源厅｜敦煌雅丹国家地质公园介绍",
+        "url": "https://zrzyt.xizang.gov.cn/dt/xzzrzygk/201907/t20190731_90672.html"
+      },
+      {
+        "title": "研究论文｜敦煌雅丹地层易溶盐特征及沉积环境",
+        "url": "https://www.geores.com.cn/zgsm/CN/abstract/article/1000-694X/67009"
+      }
+    ],
+    "黑独山": [
+      {
+        "title": "人民网青海频道｜黑独山的山体与地表影像",
+        "url": "https://qh.people.com.cn/n2/2025/0412/c378418-41194282-3.html"
+      },
+      {
+        "title": "人民日报｜从石油小镇到天文小镇",
+        "url": "https://paper.people.com.cn/rmrb/html/2023-08/02/nw.D110000renmrb_20230802_1-07.htm"
+      },
+      {
+        "title": "中国科学院｜冷湖天文台址观测研究",
+        "url": "https://www.cas.cn/yw/202108/t20210819_4802445.shtml"
+      }
+    ],
+    "乌素特水上雅丹": [
+      {
+        "title": "中国新闻网｜乌素特水上雅丹与河流改道",
+        "url": "https://www.chinanews.com.cn/tp/hd2011/2023/03-31/1063229.shtml"
+      },
+      {
+        "title": "中国国家地理2020年第3期｜柴达木水上雅丹的变化",
+        "url": "https://www.dili360.com/cng/article/p5e6a7be16ec4d40.htm"
+      }
+    ],
+    "东台吉乃尔湖": [
+      {
+        "title": "中国国家地理2020年第3期｜台吉乃尔湖区与河流尾闾",
+        "url": "https://www.dili360.com/cng/article/p5e6a7be16ec4d40.htm"
+      }
+    ],
+    "大柴旦翡翠湖": [
+      {
+        "title": "新华社｜大柴旦翡翠湖的湿地与采坑来历",
+        "url": "https://www.news.cn/local/20240817/6483b2b4070e4fa2bb247c191deef7a1/c.html"
+      }
+    ],
+    "德令哈": [
+      {
+        "title": "诗歌原文｜海子《日记》",
+        "url": "https://shiku.org/shiku/xs/haizi/144.htm"
+      },
+      {
+        "title": "央视｜海子1988年途经德令哈",
+        "url": "https://global.cctv.com/2025/04/09/VIDEq9Qu9tPRjxA01ln6HnO1250409.shtml"
+      },
+      {
+        "title": "中国作家网·张定浩｜海子的生平与诗歌语言",
+        "url": "https://www.chinawriter.com.cn/n1/2018/0327/c404031-29892241.html"
+      },
+      {
+        "title": "中国作家网·刘春｜人物关系的传记说法",
+        "url": "https://www.chinawriter.com.cn/n1/2019/0326/c404064-30995427.html"
+      },
+      {
+        "title": "青海日报2024年6月15日｜陈列馆功能分区",
+        "url": "https://epaper.tibet3.com/qhrb/html/202406/15/content_178218.html"
+      },
+      {
+        "title": "中新网2022年7月8日｜手稿原件与听诗区域",
+        "url": "https://www.qh.chinanews.com.cn/dsp/news/2022/0708/106261.html"
+      },
+      {
+        "title": "人民日报海外版｜诗意德令哈",
+        "url": "https://paper.people.com.cn/hwbwap/html/2020-09/28/content_2011188.htm"
+      },
+      {
+        "title": "2026年8月28日微博传播记录｜长文里的德令哈日落",
+        "url": "https://www.sina.cn/news/detail/5336890594558040.html"
+      },
+      {
+        "title": "2026年8月29日微博｜网友补发德令哈日落视频",
+        "url": "https://weibo.com/2/detail/5337272090103729"
+      },
+      {
+        "title": "网络文本说明｜虚构标注与称呼；仅作梗的出处",
+        "url": "https://www.sina.cn/news/detail/5336821371242815.html"
+      }
+    ],
+    "茶卡盐湖": [
+      {
+        "title": "茶卡盐湖景区｜沧桑之旅·百年铁轨",
+        "url": "https://www.chakasl.com/researchcenter_detaif/1209.html"
+      },
+      {
+        "title": "人民日报海外版｜茶卡盐湖：湖水融化蓝天里",
+        "url": "https://paper.people.com.cn/hwbwap/html/2022-07/11/content_25928170.htm"
+      }
+    ],
+    "青海湖东岸": [
+      {
+        "title": "中国国家地理2005年第10期｜第1名：青海湖：陆心之海",
+        "url": "https://www.dili360.com/cng/article/p5350c3d7d73ca19.htm"
+      },
+      {
+        "title": "中国国家地理｜2005年五大湖榜单回顾",
+        "url": "https://www.dili360.com/index.php/cng/article/p69007621bd95701.htm"
+      },
+      {
+        "title": "中国科学院地理资源所｜青海湖的形成与水系演变",
+        "url": "https://igsnrr.cas.cn/cbkx/kpyd/dlzs/land/202009/t20200910_5692510.html"
+      },
+      {
+        "title": "中国科学院｜青海湖裸鲤适应性研究",
+        "url": "https://www.nwipb.cas.cn/aepb/kycg/yjjz/202209/t20220916_6513711.html"
+      },
+      {
+        "title": "中国科学院｜裸鲤洄游与河道保护",
+        "url": "https://nwipb.cas.cn/djcxwh/dw/gzdt/202007/t20200713_5624406.html"
+      },
+      {
+        "title": "人民网｜湟鱼洄游：一条鱼的生命传奇（历史渔业与青海干板鱼）",
+        "url": "https://finance.people.com.cn/n1/2022/0916/c1004-32527658.html"
+      },
+      {
+        "title": "中国发展门户网转人民网｜青海湖湟鱼数量逐步恢复（历史风味）",
+        "url": "https://cn.chinagate.cn/environment/2014-08/27/content_33356687.htm"
+      },
+      {
+        "title": "海南州政府｜打击非法捕捞青海湖裸鲤等违法行为的通告",
+        "url": "https://www.hainanzhou.gov.cn/lnb/xwzx1/tzgg1__xwzx/tzgg/content_168425"
+      },
+      {
+        "title": "青海文旅、海南州政府｜环青赛沿途美食：手抓羊肉与酸奶",
+        "url": "https://www.hainanzhou.gov.cn/lnb/xwzx1/hnyw1__xwzx/hnyw/content_1013649156"
+      }
+    ],
+    "拜寺口双塔": [
+      {
+        "title": "银川市政府｜拜寺口双塔形制与文保介绍",
+        "url": "https://www.yinchuan.gov.cn/sshc/lyjd/zdwbcs/202302/t20230228_3978088.html"
+      }
+    ],
+    "贺兰山东麓酒庄": [
+      {
+        "title": "宁夏农业农村厅｜玉泉营酒厂沿革",
+        "url": "https://12316.nynct.nx.gov.cn/ptcy/9159.jhtml"
+      },
+      {
+        "title": "宁夏自治区政府｜贺兰山东麓产区与风土",
+        "url": "https://www.nx.gov.cn/hdjl/zxft/202308/t20230810_4213279.html"
+      }
+    ],
+    "武威雷台汉墓": [
+      {
+        "title": "甘肃省博物馆｜铜奔马藏品信息",
+        "url": "https://www.gansumuseum.com/collectionDetail?id=1233&nav=3-0"
+      },
+      {
+        "title": "敦煌文博会官网｜铜奔马的发现与研究",
+        "url": "https://www.gswbj.gov.cn/a/2026/02/24/27540.html"
+      },
+      {
+        "title": "央视采访文创设计师｜铜奔马的正面神态与丑萌绿马",
+        "url": "https://news.cctv.com/2026/02/01/ARTILAXNd3TIRVAxGDcBP147260201.shtml"
+      }
+    ],
+    "冰沟丹霞": [
+      {
+        "title": "张掖市政府｜冰沟丹霞景区",
+        "url": "https://www.zhangye.gov.cn/chzy/zyly/ajjq/202303/t20230318_1007475.html"
+      },
+      {
+        "title": "张掖市史志办｜神奇的冰沟丹霞",
+        "url": "https://www.zhangye.gov.cn/szb/dzdt/gjzy/202410/t20241024_1307102.html"
+      }
+    ],
+    "嘉峪关关城": [
+      {
+        "title": "嘉峪关市政府｜嘉峪关文化遗产与关城结构",
+        "url": "https://www.jyg.gov.cn/wlj/xwdt/bmdt/gzdt/art/2022/art_62ed11ca1488431e86691c9a57d5fd76.html"
+      }
+    ],
+    "瓜州大地之子与无界": [
+      {
+        "title": "清华大学美术学院｜董书兵荒野艺术作品",
+        "url": "https://www.ad.tsinghua.edu.cn/info/1061/31512.htm"
+      },
+      {
+        "title": "清华美院｜瓜州与大地之子",
+        "url": "https://www.ad.tsinghua.edu.cn/info/1206/10267.htm"
+      }
+    ],
+    "榆林窟与锁阳城": [
+      {
+        "title": "敦煌研究院｜榆林窟第25窟",
+        "url": "https://www.dha.ac.cn/info/1426/3635.htm"
+      },
+      {
+        "title": "数字敦煌｜榆林窟第25窟全景",
+        "url": "https://www.e-dunhuang.com/cave/10.0001/0001.0002.0025"
+      }
+    ],
+    "阳关": [
+      {
+        "title": "原典｜王维《送元二使安西》；甘肃文旅｜西出阳关",
+        "url": "https://www.gswbj.gov.cn/a/2024/09/02/21885.html"
+      },
+      {
+        "title": "中国青年报｜阳关古址考古调查",
+        "url": "https://news.cyol.com/gb/articles/2021-10/22/content_6v4VAsjxW.html"
+      }
+    ],
+    "阿克塞博罗转井影视基地": [
+      {
+        "title": "甘肃政务服务网｜阿克塞县城沿革",
+        "url": "https://zwfw.gansu.gov.cn/jiuquan/tsfw/zsyzfwzq/szgk/art/2023/art_d16c5f0beae7404da8dfb9e934a0e0d6.html"
+      },
+      {
+        "title": "中新网｜老县城与九层妖塔取景",
+        "url": "https://www.chinanews.com.cn/m/tp/hd/2017/0908/106722.shtml"
+      }
+    ],
+    "冷湖石油基地遗址": [
+      {
+        "title": "人民日报｜从石油小镇到天文小镇",
+        "url": "https://paper.people.com.cn/rmrb/html/2023-08/02/nw.D110000renmrb_20230802_1-07.htm"
+      },
+      {
+        "title": "中国科学院｜冷湖台址的连续观测研究",
+        "url": "https://www.cas.cn/yw/202108/t20210819_4802445.shtml"
+      }
+    ],
+    "红崖火星地貌": [
+      {
+        "title": "中国科学院青海盐湖研究所｜红崖火星类比区科学考察",
+        "url": "https://www.isl.cas.cn/xwdt/kyjz/201907/t20190716_6799303.html"
+      },
+      {
+        "title": "央广网｜红崖地形与地层介绍",
+        "url": "https://www.cnr.cn/qhfw/rdzt/gem/gemwl/20240929/t20240929_526923196.shtml"
+      }
+    ]
+  }
+}
