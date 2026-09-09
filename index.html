@@ -2463,6 +2463,23 @@
     details.day summary { list-style: none; }
     details.day summary::-webkit-details-marker { display: none; }
 
+    @media screen and (max-width: 700px) {
+      body { font-size: 17px; line-height: 1.85; }
+      .day-body, .day-body ul, .day-prose, .day-prose p, .day-lead,
+      .day-aside, .nearby-list p, .spot-prose, .spot-prose p,
+      .spot-slide-card > .spot-teaser, .spot-slide-card > .spot-aside,
+      .spot-reading, .layer p, .layer li, .checklist label {
+        font-size: 17px; line-height: 1.9;
+      }
+      .day-sub, .spot-meta, .nearby-summary, .trip-note, .trip-anchors,
+      .trip-route em, .check-note, .section-desc, .day-rhythm,
+      .field-note textarea, .field-notes-head span { font-size: 15px; line-height: 1.75; }
+      .day-title { font-size: 21px; line-height: 1.5; }
+      .spot-reading .reading-poem { font-size: 18px; line-height: 2; }
+      .spot-sources > summary, .nearby-kicker { font-size: 16px; }
+      .day-prose p, .spot-slide-card > .spot-aside { margin-bottom: 18px; }
+    }
+
     @media print {
       .bottom-nav, .btn-row, .no-print, .progress-bar, .fab-top, .toc, .filter-row, .lightbox, .offline-status { display: none !important; }
       body { padding: 0; background: #fff; background-image: none; }
@@ -4438,6 +4455,17 @@
         dayLock = false;
       }
       days.forEach((d) => {
+        const summary = d.querySelector(":scope > summary");
+        summary.addEventListener("click", (event) => {
+          if (event.target.closest("a, button, input, select, textarea")) return;
+          event.preventDefault();
+          // Close the previous day and open this one in one layout change,
+          // keeping the tapped heading at its original viewport position.
+          const top = summary.getBoundingClientRect().top;
+          if (d.open) d.open = false;
+          else openOnlyDay(d);
+          window.scrollBy({ top: summary.getBoundingClientRect().top - top, behavior: "instant" });
+        });
         d.addEventListener("toggle", () => {
           if (d.open) wakeDayCoverImgs(d);
           if (dayLock || !d.open) return;
