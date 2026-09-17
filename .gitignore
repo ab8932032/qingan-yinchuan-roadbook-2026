@@ -1,6 +1,7 @@
 _tmp_dl/
 scripts/*
 !scripts/amap-config.js
+!scripts/display-mode.js
 assets/feishu-url-map.json
 .DS_Store
 Thumbs.db
