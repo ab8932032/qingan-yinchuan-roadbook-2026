@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 import unittest
 from html.parser import HTMLParser
@@ -183,7 +184,7 @@ class RoadbookContentTests(unittest.TestCase):
         ):
             self.assertIn(expected_copy, VISIBLE_TEXT)
         for expected_markup in (
-            "<b>08:00</b> 南湖出发",
+            "<b>上午</b> 城市散步",
             "<b>13:15前</b> 停好车",
             "<b>13:30前</b> 到数字中心",
             "<b>14:00</b> 莫高入场",
@@ -245,38 +246,26 @@ class RoadbookContentTests(unittest.TestCase):
         self.assertNotIn("瓜州荒野雕塑群", VISIBLE_TEXT)
         self.assertNotIn("梵尘民宿", VISIBLE_TEXT)
 
-    def test_930_uses_0900_as_the_west_line_departure_everywhere(self) -> None:
-        self.assertIn("9.30 09:00 西线出发", VISIBLE_TEXT)
-        self.assertIn("09:00 出城", VISIBLE_TEXT)
-        for conflicting_copy in (
-            "13:00 左右去西线",
-            "吃过午饭再去敦煌西线",
-            "第二天下午还要走敦煌西线",
-            "一两点前",
-            "可睡懒觉",
-            "倒数第二班",
-            "末班常见约 18:30",
-            "末班观光车常见约 18:30",
-        ):
-            self.assertNotIn(conflicting_copy, VISIBLE_TEXT)
+    def test_930_city_day_replaces_the_west_line_obligation(self) -> None:
+        day_start = INDEX_SOURCE.index('<details class="day" id="d930"')
+        day_end = INDEX_SOURCE.index('<details class="day" id="d1001"', day_start)
+        day = INDEX_SOURCE[day_start:day_end]
+        for expected in ("无界", "印局", "旅行写真", "鸣沙山", "收藏池", "傍晚", "尚待实测"):
+            self.assertIn(expected, day)
+        self.assertNotIn("09:00 出城", day)
+        self.assertNotIn("9.30 09:00 西线出发", VISIBLE_TEXT)
+        self.assertNotIn("第二天 09:00 还要走敦煌西线", VISIBLE_TEXT)
         self.assertIn("当天公示的末班车与日落安排", VISIBLE_TEXT)
         self.assertIn("官方班次允许时预留一班余量", VISIBLE_TEXT)
-        self.assertIn("第二天 09:00 还要走敦煌西线", VISIBLE_TEXT)
 
-    def test_shapotou_tier_matches_the_current_trip_conditional_decision(self) -> None:
+    def test_shapotou_is_saved_for_a_separate_half_day(self) -> None:
         heading_position = INDEX_SOURCE.index("<h4>沙坡头</h4>")
         option_start = INDEX_SOURCE.rfind("<article", 0, heading_position)
         option_end = INDEX_SOURCE.index("</article>", heading_position)
         option_source = INDEX_SOURCE[option_start:option_end]
-
-        self.assertIn('class="nearby-option"', option_source)
-        self.assertIn('<span class="nearby-tier">条件满足时加入</span>', option_source)
-        self.assertIn("12:00 前离开西夏陵且驾驶状态充足时加入", option_source)
-        self.assertNotIn("适合另排", option_source)
-        self.assertIn(
-            "12:00 前离开西夏陵且两位司机状态充足时，可以顺路在中卫沙坡头停一两小时",
-            VISIBLE_TEXT,
-        )
+        self.assertIn('class="nearby-option skip"', option_source)
+        self.assertIn("收藏池 · 另留半天", option_source)
+        self.assertIn("本次转场日收进收藏池", option_source)
 
     def test_terminal_map_and_weather_statuses_state_results_and_fallbacks(self) -> None:
         self.assertIn("完整行程底线已显示；已载入 ", VISIBLE_TEXT)
@@ -309,8 +298,8 @@ class RoadbookContentTests(unittest.TestCase):
             INDEX_SOURCE.index('aside.textContent = teaser.textContent;'),
             INDEX_SOURCE.index('if (opening) teaser.textContent = opening.textContent;'),
         )
-        self.assertIn("关城留待下次", VISIBLE_TEXT)
-        self.assertIn("榆林窟与锁阳城放进下一次瓜州专程", VISIBLE_TEXT)
+        self.assertIn("这次经过，专程参观另留半天", VISIBLE_TEXT)
+        self.assertIn("独立安排一天", VISIBLE_TEXT)
         self.assertNotIn("这处停靠适合在时间、天气与精神都宽裕时加入", VISIBLE_TEXT)
 
     def test_chaka_and_u315_decisions_are_explicit(self) -> None:
@@ -347,6 +336,36 @@ class RoadbookContentTests(unittest.TestCase):
         self.assertTrue(expected_days.issubset(parser.days_with_nearby), expected_days - parser.days_with_nearby)
         self.assertGreaterEqual(parser.nearby_option_count, 12)
         self.assertNotIn("旧版结构检查的层级标记", INDEX_SOURCE)
+
+
+    def test_actual_timing_and_primary_limits_are_consistent(self) -> None:
+        days = re.findall(r'<details class="day" id="(d[0-9]+)".*?(?=<details class="day"|<section id="citywalk")', INDEX_SOURCE, re.S)
+        self.assertEqual(len(days), 12)
+        plans = re.findall(r'<ol class="main-plan">(.*?)</ol>', INDEX_SOURCE, re.S)
+        self.assertEqual(len(plans), 12)
+        for plan in plans:
+            self.assertLessEqual(plan.count("<li>"), 3)
+            self.assertGreaterEqual(plan.count("<li>"), 1)
+        for timing in ("10:00 出发", "11:00 到首个园区", "15:00 左右出园", "17:30 进场", "18:20 左右到4号观景台"):
+            self.assertIn(timing, VISIBLE_TEXT)
+        for stale in ("最迟 17:00", "17:30 前入园", "嘉峪关南湖车宿", "入住漫葡天沐"):
+            self.assertNotIn(stale, VISIBLE_TEXT)
+        self.assertIn("实付待补记", VISIBLE_TEXT)
+
+    def test_city_guide_navigation_and_station_layers(self) -> None:
+        guide_ids = re.findall(r'<details class="city-guide layer" id="([^"]+)"', INDEX_SOURCE)
+        self.assertEqual(len(guide_ids), 10)
+        for guide_id in guide_ids:
+            self.assertIn('href="#' + guide_id + '"', INDEX_SOURCE)
+        self.assertIn('window.addEventListener("hashchange", openCityGuide)', INDEX_SOURCE)
+        self.assertIn("敦煌无界", VISIBLE_TEXT)
+        self.assertIn("敦煌印局", VISIBLE_TEXT)
+        self.assertIn("拜寺口双塔", VISIBLE_TEXT)
+        self.assertIn("贺兰山东麓酒庄", VISIBLE_TEXT)
+        self.assertEqual(INDEX_SOURCE.count('class="station-priority"'), 23)
+        self.assertIn('priority.className = "station-priority"', INDEX_SOURCE)
+        self.assertIn('point.type !== "optional"', INDEX_SOURCE)
+        self.assertIn("qinggan-roadbook-v4-20260930", SERVICE_WORKER_SOURCE)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "qinggan-roadbook-v2";
+const CACHE_VERSION = "qinggan-roadbook-v4-20260930";
 const CORE_CACHE = `${CACHE_VERSION}-core`;
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const CORE_ASSETS = [
@@ -8,6 +8,7 @@ const CORE_ASSETS = [
   "./scripts/amap-config.js",
   "./scripts/display-mode.js",
   "./assets/display-mode.css",
+  "./assets/editorial.css",
   "./assets/app-icon.svg",
   "./assets/app-icon-180.png",
   "./assets/app-icon-192.png",
