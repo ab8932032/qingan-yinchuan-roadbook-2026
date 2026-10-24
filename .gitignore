@@ -2,7 +2,31 @@ _tmp_dl/
 scripts/*
 !scripts/amap-config.js
 !scripts/display-mode.js
+!scripts/return-chapter.js
+!scripts/atlas.js
+!scripts/atlas-data.js
+!scripts/theater-data.js
+!scripts/theater.js
+!scripts/journey-archive.js
+!scripts/journey-plan.js
+!scripts/build-journey-archive.py
 assets/feishu-url-map.json
 .DS_Store
 Thumbs.db
 __pycache__/
+
+!scripts/build_daily_films.py
+
+!scripts/compose_film_music.py
+
+# Local photo review, source paths, interviews, and editing manifests.
+review/
+notes/*
+!notes/story-sources.json
+!notes/amap-route-reference-2026-10-24.json
+!notes/daily-film-render-v2.json
+
+# Retain previous exports and music masters locally; publish the active films.
+media/films/*.mp4
+media/stills/*.jpg
+media/music/*.wav

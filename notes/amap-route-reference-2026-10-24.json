@@ -1,0 +1,513 @@
+{
+  "provider": "高德地图 JS API 2.0 驾车规划",
+  "queriedAt": "2026-10-24",
+  "policy": "速度优先",
+  "notes": [
+    "纯驾驶参考，不含游览、停车、休息、园内接驳；不是旅行当日轨迹。",
+    "九贺按准确酒店 POI 重新定位；察尔汗、水上雅丹统一以游客中心为起终点。",
+    "青海湖暂以二郎剑景区、西宁暂以青海藏文化博物院计算，不证明实际停靠在该点。",
+    "观星营地出现多个模糊匹配，未采纳这些候选作为实际位置；保留湖区至西宁直达参考。",
+    "2026.10.24 根据用户调整，地图撤下俄博梁独立站，重查黑独山至火星营地。高德默认经 G215、S316，不能等同火星一号公路穿越用时。"
+  ],
+  "routes": [
+    {
+      "fr": "chengdu",
+      "to": "helan",
+      "status": "complete",
+      "from": {
+        "keyword": "成都市人民公园",
+        "city": "成都"
+      },
+      "toPoint": {
+        "keyword": "贺兰山宿集",
+        "city": "银川"
+      },
+      "info": "OK",
+      "time": 49602,
+      "distance": 1204720,
+      "origin": "104.057641,30.65699",
+      "destination": "106.010716,38.626841",
+      "fromName": "成都人民公园（市区参考点）",
+      "toName": "贺兰山宿集园区",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约13 小时 45 分钟",
+      "distanceLabel": "1205 公里",
+      "url": "https://uri.amap.com/navigation?from=104.057641%2C30.65699%2C%E6%88%90%E9%83%BD%E4%BA%BA%E6%B0%91%E5%85%AC%E5%9B%AD%EF%BC%88%E5%B8%82%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=106.010716%2C38.626841%2C%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%AE%BF%E9%9B%86%E5%9B%AD%E5%8C%BA&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "helan",
+      "to": "jiuhe",
+      "status": "complete",
+      "info": "OK",
+      "time": 667,
+      "distance": 7808,
+      "origin": "106.010716,38.626841",
+      "destination": "106.060444,38.645841",
+      "inputOrigin": [
+        106.010716,
+        38.626841
+      ],
+      "inputDestination": [
+        106.060444,
+        38.645841
+      ],
+      "fromName": "贺兰山宿集园区",
+      "toName": "空山飞茑集x九贺度假酒店",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约11 分钟",
+      "distanceLabel": "7.8 公里",
+      "url": "https://uri.amap.com/navigation?from=106.010716%2C38.626841%2C%E8%B4%BA%E5%85%B0%E5%B1%B1%E5%AE%BF%E9%9B%86%E5%9B%AD%E5%8C%BA&to=106.060444%2C38.645841%2C%E7%A9%BA%E5%B1%B1%E9%A3%9E%E8%8C%91%E9%9B%86x%E4%B9%9D%E8%B4%BA%E5%BA%A6%E5%81%87%E9%85%92%E5%BA%97&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "jiuhe",
+      "to": "wuwei",
+      "status": "complete",
+      "info": "OK",
+      "time": 20992,
+      "distance": 391026,
+      "origin": "106.060444,38.645841",
+      "destination": "102.637821,37.92898",
+      "inputOrigin": [
+        106.060444,
+        38.645841
+      ],
+      "inputDestination": [
+        102.637821,
+        37.92898
+      ],
+      "fromName": "空山飞茑集x九贺度假酒店",
+      "toName": "武威市区（市政府参考点）",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约5 小时 50 分钟",
+      "distanceLabel": "391 公里",
+      "url": "https://uri.amap.com/navigation?from=106.060444%2C38.645841%2C%E7%A9%BA%E5%B1%B1%E9%A3%9E%E8%8C%91%E9%9B%86x%E4%B9%9D%E8%B4%BA%E5%BA%A6%E5%81%87%E9%85%92%E5%BA%97&to=102.637821%2C37.92898%2C%E6%AD%A6%E5%A8%81%E5%B8%82%E5%8C%BA%EF%BC%88%E5%B8%82%E6%94%BF%E5%BA%9C%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "wuwei",
+      "to": "zhangye",
+      "status": "complete",
+      "from": {
+        "keyword": "武威市政府",
+        "city": "武威"
+      },
+      "toPoint": {
+        "keyword": "张掖钟鼓楼",
+        "city": "张掖"
+      },
+      "info": "OK",
+      "time": 10500,
+      "distance": 243496,
+      "origin": "102.637821,37.92898",
+      "destination": "100.460616,38.937509",
+      "fromName": "武威市区（市政府参考点）",
+      "toName": "张掖钟鼓楼（市区参考点）",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约2 小时 55 分钟",
+      "distanceLabel": "243 公里",
+      "url": "https://uri.amap.com/navigation?from=102.637821%2C37.92898%2C%E6%AD%A6%E5%A8%81%E5%B8%82%E5%8C%BA%EF%BC%88%E5%B8%82%E6%94%BF%E5%BA%9C%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=100.460616%2C38.937509%2C%E5%BC%A0%E6%8E%96%E9%92%9F%E9%BC%93%E6%A5%BC%EF%BC%88%E5%B8%82%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "zhangye",
+      "to": "pingshanhu",
+      "status": "complete",
+      "from": {
+        "keyword": "张掖钟鼓楼",
+        "city": "张掖"
+      },
+      "toPoint": {
+        "keyword": "平山湖大峡谷",
+        "city": "张掖"
+      },
+      "info": "OK",
+      "time": 3863,
+      "distance": 56187,
+      "origin": "100.460616,38.937509",
+      "destination": "100.831003,39.168644",
+      "fromName": "张掖钟鼓楼（市区参考点）",
+      "toName": "平山湖大峡谷入口",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约1 小时 5 分钟",
+      "distanceLabel": "56 公里",
+      "url": "https://uri.amap.com/navigation?from=100.460616%2C38.937509%2C%E5%BC%A0%E6%8E%96%E9%92%9F%E9%BC%93%E6%A5%BC%EF%BC%88%E5%B8%82%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=100.831003%2C39.168644%2C%E5%B9%B3%E5%B1%B1%E6%B9%96%E5%A4%A7%E5%B3%A1%E8%B0%B7%E5%85%A5%E5%8F%A3&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "pingshanhu",
+      "to": "zhangye",
+      "status": "complete",
+      "from": {
+        "keyword": "平山湖大峡谷",
+        "city": "张掖"
+      },
+      "toPoint": {
+        "keyword": "张掖钟鼓楼",
+        "city": "张掖"
+      },
+      "info": "OK",
+      "time": 3568,
+      "distance": 57094,
+      "origin": "100.830488,39.165658",
+      "destination": "100.460616,38.937509",
+      "fromName": "平山湖大峡谷入口",
+      "toName": "张掖钟鼓楼（市区参考点）",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约1 小时",
+      "distanceLabel": "57 公里",
+      "url": "https://uri.amap.com/navigation?from=100.830488%2C39.165658%2C%E5%B9%B3%E5%B1%B1%E6%B9%96%E5%A4%A7%E5%B3%A1%E8%B0%B7%E5%85%A5%E5%8F%A3&to=100.460616%2C38.937509%2C%E5%BC%A0%E6%8E%96%E9%92%9F%E9%BC%93%E6%A5%BC%EF%BC%88%E5%B8%82%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "zhangye",
+      "to": "danxia",
+      "status": "complete",
+      "from": {
+        "keyword": "张掖钟鼓楼",
+        "city": "张掖"
+      },
+      "toPoint": {
+        "keyword": "张掖七彩丹霞旅游景区北入口",
+        "city": "张掖"
+      },
+      "info": "OK",
+      "time": 2657,
+      "distance": 37988,
+      "origin": "100.460616,38.937509",
+      "destination": "100.067231,38.973044",
+      "fromName": "张掖钟鼓楼（市区参考点）",
+      "toName": "七彩丹霞北入口",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约45 分钟",
+      "distanceLabel": "38 公里",
+      "url": "https://uri.amap.com/navigation?from=100.460616%2C38.937509%2C%E5%BC%A0%E6%8E%96%E9%92%9F%E9%BC%93%E6%A5%BC%EF%BC%88%E5%B8%82%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=100.067231%2C38.973044%2C%E4%B8%83%E5%BD%A9%E4%B8%B9%E9%9C%9E%E5%8C%97%E5%85%A5%E5%8F%A3&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "danxia",
+      "to": "dunhuang",
+      "status": "complete",
+      "from": {
+        "keyword": "张掖七彩丹霞旅游景区北入口",
+        "city": "张掖"
+      },
+      "toPoint": {
+        "keyword": "敦煌市政府",
+        "city": "敦煌"
+      },
+      "info": "OK",
+      "time": 21762,
+      "distance": 574465,
+      "origin": "100.067205,38.973064",
+      "destination": "94.661955,40.141955",
+      "fromName": "七彩丹霞北入口",
+      "toName": "敦煌市区（市政府参考点）",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约6 小时 5 分钟",
+      "distanceLabel": "574 公里",
+      "url": "https://uri.amap.com/navigation?from=100.067205%2C38.973064%2C%E4%B8%83%E5%BD%A9%E4%B8%B9%E9%9C%9E%E5%8C%97%E5%85%A5%E5%8F%A3&to=94.661955%2C40.141955%2C%E6%95%A6%E7%85%8C%E5%B8%82%E5%8C%BA%EF%BC%88%E5%B8%82%E6%94%BF%E5%BA%9C%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "dunhuang",
+      "to": "mingsha",
+      "status": "complete",
+      "from": {
+        "keyword": "敦煌市政府",
+        "city": "敦煌"
+      },
+      "toPoint": {
+        "keyword": "鸣沙山月牙泉景区中门",
+        "city": "敦煌"
+      },
+      "info": "OK",
+      "time": 747,
+      "distance": 5307,
+      "origin": "94.662328,40.142066",
+      "destination": "94.67553,40.097543",
+      "fromName": "敦煌市区（市政府参考点）",
+      "toName": "鸣沙山月牙泉中门",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约12 分钟",
+      "distanceLabel": "5.3 公里",
+      "url": "https://uri.amap.com/navigation?from=94.662328%2C40.142066%2C%E6%95%A6%E7%85%8C%E5%B8%82%E5%8C%BA%EF%BC%88%E5%B8%82%E6%94%BF%E5%BA%9C%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=94.67553%2C40.097543%2C%E9%B8%A3%E6%B2%99%E5%B1%B1%E6%9C%88%E7%89%99%E6%B3%89%E4%B8%AD%E9%97%A8&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "dunhuang",
+      "to": "lenghu",
+      "status": "complete",
+      "from": {
+        "keyword": "敦煌市政府",
+        "city": "敦煌"
+      },
+      "toPoint": {
+        "keyword": "冷湖镇人民政府",
+        "city": "茫崖"
+      },
+      "info": "OK",
+      "time": 13511,
+      "distance": 250257,
+      "origin": "94.662328,40.142066",
+      "destination": "93.335192,38.733425",
+      "fromName": "敦煌市区（市政府参考点）",
+      "toName": "冷湖镇政府（镇区参考点）",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约3 小时 45 分钟",
+      "distanceLabel": "250 公里",
+      "url": "https://uri.amap.com/navigation?from=94.662328%2C40.142066%2C%E6%95%A6%E7%85%8C%E5%B8%82%E5%8C%BA%EF%BC%88%E5%B8%82%E6%94%BF%E5%BA%9C%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=93.335192%2C38.733425%2C%E5%86%B7%E6%B9%96%E9%95%87%E6%94%BF%E5%BA%9C%EF%BC%88%E9%95%87%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "lenghu",
+      "to": "oil-town",
+      "status": "complete",
+      "from": {
+        "keyword": "冷湖镇人民政府",
+        "city": "茫崖"
+      },
+      "toPoint": {
+        "keyword": "冷湖石油基地遗址",
+        "city": "茫崖"
+      },
+      "info": "OK",
+      "time": 1005,
+      "distance": 12320,
+      "origin": "93.334715,38.733254",
+      "destination": "93.400584,38.821133",
+      "fromName": "冷湖镇政府（镇区参考点）",
+      "toName": "冷湖石油基地遗址",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约17 分钟",
+      "distanceLabel": "12 公里",
+      "url": "https://uri.amap.com/navigation?from=93.334715%2C38.733254%2C%E5%86%B7%E6%B9%96%E9%95%87%E6%94%BF%E5%BA%9C%EF%BC%88%E9%95%87%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=93.400584%2C38.821133%2C%E5%86%B7%E6%B9%96%E7%9F%B3%E6%B2%B9%E5%9F%BA%E5%9C%B0%E9%81%97%E5%9D%80&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "oil-town",
+      "to": "heidu",
+      "status": "complete",
+      "from": {
+        "keyword": "冷湖石油基地遗址",
+        "city": "茫崖"
+      },
+      "toPoint": {
+        "keyword": "黑独山景区",
+        "city": "茫崖"
+      },
+      "info": "OK",
+      "time": 572,
+      "distance": 2077,
+      "origin": "93.393254,38.822093",
+      "destination": "93.400898,38.812241",
+      "fromName": "冷湖石油基地遗址",
+      "toName": "黑独山景区入口",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约10 分钟",
+      "distanceLabel": "2.1 公里",
+      "url": "https://uri.amap.com/navigation?from=93.393254%2C38.822093%2C%E5%86%B7%E6%B9%96%E7%9F%B3%E6%B2%B9%E5%9F%BA%E5%9C%B0%E9%81%97%E5%9D%80&to=93.400898%2C38.812241%2C%E9%BB%91%E7%8B%AC%E5%B1%B1%E6%99%AF%E5%8C%BA%E5%85%A5%E5%8F%A3&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "mars",
+      "to": "water",
+      "status": "complete",
+      "info": "OK",
+      "time": 8836,
+      "distance": 118746,
+      "origin": "92.973896,38.349294",
+      "destination": "93.77409,37.624172",
+      "inputOrigin": [
+        92.973896,
+        38.349294
+      ],
+      "inputDestination": [
+        93.77409,
+        37.624172
+      ],
+      "fromName": "冷湖火星营地",
+      "toName": "乌素特水上雅丹游客中心",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约2 小时 25 分钟",
+      "distanceLabel": "119 公里",
+      "url": "https://uri.amap.com/navigation?from=92.973896%2C38.349294%2C%E5%86%B7%E6%B9%96%E7%81%AB%E6%98%9F%E8%90%A5%E5%9C%B0&to=93.77409%2C37.624172%2C%E4%B9%8C%E7%B4%A0%E7%89%B9%E6%B0%B4%E4%B8%8A%E9%9B%85%E4%B8%B9%E6%B8%B8%E5%AE%A2%E4%B8%AD%E5%BF%83&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "water",
+      "to": "chaerhan",
+      "status": "complete",
+      "info": "OK",
+      "time": 9063,
+      "distance": 209720,
+      "origin": "93.77409,37.624172",
+      "destination": "95.216848,36.767045",
+      "inputOrigin": [
+        93.77409,
+        37.624172
+      ],
+      "inputDestination": [
+        95.216848,
+        36.767045
+      ],
+      "fromName": "乌素特水上雅丹游客中心",
+      "toName": "察尔汗盐湖游客中心",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约2 小时 30 分钟",
+      "distanceLabel": "210 公里",
+      "url": "https://uri.amap.com/navigation?from=93.77409%2C37.624172%2C%E4%B9%8C%E7%B4%A0%E7%89%B9%E6%B0%B4%E4%B8%8A%E9%9B%85%E4%B8%B9%E6%B8%B8%E5%AE%A2%E4%B8%AD%E5%BF%83&to=95.216848%2C36.767045%2C%E5%AF%9F%E5%B0%94%E6%B1%97%E7%9B%90%E6%B9%96%E6%B8%B8%E5%AE%A2%E4%B8%AD%E5%BF%83&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "chaerhan",
+      "to": "delingha",
+      "status": "complete",
+      "info": "OK",
+      "time": 11070,
+      "distance": 268910,
+      "origin": "95.216848,36.767045",
+      "destination": "97.360792,37.369256",
+      "inputOrigin": [
+        95.216848,
+        36.767045
+      ],
+      "inputDestination": [
+        97.360792,
+        37.369256
+      ],
+      "fromName": "察尔汗盐湖游客中心",
+      "toName": "德令哈市区（市政府参考点）",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约3 小时 5 分钟",
+      "distanceLabel": "269 公里",
+      "url": "https://uri.amap.com/navigation?from=95.216848%2C36.767045%2C%E5%AF%9F%E5%B0%94%E6%B1%97%E7%9B%90%E6%B9%96%E6%B8%B8%E5%AE%A2%E4%B8%AD%E5%BF%83&to=97.360792%2C37.369256%2C%E5%BE%B7%E4%BB%A4%E5%93%88%E5%B8%82%E5%8C%BA%EF%BC%88%E5%B8%82%E6%94%BF%E5%BA%9C%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "delingha",
+      "to": "lake",
+      "status": "complete",
+      "from": {
+        "keyword": "德令哈市政府",
+        "city": "德令哈"
+      },
+      "toPoint": {
+        "keyword": "青海湖二郎剑景区",
+        "city": "共和"
+      },
+      "info": "OK",
+      "time": 13848,
+      "distance": 344270,
+      "origin": "97.361528,37.369865",
+      "destination": "100.49506,36.577815",
+      "fromName": "德令哈市区（市政府参考点）",
+      "toName": "青海湖二郎剑景区（湖区参考点）",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约3 小时 50 分钟",
+      "distanceLabel": "344 公里",
+      "url": "https://uri.amap.com/navigation?from=97.361528%2C37.369865%2C%E5%BE%B7%E4%BB%A4%E5%93%88%E5%B8%82%E5%8C%BA%EF%BC%88%E5%B8%82%E6%94%BF%E5%BA%9C%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=100.49506%2C36.577815%2C%E9%9D%92%E6%B5%B7%E6%B9%96%E4%BA%8C%E9%83%8E%E5%89%91%E6%99%AF%E5%8C%BA%EF%BC%88%E6%B9%96%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "xining",
+      "to": "chengdu",
+      "status": "complete",
+      "from": {
+        "keyword": "青海藏文化博物院",
+        "city": "西宁"
+      },
+      "toPoint": {
+        "keyword": "成都市人民公园",
+        "city": "成都"
+      },
+      "info": "OK",
+      "time": 43812,
+      "distance": 1071494,
+      "origin": "101.747855,36.688698",
+      "destination": "104.058854,30.657759",
+      "fromName": "青海藏文化博物院（西宁参考点）",
+      "toName": "成都人民公园（市区参考点）",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约12 小时 10 分钟",
+      "distanceLabel": "1071 公里",
+      "url": "https://uri.amap.com/navigation?from=101.747855%2C36.688698%2C%E9%9D%92%E6%B5%B7%E8%97%8F%E6%96%87%E5%8C%96%E5%8D%9A%E7%89%A9%E9%99%A2%EF%BC%88%E8%A5%BF%E5%AE%81%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=104.058854%2C30.657759%2C%E6%88%90%E9%83%BD%E4%BA%BA%E6%B0%91%E5%85%AC%E5%9B%AD%EF%BC%88%E5%B8%82%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "lake",
+      "to": "xining",
+      "status": "complete",
+      "from": {
+        "keyword": "青海湖二郎剑景区",
+        "city": "共和"
+      },
+      "toPoint": {
+        "keyword": "青海藏文化博物院",
+        "city": "西宁"
+      },
+      "info": "OK",
+      "time": 7447,
+      "distance": 159694,
+      "origin": "100.495767,36.578633",
+      "destination": "101.749077,36.689543",
+      "fromName": "青海湖二郎剑景区（湖区参考点）",
+      "toName": "青海藏文化博物院（西宁参考点）",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约2 小时 5 分钟",
+      "distanceLabel": "160 公里",
+      "url": "https://uri.amap.com/navigation?from=100.495767%2C36.578633%2C%E9%9D%92%E6%B5%B7%E6%B9%96%E4%BA%8C%E9%83%8E%E5%89%91%E6%99%AF%E5%8C%BA%EF%BC%88%E6%B9%96%E5%8C%BA%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&to=101.749077%2C36.689543%2C%E9%9D%92%E6%B5%B7%E8%97%8F%E6%96%87%E5%8C%96%E5%8D%9A%E7%89%A9%E9%99%A2%EF%BC%88%E8%A5%BF%E5%AE%81%E5%8F%82%E8%80%83%E7%82%B9%EF%BC%89&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    },
+    {
+      "fr": "heidu",
+      "to": "mars",
+      "status": "complete",
+      "info": "OK",
+      "time": 5839,
+      "distance": 75353,
+      "origin": "93.401038,38.812435",
+      "destination": "92.973896,38.349294",
+      "inputOrigin": [
+        93.401038,
+        38.812435
+      ],
+      "inputDestination": [
+        92.973896,
+        38.349294
+      ],
+      "fromName": "黑独山景区入口",
+      "toName": "冷湖火星营地",
+      "provider": "高德驾车规划",
+      "queriedAt": "2026-10-24",
+      "policy": "速度优先",
+      "durationLabel": "约1 小时 35 分钟",
+      "distanceLabel": "75 公里",
+      "roads": [
+        "215国道",
+        "东环路",
+        "316省道"
+      ],
+      "url": "https://uri.amap.com/navigation?from=93.401038%2C38.812435%2C%E9%BB%91%E7%8B%AC%E5%B1%B1%E6%99%AF%E5%8C%BA%E5%85%A5%E5%8F%A3&to=92.973896%2C38.349294%2C%E5%86%B7%E6%B9%96%E7%81%AB%E6%98%9F%E8%90%A5%E5%9C%B0&mode=car&src=qinggan-roadbook&coordinate=gaode&callnative=1"
+    }
+  ]
+}

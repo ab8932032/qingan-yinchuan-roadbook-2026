@@ -1,0 +1,242 @@
+[
+  {
+    "file": "10-1-portrait.mp4",
+    "relativePath": "media/films/v2/10-1-portrait.mp4",
+    "bytes": 2303316,
+    "duration": 21.96,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.4,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "10-1-wide.mp4",
+    "relativePath": "media/films/v2/10-1-wide.mp4",
+    "bytes": 2389846,
+    "duration": 21.96,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.4,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "10-2-portrait.mp4",
+    "relativePath": "media/films/v2/10-2-portrait.mp4",
+    "bytes": 1980057,
+    "duration": 21.96,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.5,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "10-2-wide.mp4",
+    "relativePath": "media/films/v2/10-2-wide.mp4",
+    "bytes": 2281989,
+    "duration": 21.96,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.5,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "10-3-portrait.mp4",
+    "relativePath": "media/films/v2/10-3-portrait.mp4",
+    "bytes": 1675310,
+    "duration": 16.38,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.6,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "10-3-wide.mp4",
+    "relativePath": "media/films/v2/10-3-wide.mp4",
+    "bytes": 2256211,
+    "duration": 16.38,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.6,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "10-4-portrait.mp4",
+    "relativePath": "media/films/v2/10-4-portrait.mp4",
+    "bytes": 2386266,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.5,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "10-4-wide.mp4",
+    "relativePath": "media/films/v2/10-4-wide.mp4",
+    "bytes": 2506422,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.5,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "10-5-portrait.mp4",
+    "relativePath": "media/films/v2/10-5-portrait.mp4",
+    "bytes": 724655,
+    "duration": 16.0,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.6,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "10-5-wide.mp4",
+    "relativePath": "media/films/v2/10-5-wide.mp4",
+    "bytes": 743794,
+    "duration": 16.0,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.6,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-24-portrait.mp4",
+    "relativePath": "media/films/v2/9-24-portrait.mp4",
+    "bytes": 416367,
+    "duration": 16.0,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.8,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-24-wide.mp4",
+    "relativePath": "media/films/v2/9-24-wide.mp4",
+    "bytes": 414372,
+    "duration": 16.0,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.8,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-25-portrait.mp4",
+    "relativePath": "media/films/v2/9-25-portrait.mp4",
+    "bytes": 2161266,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.7,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-25-wide.mp4",
+    "relativePath": "media/films/v2/9-25-wide.mp4",
+    "bytes": 2015996,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.7,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-26-portrait.mp4",
+    "relativePath": "media/films/v2/9-26-portrait.mp4",
+    "bytes": 2476928,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.7,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-26-wide.mp4",
+    "relativePath": "media/films/v2/9-26-wide.mp4",
+    "bytes": 2103048,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.7,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-27-portrait.mp4",
+    "relativePath": "media/films/v2/9-27-portrait.mp4",
+    "bytes": 419072,
+    "duration": 16.0,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.6,
+    "peakVolumeDb": -10.2,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-27-wide.mp4",
+    "relativePath": "media/films/v2/9-27-wide.mp4",
+    "bytes": 417602,
+    "duration": 16.0,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.6,
+    "peakVolumeDb": -10.2,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-28-portrait.mp4",
+    "relativePath": "media/films/v2/9-28-portrait.mp4",
+    "bytes": 3353344,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.4,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-28-wide.mp4",
+    "relativePath": "media/films/v2/9-28-wide.mp4",
+    "bytes": 2426242,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.4,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-29-portrait.mp4",
+    "relativePath": "media/films/v2/9-29-portrait.mp4",
+    "bytes": 2056255,
+    "duration": 16.38,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.8,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-29-wide.mp4",
+    "relativePath": "media/films/v2/9-29-wide.mp4",
+    "bytes": 2131845,
+    "duration": 16.38,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.8,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-30-portrait.mp4",
+    "relativePath": "media/films/v2/9-30-portrait.mp4",
+    "bytes": 1664231,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.4,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  },
+  {
+    "file": "9-30-wide.mp4",
+    "relativePath": "media/films/v2/9-30-wide.mp4",
+    "bytes": 1791728,
+    "duration": 19.17,
+    "audioCodec": "aac",
+    "meanVolumeDb": -22.4,
+    "peakVolumeDb": -9.9,
+    "decodedFullFile": true
+  }
+]

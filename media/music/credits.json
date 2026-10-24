@@ -1,0 +1,26 @@
+{
+  "author": "Original instrumental arrangements created for this travel journal",
+  "tracks": [
+    {
+      "file": "courtyard.wav",
+      "seconds": 26.5,
+      "peakDbFS": -13.2,
+      "rmsDbFS": -26.1,
+      "composition": "Original note sequence and local additive synthesis; no external samples."
+    },
+    {
+      "file": "open-road.wav",
+      "seconds": 27.76,
+      "peakDbFS": -13.2,
+      "rmsDbFS": -25.9,
+      "composition": "Original note sequence and local additive synthesis; no external samples."
+    },
+    {
+      "file": "lake-light.wav",
+      "seconds": 29.17,
+      "peakDbFS": -13.2,
+      "rmsDbFS": -26.0,
+      "composition": "Original note sequence and local additive synthesis; no external samples."
+    }
+  ]
+}
