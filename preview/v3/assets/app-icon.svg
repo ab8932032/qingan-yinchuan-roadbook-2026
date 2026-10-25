@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">青甘银川自驾路书</title>
+  <desc id="desc">暮色、沙丘、湖水与通向远方的公路</desc>
+  <rect width="512" height="512" rx="104" fill="#1a1410"/>
+  <circle cx="354" cy="153" r="62" fill="#c45c26"/>
+  <path d="M72 302c76-67 142-90 199-72 52 17 101 11 169-32v172H72z" fill="#c4a574"/>
+  <path d="M72 352c76-38 137-45 199-22 55 21 106 18 169-10v120H72z" fill="#2a6f7f"/>
+  <path d="M230 440c20-93 36-151 53-174 14-19 29-28 45-35-28 9-54 22-75 46-28 33-50 87-70 163z" fill="#f3efe6"/>
+  <path d="M272 391c7-36 14-63 22-83" fill="none" stroke="#c45c26" stroke-width="10" stroke-linecap="round" stroke-dasharray="16 20"/>
+</svg>

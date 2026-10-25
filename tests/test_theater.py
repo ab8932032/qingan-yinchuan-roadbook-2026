@@ -9,6 +9,18 @@ ATLAS = json.loads((ROOT / 'scripts/atlas-data.js').read_text(encoding='utf-8').
 
 
 class TheaterTests(unittest.TestCase):
+    @staticmethod
+    def run_film_helpers(script):
+        harness = r'''
+const fs=require('fs'),vm=require('vm');
+const context={window:{}};
+vm.createContext(context);vm.runInContext(fs.readFileSync(process.argv[1],'utf8'),context);
+const util=context.window.RoadbookFilm;
+''' + script
+        result = subprocess.run(['node', '-e', harness, str(ROOT / 'scripts/theater.js')],
+                                capture_output=True, text=True, encoding='utf-8', check=True)
+        return json.loads(result.stdout)
+
     def test_six_acts_cover_the_actual_places(self):
         places = {p['id'] for p in ATLAS['places']}
         self.assertEqual(len(THEATER['acts']), 6)
@@ -50,6 +62,69 @@ process.stdout.write(JSON.stringify({items,sources:[util.safeSource('file:///sec
         self.assertEqual(data['items'][2]['poster'], '')
         self.assertEqual(data['items'][3]['end'], 9)
         self.assertEqual(data['sources'], ['', 'https://example.com/movie.mp4', 'blob:https://example.com/clip'])
+
+    def test_place_films_are_a_strict_boundary_even_for_missing_or_empty_places(self):
+        data = self.run_film_helpers(r'''
+const daily={id:'whole-day',date:'10.1',places:['oil','heidu','mars','water'],media:[{type:'video',src:'daily.mp4'}]};
+const fallback=[{type:'video',src:'act.mp4'}];
+const config={dailyFilms:[daily],placeFilms:{
+ oil:[{id:'oil-only',date:'10.1',title:'石油遗址',media:[{type:'video',src:'oil.mp4'}]}],
+ heidu:[],water:[{media:[]}],invalid:[{media:'not-a-list'}]
+}};
+const read=id=>util.prepareFilmClips(util.resolveFilms(config,id,fallback)).map(clip=>clip.src);
+const empty=util.prepareFilmClips(util.resolveFilms({...config,placeFilms:{}},'oil',fallback));
+const inheritedMap=Object.create({mars:[daily]});
+const inherited=util.resolveFilms({...config,placeFilms:inheritedMap},'mars',fallback);
+process.stdout.write(JSON.stringify({oil:read('oil'),heidu:read('heidu'),mars:read('mars'),water:read('water'),invalid:read('invalid'),empty,inherited}));
+''')
+        self.assertEqual(data['oil'], ['oil.mp4'])
+        for place in ['heidu', 'mars', 'water', 'invalid', 'empty', 'inherited']:
+            self.assertEqual(data[place], [], place)
+
+    def test_configs_without_place_films_keep_daily_then_act_fallback(self):
+        data = self.run_film_helpers(r'''
+const config={dailyFilms:[{date:'9.28',title:'张掖',places:['canyon','danxia'],media:[{type:'video',src:'daily.mp4'}]}]};
+const fallback=[{type:'photo',src:'courtyard.jpg',date:'9.25',title:'院落',duration:5}];
+process.stdout.write(JSON.stringify({
+ daily:util.prepareFilmClips(util.resolveFilms(config,'canyon',fallback)),
+ act:util.prepareFilmClips(util.resolveFilms(config,'helan',fallback)),
+ empty:util.prepareFilmClips(util.resolveFilms({},'helan'))
+}));
+''')
+        self.assertEqual(data['daily'][0]['src'], 'daily.mp4')
+        self.assertEqual(data['daily'][0]['date'], '9.28')
+        self.assertEqual(data['act'][0]['src'], 'courtyard.jpg')
+        self.assertEqual(data['act'][0]['date'], '9.25')
+        self.assertEqual(data['act'][0]['duration'], 5)
+        self.assertEqual(data['empty'], [])
+
+    def test_place_films_keep_identity_and_label_in_both_screen_orientations(self):
+        data = self.run_film_helpers(r'''
+const config={placeFilms:{lake:[
+ {id:'shore',date:'10.3',title:'青海湖 · 湖岸与日落',label:'湖岸与日落',media:[{type:'video',src:'shore-wide.mp4',portraitSrc:'shore-tall.mp4',poster:'shore-wide.jpg',portraitPoster:'shore-tall.jpg',start:2,end:7}]},
+ {id:'stars',date:'10.3',title:'青海湖 · 星空',label:'星空',media:[{type:'video',src:'stars-wide.mp4',poster:'stars-wide.jpg'}]},
+ {id:'unsafe',date:'10.3',media:[{type:'video',src:'javascript:bad',portraitSrc:'data:bad'}]}
+]}};
+const films=util.resolveFilms(config,'lake');
+const wide=util.prepareFilmClips(films),tall=util.prepareFilmClips(films,true);
+process.stdout.write(JSON.stringify({wide,tall,selected:[
+ util.findFilmIndex(tall,wide[1]),
+ util.findFilmIndex(tall,{id:'missing',date:'10.3'}),
+ util.findFilmIndex(tall,{id:'stars',date:'10.4'}),
+ util.findFilmIndex(tall,{date:'unknown'})
+]}));
+''')
+        self.assertEqual(len(data['wide']), 2)
+        self.assertEqual(len(data['tall']), 2)
+        self.assertEqual(data['wide'][0]['src'], 'shore-wide.mp4')
+        self.assertEqual(data['tall'][0]['src'], 'shore-tall.mp4')
+        self.assertEqual(data['tall'][0]['poster'], 'shore-tall.jpg')
+        self.assertEqual(data['tall'][1]['src'], 'stars-wide.mp4')
+        self.assertEqual(data['tall'][1]['poster'], 'stars-wide.jpg')
+        self.assertEqual(data['tall'][0]['label'], '湖岸与日落')
+        self.assertEqual(data['tall'][0]['title'], '青海湖 · 湖岸与日落')
+        self.assertEqual((data['tall'][0]['start'], data['tall'][0]['end']), (2, 7))
+        self.assertEqual(data['selected'], [1, 0, 1, 0])
 
     def test_empty_media_slots_do_not_reference_fake_footage(self):
         for act in THEATER['acts']:

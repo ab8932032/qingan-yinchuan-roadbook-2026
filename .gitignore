@@ -18,6 +18,8 @@ __pycache__/
 !scripts/build_daily_films.py
 
 !scripts/compose_film_music.py
+!scripts/build_v3_preview.py
+!scripts/build_place_films.py
 
 # Local photo review, source paths, interviews, and editing manifests.
 review/

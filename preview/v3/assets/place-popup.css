@@ -1,0 +1,112 @@
+/* The record stays attached to its landmark while the scene remains visible. */
+#placePanel { inset: auto; margin: 0; position: fixed; width: 410px; height: 650px; max-height: none; min-width: 0; border: 1px solid #fff9; border-radius: 5px; background: #f7efdf; overflow: visible; z-index: 50; box-shadow: 3px 5px 0 #c5ae8155,0 16px 48px #51402530; }
+#placePanel::before { content: ""; position: absolute; top: var(--pointer-y,100px); width: 13px; height: 13px; background: #f7efdf; border: solid #fff9; transform: translateY(-50%) rotate(45deg); pointer-events: none; }
+#placePanel[data-side="right"]::before { left: -7px; border-width: 0 0 1px 1px; }
+#placePanel[data-side="left"]::before { right: -7px; border-width: 1px 1px 0 0; }
+#placePanel .panel-top { padding: 11px 18px 5px; min-height: 43px; font-size: 9px; max-width: none; }
+#placePanel .close-panel { width: 35px; height: 35px; font-size: 24px; }
+#placePanel .record-tabs { gap: 0; justify-content: flex-start; padding: 0 12px 5px; overflow-x: auto; scrollbar-width: none; }
+#placePanel .record-tabs button { flex: 1 0 auto; font-size: 10px; min-height: 39px; padding: 7px 9px; }
+#placePanel .place-scroll { padding: 17px 20px 26px; min-height: 0; }
+#placePanel .place-scroll h2 { font-size: 28px; margin-bottom: 12px; }
+#placePanel .place-date { font-size: 10px; margin-bottom: 6px; }
+#placePanel .place-vignette { height: 84px; margin: 0 0 15px; }
+#placePanel .place-vignette > svg { width: 115px; height: 98px; }
+#placePanel[data-record="guide"] .place-vignette, #placePanel[data-record="book"] .place-vignette { display: none; }
+#placePanel :is(.place-memory p,.story-body p) { font-size: 13px; line-height: 1.95; margin-bottom: 14px; }
+#placePanel .place-block { padding-top: 16px; margin-top: 19px; }
+#placePanel .place-facts { margin: 17px 0; gap: 9px; }
+#placePanel .place-pager { justify-content: space-between; gap: 0; min-height: 47px; padding: 3px 8px; border-radius: 0 0 5px 5px; }
+#placePanel .place-pager button { font-size: 10px; min-height: 39px; padding-inline: 7px; }
+#placePanel .archive-entry > summary { font-size: 17px; }
+#placePanel .archive-body { font-size: 12px; }
+.place-connector { position: fixed; inset: 0; width: 100vw; height: 100dvh; z-index: 45; pointer-events: none; overflow: visible; }
+.place-connector path { fill: none; stroke: #ac7851; stroke-width: 1.4; stroke-dasharray: 3 4; }
+.place-connector circle { fill: #ac7851; stroke: #fff0d7; stroke-width: 1; }
+.route-legs { margin: 20px 0; border-top: 1px solid var(--line); }
+.route-legs h3,.station-guide h3,.day-schedule h3 { font: 18px/1.6 "STSong","SimSun",serif; margin: 17px 0 11px; }
+.route-leg { position: relative; border-left: 1px solid #b8a18066; padding: 0 0 15px 13px; margin-left: 3px; }
+.route-leg::before { content: ""; position: absolute; width: 5px; height: 5px; left: -3px; top: 7px; border-radius: 50%; background: #b08a60; }
+.route-leg:last-child { padding-bottom: 2px; }
+.route-leg .leg-date { color: var(--soft); font-size: 9px; margin: 0 0 3px; }
+.leg-title { margin: 0; font-size: 11px; line-height: 1.8; color: #66543e; }
+.leg-duration { font-size: 12px; color: #8d5d3b; margin: 4px 0; }
+.leg-basis { font-size: 9px; padding: 2px 5px; margin-left: 5px; color: #85755f; background: #e8ddc755; }
+.leg-basis.measured { color: #4e7672; background: #b7cdc133; }
+.leg-distance { display: inline-block; font: 10px/1.8 Georgia,serif; color: #8d795a; margin-bottom: 3px; }
+.leg-map { display: inline-block; font-size: 10px; color: var(--lake); margin-top: 2px; padding-block: 4px; }
+.leg-note,.leg-reference { font-size: 10px; line-height: 1.8; margin: 4px 0; color: #8e7c63; }
+.station-guide { border-top: 1px solid var(--line); margin-top: 21px; padding-top: 1px; }
+.guide-duration { color: #9a6945; font-size: 11px; }
+.station-guide ul { margin: 12px 0; padding-left: 17px; }
+.station-guide li { font-size: 12px; line-height: 1.9; color: #71614b; margin-bottom: 10px; }
+.guide-basis { color: #9c8c75; font-size: 9px; line-height: 1.8; }
+.guide-sources a { font-size: 10px; color: var(--lake); }
+.day-schedule { margin: 20px 0; border-top: 1px solid var(--line); }
+.day-schedule h3 span { font: 10px/1.5 system-ui,sans-serif; margin-right: 8px; color: var(--dusk); }
+.day-schedule ol { list-style: none; padding: 0; margin: 0; }
+.day-schedule li { display: grid; grid-template-columns: 64px 1fr; gap: 10px; padding: 7px 0; font-size: 11px; border-bottom: 1px dotted #b9a27a2b; }
+.day-schedule time { font-size: 10px; line-height: 1.85; color: #9b7750; }
+.day-schedule .current-step { color: #4f7370; font-weight: 500; }
+.day-schedule li span { line-height: 1.85; }
+.day-note { font-size: 10px; line-height: 1.8; color: #9a896e; }
+.walk-stops { padding-left: 16px; margin: 15px 0; color: #75634c; font-size: 12px; line-height: 1.9; }
+.walk-stops li { margin-bottom: 9px; }
+.walk-stops strong { font-weight: 500; color: #8c5d3e; }
+.route-view-tabs { display: flex; border-bottom: 1px solid var(--line); margin-bottom: 8px; }
+.route-view-tabs button { flex: 1; font-size: 11px; min-height: 39px; color: var(--soft); border-bottom: 2px solid transparent; }
+.route-view-tabs button[aria-pressed="true"] { border-color: var(--dusk); color: var(--dusk); }
+.daily-card { padding: 8px 2px 15px; border-bottom: 1px solid var(--line); }
+.daily-card h3 { display: flex; gap: 10px; align-items: baseline; margin: 0 0 7px; font-size: 11px; font-weight: 500; }
+.daily-card h3 time { color: var(--dusk); font: 14px/1.6 Georgia,serif; white-space: nowrap; }
+.daily-card > button { display: grid; grid-template-columns: 58px 1fr; gap: 8px; width: 100%; padding: 7px 5px; text-align: left; font-size: 10px; line-height: 1.9; border-radius: 3px; }
+.daily-card > button.active { background: #e7d7ba88; }
+.daily-card > button > time { font-size: 9px; color: #a0815b; }
+.daily-driving { font-size: 9px; color: #9e805b; margin: 0 0 8px; }
+.day-driving { padding: 12px 13px; border: 1px solid #c0a57538; background: #eadbc533; margin: 10px 0 14px; }
+.day-driving strong { display: block; font: 23px/1.5 "STSong","SimSun",serif; color: #96613c; }
+.day-driving > span { font-size: 9px; color: var(--soft); }
+.day-driving p { font-size: 10px; line-height: 1.8; color: #968268; margin: 5px 0 0; }
+body:has(#placePanel[open]) .mobile-peek { visibility: hidden; }
+@media (max-width:600px) { #placePanel .place-scroll { padding-inline: 16px; } #placePanel .record-tabs { padding-inline: 7px; } #placePanel .record-tabs button { font-size: 10px; padding-inline: 5px; } #placePanel .place-scroll h2 { font-size: 25px; } }
+@media (orientation:landscape) and (max-height:600px) { #placePanel .panel-top { min-height: 36px; padding-block: 4px 0; } #placePanel .record-tabs button { min-height: 33px; padding-block: 4px; } #placePanel .place-pager { min-height: 40px; } #placePanel .place-pager button { min-height: 34px; } #placePanel .place-vignette { height: 65px; } #placePanel .place-vignette > svg { height: 78px; } }
+@media print { #placePanel { position: static; width: 100%; height: auto; box-shadow: none; } #placeConnector { display: none; } }
+
+.pin-locality { font-size: .72em; opacity: .8; font-weight: 400; }
+.road-label rect { fill: #f1e7d4; stroke: #c5ad8544; stroke-width: 1; }
+.road-label text { fill: #9c7654; font: 13px "Microsoft YaHei",sans-serif; letter-spacing: 1px; }
+.place-road { margin: -3px 0 15px; }
+.place-road > span { display: inline-block; border: 1px solid #bba07c66; border-radius: 3px; padding: 2px 7px; color: #8a6d4b; font-size: 10px; letter-spacing: .06em; }
+.place-road > p { margin: 5px 0 0; font-size: 10px; line-height: 1.7; color: #9b896f; }
+
+/* Two local stops branch off Dunhuang without becoming extra intercity legs. */
+#branchRoutes path { fill: none; stroke: #ac906e; stroke-width: 1.7; stroke-dasharray: 3 5; opacity: .65; }
+#branchRoutes path.active { stroke: #ae704c; opacity: 1; }
+.place-pin.branch-pin { width: 140px; height: 95px; z-index: 3; }
+.branch-pin .pin-model { width: 58px; height: 53px; }
+.branch-pin .pin-label { font-size: calc(var(--map-label-size,16px) * .85); border: 1px solid #b79c7040; }
+.place-pin.branch-pin.selected { z-index: 4; }
+.map-world.overview .branch-pin .pin-label { visibility: visible !important; }
+.place-branches { display: flex; flex-wrap: wrap; gap: 7px; margin: 2px 0 17px; }
+.place-branches .branch-back { flex-basis: 100%; font-size: 10px; text-align: left; color: var(--lake); padding: 5px 0; }
+.branch-card { position: relative; flex: 1; min-width: 95px; text-align: left; padding: 8px 21px 8px 10px; background: #ebdfc855; border: 1px solid #b6a07b44; border-radius: 3px; }
+.branch-card small { display: block; font: 9px/1.5 Georgia,serif; color: #a88b65; }
+.branch-card span { font-size: 12px; color: #806044; }
+.branch-card b { position: absolute; right: 8px; top: 15px; color: #a58a66; font-size: 11px; font-weight: normal; }
+.branch-card.active { background: #dfcfb366; border-color: #a98a6155; }
+.route-menu .route-subplaces { margin: -3px 0 5px 27px; padding: 0; border-left: 1px dotted #b5a08066; }
+.route-menu .route-subplaces button { padding: 6px 8px; }
+
+.settlement-drawing { position: absolute; inset: 0; width: 1280px; height: 960px; pointer-events: none; overflow: visible; }
+.settlement-edge { fill: #c2b895; opacity: .55; }
+.settlement-paper { fill: #e7dfc3; stroke: #faf0d8; stroke-width: 2; }
+#branchRoutes .branch-under { stroke: #faf0d9; stroke-width: 8; opacity: .9; stroke-dasharray: none; }
+#branchRoutes [data-branch] { stroke: #ac8d6a; stroke-width: 1.5; stroke-dasharray: 2 5; }
+.branch-pin .pin-model { width: 70px; height: 64px; }
+.paper-world .place-pin.branch-pin { height: 108px; }
+
+.landscape-drawing { position: absolute; inset: 0; width: 1280px; height: 960px; pointer-events: none; overflow: visible; }
+.landform-art { opacity: .88; }
+.landform-name { fill: #8b795e; font: 18px "STSong","SimSun",serif; letter-spacing: 4px; text-anchor: middle; paint-order: stroke; stroke: #f2e7d3; stroke-width: 4px; stroke-opacity: .6; }
+.landform-mountains .landform-name { fill: #7d8774; }
+.landform-basin .landform-name { fill: #a58e68; letter-spacing: 7px; }

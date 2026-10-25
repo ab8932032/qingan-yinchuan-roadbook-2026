@@ -1,0 +1,592 @@
+{
+  "version": 3,
+  "title": "沿途影像 · 新剪辑",
+  "films": [
+    {
+      "id": "yinchuan-lunch",
+      "placeId": null,
+      "placeIds": [],
+      "title": "银川 · 抵达后的午餐",
+      "date": "9.25",
+      "label": "9.25",
+      "duration": 10,
+      "stats": {
+        "photos": 3,
+        "live": 1
+      },
+      "wide": {
+        "src": "../../media/films/v3/yinchuan-lunch-wide.mp4",
+        "poster": "../../media/stills/v3/yinchuan-lunch-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/yinchuan-lunch-portrait.mp4",
+        "poster": "../../media/stills/v3/yinchuan-lunch-portrait.jpg"
+      }
+    },
+    {
+      "id": "helan",
+      "placeId": "helan",
+      "placeIds": [
+        "helan"
+      ],
+      "title": "银川 · 贺兰山宿集",
+      "date": "9.25",
+      "label": "院落与傍晚",
+      "duration": 35,
+      "stats": {
+        "photos": 11,
+        "live": 3
+      },
+      "wide": {
+        "src": "../../media/films/v3/helan-wide.mp4",
+        "poster": "../../media/stills/v3/helan-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/helan-portrait.mp4",
+        "poster": "../../media/stills/v3/helan-portrait.jpg"
+      }
+    },
+    {
+      "id": "helan-morning",
+      "placeId": "helan",
+      "placeIds": [
+        "helan"
+      ],
+      "title": "贺兰山宿集 · 早晨",
+      "date": "9.26",
+      "label": "次日早晨",
+      "duration": 8,
+      "stats": {
+        "photos": 2,
+        "live": 1
+      },
+      "wide": {
+        "src": "../../media/films/v3/helan-morning-wide.mp4",
+        "poster": "../../media/stills/v3/helan-morning-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/helan-morning-portrait.mp4",
+        "poster": "../../media/stills/v3/helan-morning-portrait.jpg"
+      }
+    },
+    {
+      "id": "helan-winery",
+      "placeId": null,
+      "placeIds": [],
+      "title": "贺兰山下 · 酒窖与葡萄园",
+      "date": "9.26",
+      "label": "酒窖与葡萄园",
+      "duration": 16,
+      "stats": {
+        "photos": 5,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/helan-winery-wide.mp4",
+        "poster": "../../media/stills/v3/helan-winery-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/helan-winery-portrait.mp4",
+        "poster": "../../media/stills/v3/helan-winery-portrait.jpg"
+      }
+    },
+    {
+      "id": "jiuhe",
+      "placeId": null,
+      "placeIds": [],
+      "title": "贺兰山下 · 露台与柱廊",
+      "date": "9.26",
+      "label": "露台与柱廊",
+      "duration": 28,
+      "stats": {
+        "photos": 10,
+        "live": 3
+      },
+      "wide": {
+        "src": "../../media/films/v3/jiuhe-wide.mp4",
+        "poster": "../../media/stills/v3/jiuhe-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/jiuhe-portrait.mp4",
+        "poster": "../../media/stills/v3/jiuhe-portrait.jpg"
+      }
+    },
+    {
+      "id": "helan-hills",
+      "placeId": null,
+      "placeIds": [],
+      "title": "贺兰山 · 山间散步",
+      "date": "9.26",
+      "label": "山间",
+      "duration": 14,
+      "stats": {
+        "photos": 4,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/helan-hills-wide.mp4",
+        "poster": "../../media/stills/v3/helan-hills-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/helan-hills-portrait.mp4",
+        "poster": "../../media/stills/v3/helan-hills-portrait.jpg"
+      }
+    },
+    {
+      "id": "jiuhe-evening",
+      "placeId": "jiuhe",
+      "placeIds": [
+        "jiuhe"
+      ],
+      "title": "银川 · 九贺晚间",
+      "date": "9.26",
+      "label": "九贺晚间",
+      "duration": 8,
+      "stats": {
+        "photos": 2,
+        "live": 0
+      },
+      "wide": {
+        "src": "../../media/films/v3/jiuhe-evening-wide.mp4",
+        "poster": "../../media/stills/v3/jiuhe-evening-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/jiuhe-evening-portrait.mp4",
+        "poster": "../../media/stills/v3/jiuhe-evening-portrait.jpg"
+      }
+    },
+    {
+      "id": "pingshanhu",
+      "placeId": "pingshanhu",
+      "placeIds": [
+        "pingshanhu"
+      ],
+      "title": "张掖 · 平山湖大峡谷",
+      "date": "9.28",
+      "label": "9.28",
+      "duration": 30,
+      "stats": {
+        "photos": 10,
+        "live": 3
+      },
+      "wide": {
+        "src": "../../media/films/v3/pingshanhu-wide.mp4",
+        "poster": "../../media/stills/v3/pingshanhu-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/pingshanhu-portrait.mp4",
+        "poster": "../../media/stills/v3/pingshanhu-portrait.jpg"
+      }
+    },
+    {
+      "id": "danxia",
+      "placeId": "danxia",
+      "placeIds": [
+        "danxia"
+      ],
+      "title": "张掖 · 七彩丹霞",
+      "date": "9.28",
+      "label": "9.28",
+      "duration": 27,
+      "stats": {
+        "photos": 9,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/danxia-wide.mp4",
+        "poster": "../../media/stills/v3/danxia-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/danxia-portrait.mp4",
+        "poster": "../../media/stills/v3/danxia-portrait.jpg"
+      }
+    },
+    {
+      "id": "dunhuang",
+      "placeId": "dunhuang",
+      "placeIds": [
+        "dunhuang"
+      ],
+      "title": "敦煌 · 城里",
+      "date": "敦煌停留期间",
+      "label": "敦煌停留期间",
+      "duration": 16,
+      "stats": {
+        "photos": 5,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/dunhuang-wide.mp4",
+        "poster": "../../media/stills/v3/dunhuang-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/dunhuang-portrait.mp4",
+        "poster": "../../media/stills/v3/dunhuang-portrait.jpg"
+      }
+    },
+    {
+      "id": "siju",
+      "placeId": "siju",
+      "placeIds": [
+        "siju"
+      ],
+      "title": "敦煌 · 敦煌四局",
+      "date": "敦煌停留期间",
+      "label": "敦煌停留期间",
+      "duration": 24,
+      "stats": {
+        "photos": 8,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/siju-wide.mp4",
+        "poster": "../../media/stills/v3/siju-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/siju-portrait.mp4",
+        "poster": "../../media/stills/v3/siju-portrait.jpg"
+      }
+    },
+    {
+      "id": "nightmarket",
+      "placeId": "nightmarket",
+      "placeIds": [
+        "nightmarket"
+      ],
+      "title": "敦煌 · 沙州夜市与晚餐",
+      "date": "敦煌停留期间 · 晚间",
+      "label": "敦煌停留期间 · 晚间",
+      "duration": 23,
+      "stats": {
+        "photos": 7,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/nightmarket-wide.mp4",
+        "poster": "../../media/stills/v3/nightmarket-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/nightmarket-portrait.mp4",
+        "poster": "../../media/stills/v3/nightmarket-portrait.jpg"
+      }
+    },
+    {
+      "id": "mingsha",
+      "placeId": "mingsha",
+      "placeIds": [
+        "mingsha"
+      ],
+      "title": "敦煌 · 鸣沙山",
+      "date": "9.30",
+      "label": "9.30",
+      "duration": 35,
+      "stats": {
+        "photos": 10,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/mingsha-wide.mp4",
+        "poster": "../../media/stills/v3/mingsha-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/mingsha-portrait.mp4",
+        "poster": "../../media/stills/v3/mingsha-portrait.jpg"
+      }
+    },
+    {
+      "id": "lenghu-approach",
+      "placeId": "lenghu",
+      "placeIds": [
+        "lenghu"
+      ],
+      "title": "敦煌至冷湖 · 路上",
+      "date": "10.1",
+      "label": "10.1",
+      "duration": 22,
+      "stats": {
+        "photos": 7,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/lenghu-approach-wide.mp4",
+        "poster": "../../media/stills/v3/lenghu-approach-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/lenghu-approach-portrait.mp4",
+        "poster": "../../media/stills/v3/lenghu-approach-portrait.jpg"
+      }
+    },
+    {
+      "id": "oil",
+      "placeId": "oil-town",
+      "placeIds": [
+        "oil-town"
+      ],
+      "title": "冷湖 · 石油小镇遗址",
+      "date": "10.1",
+      "label": "10.1",
+      "duration": 11,
+      "stats": {
+        "photos": 3,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/oil-wide.mp4",
+        "poster": "../../media/stills/v3/oil-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/oil-portrait.mp4",
+        "poster": "../../media/stills/v3/oil-portrait.jpg"
+      }
+    },
+    {
+      "id": "heidu",
+      "placeId": "heidu",
+      "placeIds": [
+        "heidu"
+      ],
+      "title": "冷湖 · 黑独山",
+      "date": "10.1",
+      "label": "10.1",
+      "duration": 20,
+      "stats": {
+        "photos": 6,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/heidu-wide.mp4",
+        "poster": "../../media/stills/v3/heidu-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/heidu-portrait.mp4",
+        "poster": "../../media/stills/v3/heidu-portrait.jpg"
+      }
+    },
+    {
+      "id": "mars-road",
+      "placeId": null,
+      "placeIds": [],
+      "title": "火星一号公路 · 沿途",
+      "date": "10.1",
+      "label": "10.1",
+      "duration": 15,
+      "stats": {
+        "photos": 4,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/mars-road-wide.mp4",
+        "poster": "../../media/stills/v3/mars-road-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/mars-road-portrait.mp4",
+        "poster": "../../media/stills/v3/mars-road-portrait.jpg"
+      }
+    },
+    {
+      "id": "mars",
+      "placeId": "mars",
+      "placeIds": [
+        "mars"
+      ],
+      "title": "冷湖 · 火星营地门口",
+      "date": "10.1 · 门口",
+      "label": "10.1 · 门口",
+      "duration": 8,
+      "stats": {
+        "photos": 1,
+        "live": 0
+      },
+      "wide": {
+        "src": "../../media/films/v3/mars-wide.mp4",
+        "poster": "../../media/stills/v3/mars-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/mars-portrait.mp4",
+        "poster": "../../media/stills/v3/mars-portrait.jpg"
+      }
+    },
+    {
+      "id": "water",
+      "placeId": "water",
+      "placeIds": [
+        "water"
+      ],
+      "title": "水上雅丹",
+      "date": "10.2 · 上午",
+      "label": "10.2 · 上午",
+      "duration": 32,
+      "stats": {
+        "photos": 9,
+        "live": 3
+      },
+      "wide": {
+        "src": "../../media/films/v3/water-wide.mp4",
+        "poster": "../../media/stills/v3/water-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/water-portrait.mp4",
+        "poster": "../../media/stills/v3/water-portrait.jpg"
+      }
+    },
+    {
+      "id": "chaerhan",
+      "placeId": "chaerhan",
+      "placeIds": [
+        "chaerhan"
+      ],
+      "title": "察尔汗盐湖",
+      "date": "10.2 · 下午",
+      "label": "10.2 · 下午",
+      "duration": 27,
+      "stats": {
+        "photos": 9,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/chaerhan-wide.mp4",
+        "poster": "../../media/stills/v3/chaerhan-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/chaerhan-portrait.mp4",
+        "poster": "../../media/stills/v3/chaerhan-portrait.jpg"
+      }
+    },
+    {
+      "id": "del-road",
+      "placeId": "delingha",
+      "placeIds": [
+        "delingha"
+      ],
+      "title": "前往德令哈 · 日落途中",
+      "date": "10.2 · 傍晚",
+      "label": "日落路上",
+      "duration": 24,
+      "stats": {
+        "photos": 8,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/del-road-wide.mp4",
+        "poster": "../../media/stills/v3/del-road-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/del-road-portrait.mp4",
+        "poster": "../../media/stills/v3/del-road-portrait.jpg"
+      }
+    },
+    {
+      "id": "delingha-breakfast",
+      "placeId": "delingha",
+      "placeIds": [
+        "delingha"
+      ],
+      "title": "德令哈 · 出发前的一餐",
+      "date": "10.3 · 出发前",
+      "label": "出发前",
+      "duration": 8,
+      "stats": {
+        "photos": 2,
+        "live": 0
+      },
+      "wide": {
+        "src": "../../media/films/v3/delingha-breakfast-wide.mp4",
+        "poster": "../../media/stills/v3/delingha-breakfast-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/delingha-breakfast-portrait.mp4",
+        "poster": "../../media/stills/v3/delingha-breakfast-portrait.jpg"
+      }
+    },
+    {
+      "id": "lake-approach",
+      "placeId": null,
+      "placeIds": [],
+      "title": "前往青海湖 · 沿途",
+      "date": "10.3 · 沿途",
+      "label": "10.3 · 沿途",
+      "duration": 17,
+      "stats": {
+        "photos": 5,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/lake-approach-wide.mp4",
+        "poster": "../../media/stills/v3/lake-approach-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/lake-approach-portrait.mp4",
+        "poster": "../../media/stills/v3/lake-approach-portrait.jpg"
+      }
+    },
+    {
+      "id": "lake",
+      "placeId": "lake",
+      "placeIds": [
+        "lake"
+      ],
+      "title": "青海湖 · 湖岸、垭口与星空",
+      "date": "10.3",
+      "label": "湖岸与夜空",
+      "duration": 30,
+      "stats": {
+        "photos": 8,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/lake-wide.mp4",
+        "poster": "../../media/stills/v3/lake-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/lake-portrait.mp4",
+        "poster": "../../media/stills/v3/lake-portrait.jpg"
+      }
+    },
+    {
+      "id": "lake-loop",
+      "placeId": "lake",
+      "placeIds": [
+        "lake"
+      ],
+      "title": "青海湖 · 环湖途中",
+      "date": "10.4 · 环湖",
+      "label": "环湖",
+      "duration": 30,
+      "stats": {
+        "photos": 10,
+        "live": 3
+      },
+      "wide": {
+        "src": "../../media/films/v3/lake-loop-wide.mp4",
+        "poster": "../../media/stills/v3/lake-loop-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/lake-loop-portrait.mp4",
+        "poster": "../../media/stills/v3/lake-loop-portrait.jpg"
+      }
+    },
+    {
+      "id": "xining",
+      "placeId": "xining",
+      "placeIds": [
+        "xining"
+      ],
+      "title": "西宁 · 藏文化博物馆与咖啡",
+      "date": "10.4",
+      "label": "10.4",
+      "duration": 24,
+      "stats": {
+        "photos": 8,
+        "live": 2
+      },
+      "wide": {
+        "src": "../../media/films/v3/xining-wide.mp4",
+        "poster": "../../media/stills/v3/xining-wide.jpg"
+      },
+      "portrait": {
+        "src": "../../media/films/v3/xining-portrait.mp4",
+        "poster": "../../media/stills/v3/xining-portrait.jpg"
+      }
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e9ddc5">
+  <title>沿途影像 · V3 预览</title>
+  <link rel="stylesheet" href="films.css">
+  <script src="films.js" defer></script>
+</head>
+<body>
+  <header class="page-header">
+    <a class="back-link" href="./"><span aria-hidden="true">↖</span> 回到路书</a>
+    <span class="version-tag">V3 预览</span>
+  </header>
+  <main>
+    <div class="page-intro">
+      <span class="eyebrow">银川 · 河西 · 青海</span>
+      <h1 id="pageTitle">沿途影像</h1>
+      <p id="pageStatus" class="page-status" role="status">正在整理画面…</p>
+    </div>
+    <div id="filmGrid" class="film-grid" aria-label="按地点查看影片"></div>
+    <noscript><p class="page-status">请开启 JavaScript 查看影片。</p></noscript>
+  </main>
+
+  <dialog id="filmDialog" class="film-dialog" aria-labelledby="viewerTitle">
+    <div class="viewer-shell">
+      <header class="viewer-header">
+        <div class="viewer-heading"><p id="viewerDate" class="viewer-date"></p><h2 id="viewerTitle"></h2></div>
+        <button id="closeViewer" class="icon-button close-button" type="button" aria-label="关闭影片">×</button>
+      </header>
+      <div id="videoStage" class="video-stage">
+        <video id="filmVideo" controls playsinline preload="none" muted></video>
+        <p id="videoError" class="video-error" hidden>这段影片暂时无法播放，请稍后重试。</p>
+      </div>
+      <footer class="viewer-footer">
+        <div class="viewer-actions">
+          <button id="musicButton" class="paper-button" type="button" aria-pressed="false">♫ 开启配乐</button>
+          <button id="fullscreenButton" class="paper-button" type="button">全屏</button>
+          <a id="placeLink" class="place-link" href="./" hidden>在路书中看 <span aria-hidden="true">↗</span></a>
+        </div>
+        <nav class="film-navigation" aria-label="切换影片">
+          <button id="previousFilm" class="icon-button" type="button" aria-label="上一段影片">←</button>
+          <span id="filmPosition" class="film-position"></span>
+          <button id="nextFilm" class="icon-button" type="button" aria-label="下一段影片">→</button>
+        </nav>
+      </footer>
+    </div>
+  </dialog>
+</body>
+</html>

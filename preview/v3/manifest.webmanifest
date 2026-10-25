@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "青甘银川 · V3 预览",
+  "short_name": "V3 预览",
+  "description": "沿途的山、湖泊与停留，收进这一程的旅行记录。",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3efe6",
+  "theme_color": "#eee7db",
+  "icons": [
+    {
+      "src": "assets/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

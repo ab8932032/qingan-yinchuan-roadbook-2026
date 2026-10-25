@@ -6,6 +6,8 @@
 
 手机在线预览：https://ab8932032.github.io/qingan-yinchuan-roadbook-2026/ 。GitHub Pages 从 `main` 分支根目录发布，`.nojekyll` 保证资源按静态文件提供。当前发布保留现有影片，新的照片选片与替换继续在本机进行。
 
+新剪辑独立预览：https://ab8932032.github.io/qingan-yinchuan-roadbook-2026/preview/v3/ 。也可以直接打开 [沿途影像](https://ab8932032.github.io/qingan-yinchuan-roadbook-2026/preview/v3/films.html) 逐段看。V3 将最新精选与对应 Live 按地点剪成 26 段，提供横竖双版和配乐；主入口继续保留 V2。
+
 直接双击 `index.html` 即可。所有主界面资源都在本地，不需要地图 Key、外部字体或第三方脚本。主界面已整合原路书：对应内容归入地点的“行前存页”，预算、行李、路段等共用内容收入“更多选项 → 随行手册”。完整底稿仍保存在根目录的 `roadbook-original.html`，作为备份。
 
 需要离线缓存或本机浏览器预览时，在此目录运行：
@@ -102,3 +104,7 @@ node --check service-worker.js
 已加入每日短片：9.24—10.5 共 12 段，横竖双版。54 张实拍照片与三段原创纸片公路动画组合，按地点直接在中央播放，已加入轻器乐配乐；跨日地点仅显示相关日期。详细选片与构建方式见 media/README.md。原始手机导出与另一聊天的分类结果保持只读。
 
 图标首次点击只切换地点与影片，再次点击当前地点才展开记录。最终精选重排与有声成片采用 v2 路径，避免浏览器继续使用旧片；选片审计与音轨检查保存在 notes。
+
+V3 使用 `media/films/v3/` 与 `media/stills/v3/` 独立文件。`preview/v3/films.json` 只保存公开标题、地点映射和相对媒体地址；原始照片、Live MOV、定位与本机选片清单不随网站上传。油址、黑独山、火星一号公路、火星营地门口分别剪辑，水上雅丹只采用 10 月 2 日上午素材。暂未确认对应素材的地点保留纸片风景，不借用同日其他地点的影片。
+
+本机构建依次运行 `python scripts/build_place_films.py`、`python scripts/build_v3_preview.py`；前者读取本机私有 `notes/place-film-edit-v3.json`，后者打包独立路书预览，不覆盖根目录页面或已有影片页。V3 的地点队列由 `placeFilms` 指定；显式配置后不再回退到旧的 `dailyFilms`。

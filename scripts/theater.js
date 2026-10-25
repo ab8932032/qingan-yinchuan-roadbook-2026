@@ -18,11 +18,38 @@
     return [{ type: item.type, src, poster: safeSource(item.poster), start, end,
       duration: item.type === "photo" ? Math.min(60, Math.max(1, duration || 4)) : duration,
       caption: typeof item.caption === "string" ? item.caption : "",
+      id: typeof item.id === "string" ? item.id : "",
       date: typeof item.date === "string" ? item.date : "",
       title: typeof item.title === "string" ? item.title : "",
+      label: typeof item.label === "string" ? item.label : "",
       fit: item.fit === "cover" ? "cover" : "contain" }];
   });
-  window.RoadbookFilm = Object.freeze({ safeSource, normalizeClips });
+  const resolveFilms = (config, placeId, fallbackMedia = []) => {
+    const byPlace = config?.placeFilms;
+    // Presence of a place map is an explicit boundary, including empty entries.
+    // A missing place must never borrow another stop's daily film or act media.
+    if (byPlace && typeof byPlace === "object" && !Array.isArray(byPlace)) {
+      const films = Object.prototype.hasOwnProperty.call(byPlace, placeId) ? byPlace[placeId] : null;
+      return Array.isArray(films) ? films.filter((film) => film && Array.isArray(film.media)) : [];
+    }
+    const daily = (Array.isArray(config?.dailyFilms) ? config.dailyFilms : [])
+      .filter((film) => Array.isArray(film?.places) && film.places.includes(placeId));
+    return daily.length ? daily : [{ media: fallbackMedia }];
+  };
+  const prepareFilmClips = (films, isPortrait = false) => normalizeClips(films.flatMap((film) =>
+    (Array.isArray(film.media) ? film.media : []).map((clip) => ({ ...clip,
+      src: isPortrait ? (clip?.portraitSrc || clip?.src) : clip?.src,
+      poster: isPortrait ? (clip?.portraitPoster || clip?.poster) : clip?.poster,
+      id: film.id ?? clip?.id, date: film.date ?? clip?.date,
+      title: film.title ?? clip?.title, label: film.label ?? clip?.label
+    }))));
+  const findFilmIndex = (items, previous) => {
+    const byId = previous?.id ? items.findIndex((clip) => clip.id === previous.id) : -1;
+    if (byId >= 0) return byId;
+    const byDate = previous?.date ? items.findIndex((clip) => clip.date === previous.date) : -1;
+    return Math.max(0, byDate);
+  };
+  window.RoadbookFilm = Object.freeze({ safeSource, normalizeClips, resolveFilms, prepareFilmClips, findFilmIndex });
 
   const config = window.ROADBOOK_THEATER, atlas = window.roadbookAtlas, data = window.ROADBOOK;
   if (!config?.acts?.length || !atlas || !data) return;
@@ -145,22 +172,17 @@
     const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
     use.setAttribute("href", `#model-${active.kind}`); actor.append(use);
     $("stageActor").replaceChildren(actor);
-    const priorDate = clips[clipIndex]?.date;
-    const daily = (config.dailyFilms || []).filter((film) => film.places.includes(atlas.getSelectedId()));
-    const media = daily.length ? daily.flatMap((film) => film.media.map((clip) => ({...clip,
-      src: portrait.matches ? (clip.portraitSrc || clip.src) : clip.src,
-      poster: portrait.matches ? (clip.portraitPoster || clip.poster) : clip.poster,
-      date: film.date, title: film.title
-    }))) : active.media;
-    clips = normalizeClips(media);
+    const priorClip = clips[clipIndex];
+    const films = resolveFilms(config, atlas.getSelectedId(), active.media);
+    clips = prepareFilmClips(films, portrait.matches);
     $("filmDays").hidden = clips.length < 2;
     $("filmDays").replaceChildren(...clips.map((clip,index) => {
       const button = document.createElement("button"); button.type = "button";
-      button.dataset.filmIndex = index; button.textContent = clip.date || String(index+1);
+      button.dataset.filmIndex = index; button.textContent = clip.label || clip.date || String(index+1);
       button.setAttribute("aria-label",`${clip.date} · ${clip.title}`);
       button.addEventListener("click",() => renderClip(index)); return button;
     }));
-    if (clips.length) renderClip(Math.max(0,clips.findIndex((clip) => clip.date === priorDate))); else showPaper();
+    if (clips.length) renderClip(findFilmIndex(clips, priorClip)); else showPaper();
   };
   const setView = (theater) => {
     theaterView = theater; stage.hidden = !theater;
